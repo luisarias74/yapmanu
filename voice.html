@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaLanguish — Say It Once</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.34);
+      --glass-strong: rgba(255, 255, 255, 0.42);
+      --glass-border: rgba(255, 255, 255, 0.38);
+      --glass-shadow: 0 24px 60px rgba(70, 118, 160, 0.18);
+      --text-main: #24384b;
+      --text-soft: rgba(36, 56, 75, 0.7);
+      --mint: #67f2e7;
+      --aqua: #2bd9f1;
+      --lavender: #c7c4ff;
+      --soft-white: rgba(255, 255, 255, 0.78);
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(143, 255, 230, 0.72), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(108, 206, 255, 0.78), transparent 24%),
+        radial-gradient(circle at 78% 86%, rgba(255, 255, 255, 0.9), transparent 22%),
+        radial-gradient(circle at 20% 88%, rgba(155, 236, 255, 0.55), transparent 18%),
+        linear-gradient(180deg, #b3f4ea 0%, #7ed8ff 46%, #d7f8ff 100%);
+      color: var(--text-main);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .dashboard-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 22px 16px 104px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-card {
+      width: 100%;
+      border-radius: 32px;
+      padding: 18px 18px 90px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 68%);
+      pointer-events: none;
+    }
+
+    .voice-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .voice-hero {
+      padding: 0;
+    }
+
+    .voice-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.34);
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    .voice-title {
+      margin-top: 12px;
+      font-size: clamp(2rem, 7vw, 2.6rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--text-main);
+      font-weight: 700;
+      max-width: 11ch;
+    }
+
+    .voice-subtitle {
+      margin-top: 8px;
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 0.95rem;
+      max-width: 34ch;
+    }
+
+    .voice-stack {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .phrase-card,
+    .speak-card,
+    .feedback-card {
+      border-radius: 24px;
+      padding: 18px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .phrase-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phrase-card::after {
+      content: '';
+      position: absolute;
+      right: -50px;
+      bottom: -70px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.42), transparent 66%);
+      pointer-events: none;
+    }
+
+    .card-kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: rgba(36, 56, 75, 0.5);
+    }
+
+    .scene-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.28);
+      color: var(--text-soft);
+      font-size: 0.76rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .phrase-text {
+      margin-top: 10px;
+      font-size: clamp(1.8rem, 6vw, 2.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      color: var(--text-main);
+      max-width: 11ch;
+    }
+
+    .phrase-meaning {
+      margin-top: 8px;
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.36);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.34);
+    }
+
+    .phrase-model {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-soft);
+      max-width: 34ch;
+    }
+
+    .phrase-actions,
+    .feedback-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .step-copy {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.24);
+      color: var(--text-soft);
+      line-height: 1.45;
+      font-size: 0.88rem;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .recorder-center {
+      display: grid;
+      justify-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .record-timer {
+      display: none;
+      color: var(--text-main);
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .record-timer.visible {
+      display: block;
+    }
+
+    .waveform {
+      width: 100%;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+    }
+
+    .wave-bar {
+      width: 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--mint), var(--aqua));
+      opacity: 0.5;
+    }
+
+    .waveform.active .wave-bar {
+      animation: wave-bounce 0.85s ease-in-out infinite;
+      opacity: 0.9;
+    }
+
+    .wave-bar:nth-child(2) { animation-delay: 0.05s; }
+    .wave-bar:nth-child(3) { animation-delay: 0.12s; }
+    .wave-bar:nth-child(4) { animation-delay: 0.18s; }
+    .wave-bar:nth-child(5) { animation-delay: 0.24s; }
+    .wave-bar:nth-child(6) { animation-delay: 0.1s; }
+    .wave-bar:nth-child(7) { animation-delay: 0.2s; }
+    .wave-bar:nth-child(8) { animation-delay: 0.28s; }
+
+    @keyframes wave-bounce {
+      0%, 100% { height: 8px; }
+      50% { height: 22px; }
+    }
+
+    .record-btn-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 110px;
+      height: 110px;
+    }
+
+    .record-pulse {
+      position: absolute;
+      width: 78px;
+      height: 78px;
+      border-radius: 50%;
+      background: rgba(43,217,241,0.18);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .record-pulse.ring2 {
+      width: 98px;
+      height: 98px;
+      background: rgba(103,242,231,0.12);
+    }
+
+    .record-btn-wrap.recording .record-pulse {
+      animation: pulse-ring 1.2s ease-out infinite;
+      opacity: 1;
+    }
+
+    .record-btn-wrap.recording .record-pulse.ring2 {
+      animation-delay: 0.28s;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.55); opacity: 0; }
+    }
+
+    .record-btn {
+      position: relative;
+      z-index: 2;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      color: var(--text-main);
+      font-size: 1.55rem;
+      box-shadow: 0 14px 28px rgba(32, 217, 234, 0.28);
+    }
+
+    .record-status {
+      color: var(--text-soft);
+      font-size: 0.86rem;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.4;
+      max-width: 26ch;
+    }
+
+    .record-status.recording-text {
+      color: #19c9d8;
+    }
+
+    .feedback-card {
+      display: none;
+      gap: 10px;
+    }
+
+    .feedback-card.visible {
+      display: grid;
+    }
+
+    .feedback-line {
+      color: var(--text-main);
+      font-size: 0.95rem;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .feedback-model {
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.24);
+      color: var(--text-soft);
+      line-height: 1.45;
+      font-size: 0.86rem;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .speech-state {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.28);
+      color: var(--text-main);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      width: fit-content;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .speech-state.missed {
+      background: rgba(255,255,255,0.32);
+      color: #c55a62;
+    }
+
+    .speech-state.heard {
+      background: rgba(103,242,231,0.24);
+      color: #177f83;
+    }
+
+    .playback-card {
+      display: none;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.22);
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .playback-card.visible {
+      display: block;
+    }
+
+    .playback-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .play-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      color: var(--text-main);
+      box-shadow: 0 10px 22px rgba(32, 217, 234, 0.2);
+    }
+
+    .playback-track {
+      flex: 1;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(36,56,75,0.12);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .playback-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+    }
+
+    .playback-meta {
+      margin-top: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: rgba(36,56,75,0.48);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .transcript-line {
+      color: var(--text-soft);
+      line-height: 1.4;
+      font-size: 0.8rem;
+    }
+
+    .tiny-proof {
+      margin-top: 4px;
+      color: rgba(36,56,75,0.46);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .no-support {
+      display: none;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.26);
+      border: 1px solid rgba(255,255,255,0.34);
+      color: var(--text-main);
+      line-height: 1.55;
+      font-size: 0.88rem;
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      color: var(--text-main);
+      border-radius: 999px;
+      box-shadow: 0 14px 28px rgba(32, 217, 234, 0.22);
+    }
+
+    .btn-outline,
+    .btn-ghost {
+      background: rgba(255,255,255,0.26);
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.36);
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+    .bottom-nav {
+      left: 50%;
+      right: auto;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(430px, calc(100% - 32px));
+      height: 72px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.28);
+      border: 1px solid rgba(255,255,255,0.34);
+      box-shadow: 0 18px 40px rgba(70, 118, 160, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      color: rgba(36, 56, 75, 0.55);
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: #1ed9ea;
+      text-shadow: 0 0 18px rgba(30,217,234,0.3);
+    }
+
+    .nav-label {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: none;
+    }
+
+    .toast {
+      background: rgba(255,255,255,0.86);
+      color: var(--text-main);
+      box-shadow: 0 16px 40px rgba(70, 118, 160, 0.18);
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard-shell">
+    <section class="dashboard-card">
+      <div class="voice-shell">
+        <section class="voice-hero">
+          <div class="voice-kicker">🎙️ Say It Once</div>
+          <h1 class="voice-title" id="voiceTitle">Say this with me.</h1>
+          <p class="voice-subtitle" id="voiceSubtitle">
+            One phrase, one try, one gentle response.
+          </p>
+        </section>
+
+        <div class="voice-stack">
+          <section class="phrase-card">
+            <div class="card-kicker">Say This</div>
+            <div class="scene-label" id="sceneLabel">💛 With You</div>
+            <div class="phrase-text" id="phraseText">I miss you.</div>
+            <div class="phrase-meaning" id="phraseMeaning">Te extraño.</div>
+            <p class="phrase-model" id="phraseModel">This one already means something, which makes it easier to say.</p>
+            <div class="phrase-actions">
+              <button class="btn btn-primary btn-full" id="hearBtn">▶️ Listen</button>
+            </div>
+          </section>
+
+          <section class="no-support" id="noSupport">
+            This browser cannot record here. Carol can still use the phrase and say it out loud, but Chrome or Safari will give the full speaking loop.
+          </section>
+
+          <section class="speak-card">
+            <div class="card-kicker">Your Turn</div>
+            <div class="step-copy" id="stepCopy">Tap the mic and say it once.</div>
+
+            <div class="recorder-center">
+              <div class="record-timer" id="recordTimer">0:00</div>
+
+              <div class="waveform" id="waveform">
+                <div class="wave-bar" style="height:8px"></div>
+                <div class="wave-bar" style="height:14px"></div>
+                <div class="wave-bar" style="height:20px"></div>
+                <div class="wave-bar" style="height:28px"></div>
+                <div class="wave-bar" style="height:18px"></div>
+                <div class="wave-bar" style="height:24px"></div>
+                <div class="wave-bar" style="height:16px"></div>
+                <div class="wave-bar" style="height:30px"></div>
+              </div>
+
+              <div class="record-btn-wrap" id="recordBtnWrap">
+                <div class="record-pulse"></div>
+                <div class="record-pulse ring2"></div>
+                <button class="record-btn" id="recordBtn" type="button">
+                  <span id="recordIcon">🎙️</span>
+                </button>
+              </div>
+
+              <div class="record-status" id="recordStatus">Tap when you're ready.</div>
+            </div>
+          </section>
+
+          <section class="feedback-card" id="feedbackCard">
+            <div class="card-kicker">Luna</div>
+            <div class="speech-state" id="speechState">waiting</div>
+            <div class="feedback-line" id="feedbackLine">
+              That was good. Listen once more and try the natural version with me.
+            </div>
+            <div class="feedback-model" id="feedbackModel">
+              Natural model: “I am eating a hamburger.”
+            </div>
+            <div class="transcript-line" id="transcriptLine"></div>
+
+            <div class="playback-card" id="playbackCard">
+              <div class="playback-row">
+                <button class="play-btn" id="playBtn" type="button">▶️</button>
+                <div class="playback-track" id="playbackTrack">
+                  <div class="playback-fill" id="playbackFill"></div>
+                </div>
+              </div>
+              <div class="playback-meta">
+                <span>Your Take</span>
+                <span id="playbackDuration">0:00</span>
+              </div>
+            </div>
+
+            <div class="feedback-actions">
+              <button class="btn btn-ghost btn-full" id="retryBtn">Say It Again</button>
+              <button class="btn btn-primary btn-full" id="advanceBtn">Try A Different One</button>
+            </div>
+            <div class="tiny-proof" id="tinyProof">small win saved</div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></a>
+    <a href="chat.html" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></a>
+    <a href="practice.html" class="nav-item"><span class="nav-icon">📍</span><span class="nav-label">Práctica</span></a>
+    <a href="voice.html" class="nav-item active"><span class="nav-icon">🎙️</span><span class="nav-label">Voz</span></a>
+    <a href="progress.html" class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Viaje</span></a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    const App = window.LaLanguishApp;
+    const LS = App.store;
+
+    const PHRASES = [
+      {
+        emoji: '💛',
+        scene: 'With You',
+        text: 'I miss you.',
+        translation: 'Te extraño.',
+        note: 'This one already means something, which makes it easier to say.',
+        voice: { lang: 'en-US', rate: 0.92, pitch: 1.03 }
+      },
+      {
+        emoji: '🏠',
+        scene: 'At Home',
+        text: 'I am opening the door.',
+        translation: 'Estoy abriendo la puerta.',
+        note: 'Action phrases are easier because Carol can picture them.',
+        voice: { lang: 'en-US', rate: 0.9, pitch: 1.0 }
+      },
+      {
+        emoji: '🐾',
+        scene: 'With Mayi and Nube',
+        text: 'I am walking the dog.',
+        translation: 'Estoy paseando al perro.',
+        note: 'A familiar scene makes the sentence feel closer and safer.',
+        voice: { lang: 'en-US', rate: 0.9, pitch: 1.02 }
+      },
+      {
+        emoji: '⚡',
+        scene: 'At Work',
+        text: 'I am in a meeting right now.',
+        translation: 'Estoy en una reunión ahora mismo.',
+        note: 'Work English should feel usable, not heavy.',
+        voice: { lang: 'en-US', rate: 0.9, pitch: 0.98 }
+      },
+      {
+        emoji: '🌙',
+        scene: 'Conversation',
+        text: 'What are you doing?',
+        translation: '¿Qué estás haciendo?',
+        note: 'Questions like this are where conversation starts feeling real.',
+        voice: { lang: 'en-US', rate: 0.92, pitch: 1.0 }
+      }
+    ];
+
+    let currentIndex = 0;
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let audioURL = null;
+    let audioEl = null;
+    let recognition = null;
+    let transcript = '';
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let isRecording = false;
+    let isPlaying = false;
+
+    const hasMediaRecorder = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+    const hasSpeechRec = !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+
+    function showToast(message, duration = 2200) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    function currentPhrase() {
+      return PHRASES[currentIndex];
+    }
+
+    function normalizeSpeech(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[^a-z\s]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function compareTranscript(targetText, spokenText) {
+      const targetWords = normalizeSpeech(targetText).split(' ').filter(Boolean);
+      const spokenWords = normalizeSpeech(spokenText).split(' ').filter(Boolean);
+
+      if (!spokenWords.length) {
+        return {
+          score: 0,
+          missing: targetWords,
+          extras: [],
+          matchedCount: 0
+        };
+      }
+
+      const remaining = [...spokenWords];
+      let matchedCount = 0;
+      const missing = [];
+
+      for (const word of targetWords) {
+        const idx = remaining.indexOf(word);
+        if (idx >= 0) {
+          matchedCount += 1;
+          remaining.splice(idx, 1);
+        } else {
+          missing.push(word);
+        }
+      }
+
+      return {
+        score: Math.round((matchedCount / targetWords.length) * 100),
+        missing,
+        extras: remaining,
+        matchedCount
+      };
+    }
+
+    function buildModeledFeedback(phrase, spokenText) {
+      const comparison = compareTranscript(phrase.text, spokenText);
+      const heardAnything = normalizeSpeech(spokenText).length > 0;
+
+      if (!heardAnything) {
+        return {
+          state: 'didn’t catch that',
+          stateClass: 'missed',
+          line: 'I did not catch the words clearly yet.',
+          model: `Listen again: “${phrase.text}”`,
+          transcriptLine: 'Try once more after listening. One clear sentence is enough.'
+        };
+      }
+
+      if (comparison.score >= 85) {
+        return {
+          state: 'heard you',
+          stateClass: 'heard',
+          line: 'That was clear. Keep that same rhythm.',
+          model: `Natural model: “${phrase.text}”`,
+          transcriptLine: `I heard: “${spokenText}”`
+        };
+      }
+
+      if (comparison.score >= 55) {
+        const focusWord = comparison.missing[0] || comparison.extras[0] || '';
+        return {
+          state: 'heard you',
+          stateClass: 'heard',
+          line: focusWord
+            ? `Good. Let’s smooth out “${focusWord}” once more.`
+            : 'Good. Let’s say it once more together.',
+          model: `Listen again: “${phrase.text}”`,
+          transcriptLine: `I heard: “${spokenText}”`
+        };
+      }
+
+      return {
+        state: 'heard you',
+        stateClass: 'heard',
+        line: 'Let’s keep it simple and say the full sentence once more.',
+        model: `Listen again: “${phrase.text}”`,
+        transcriptLine: `I heard: “${spokenText}”`
+      };
+    }
+
+    function renderPhrase() {
+      const profile = App.getSnapshot().profile || {};
+      const phrase = currentPhrase();
+
+      document.getElementById('voiceTitle').textContent = profile.name
+        ? `${profile.name}, say this with me.`
+        : 'Say this with me.';
+      document.getElementById('voiceSubtitle').textContent = profile.job
+        ? `One useful sentence from real life in ${profile.job}.`
+        : 'One useful sentence from real life.';
+      document.getElementById('sceneLabel').textContent = `${phrase.emoji} ${phrase.scene}`;
+      document.getElementById('phraseText').textContent = phrase.text;
+      document.getElementById('phraseMeaning').textContent = phrase.translation;
+      document.getElementById('phraseModel').textContent = phrase.note;
+      document.getElementById('stepCopy').textContent =
+        `Tap the mic and say: “${phrase.text}” once.`;
+
+      clearFeedback();
+    }
+
+    function hearPhrase() {
+      const phrase = currentPhrase();
+      const utterance = new SpeechSynthesisUtterance(phrase.text);
+      utterance.lang = phrase.voice.lang;
+      utterance.rate = phrase.voice.rate;
+      utterance.pitch = phrase.voice.pitch;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+      showToast('Luna said it once.');
+    }
+
+    async function toggleRecord() {
+      if (isRecording) {
+        stopRecording();
+        return;
+      }
+      await startRecording();
+    }
+
+    async function startRecording() {
+      if (!hasMediaRecorder) {
+        showToast('Recording is not available in this browser.');
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioChunks = [];
+        transcript = '';
+
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) audioChunks.push(event.data);
+        };
+        mediaRecorder.onstop = () => {
+          stream.getTracks().forEach((track) => track.stop());
+          const blob = new Blob(audioChunks, { type: 'audio/webm' });
+          if (audioURL) URL.revokeObjectURL(audioURL);
+          audioURL = URL.createObjectURL(blob);
+          audioEl = new Audio(audioURL);
+          audioEl.ontimeupdate = updatePlaybackProgress;
+          audioEl.onended = () => {
+            isPlaying = false;
+            document.getElementById('playBtn').textContent = '▶️';
+            document.getElementById('playbackFill').style.width = '0%';
+          };
+          document.getElementById('playbackDuration').textContent = formatDuration(timerSeconds);
+          renderFeedback();
+        };
+
+        if (hasSpeechRec) {
+          const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+          recognition = new SR();
+          recognition.lang = 'en-US';
+          recognition.interimResults = false;
+          recognition.maxAlternatives = 1;
+          recognition.onresult = (event) => {
+            transcript = event.results[0][0].transcript || '';
+          };
+          recognition.onerror = () => {};
+          recognition.start();
+        }
+
+        mediaRecorder.start();
+        isRecording = true;
+        timerSeconds = 0;
+        document.getElementById('recordBtnWrap').classList.add('recording');
+        document.getElementById('recordIcon').textContent = '⏹️';
+        document.getElementById('recordStatus').textContent = 'Recording... say it once.';
+        document.getElementById('recordStatus').classList.add('recording-text');
+        document.getElementById('recordTimer').classList.add('visible');
+        document.getElementById('waveform').classList.add('active');
+
+        timerInterval = setInterval(() => {
+          timerSeconds += 1;
+          document.getElementById('recordTimer').textContent = formatDuration(timerSeconds);
+          if (timerSeconds >= 12) stopRecording();
+        }, 1000);
+      } catch {
+        showToast('Microphone access was denied.');
+      }
+    }
+
+    function stopRecording() {
+      if (!mediaRecorder || mediaRecorder.state === 'inactive') return;
+      mediaRecorder.stop();
+      if (recognition) recognition.stop();
+      clearInterval(timerInterval);
+      isRecording = false;
+      document.getElementById('recordBtnWrap').classList.remove('recording');
+      document.getElementById('recordIcon').textContent = '🎙️';
+      document.getElementById('recordStatus').textContent = 'One second...';
+      document.getElementById('recordStatus').classList.remove('recording-text');
+      document.getElementById('recordTimer').classList.remove('visible');
+      document.getElementById('waveform').classList.remove('active');
+    }
+
+    function renderFeedback() {
+      const phrase = currentPhrase();
+      const feedback = buildModeledFeedback(phrase, transcript);
+      const xpGain = normalizeSpeech(transcript) ? 8 : 4;
+      LS.set('xp', (LS.get('xp', 0) || 0) + xpGain);
+
+      document.getElementById('feedbackCard').classList.add('visible');
+      const speechState = document.getElementById('speechState');
+      speechState.textContent = feedback.state;
+      speechState.className = `speech-state ${feedback.stateClass}`;
+      document.getElementById('feedbackLine').textContent = feedback.line;
+      document.getElementById('feedbackModel').textContent = feedback.model;
+      document.getElementById('transcriptLine').textContent = feedback.transcriptLine;
+      document.getElementById('tinyProof').textContent = `small win saved · +${xpGain} xp`;
+      document.getElementById('playbackCard').classList.toggle('visible', !!audioEl);
+      showToast('Luna heard you.');
+    }
+
+    function clearFeedback() {
+      if (audioEl) {
+        audioEl.pause();
+        audioEl = null;
+      }
+      if (audioURL) {
+        URL.revokeObjectURL(audioURL);
+        audioURL = null;
+      }
+      isPlaying = false;
+      transcript = '';
+      document.getElementById('feedbackCard').classList.remove('visible');
+      document.getElementById('recordStatus').textContent = `Tap when you're ready.`;
+      document.getElementById('playBtn').textContent = '▶️';
+      document.getElementById('playbackFill').style.width = '0%';
+    }
+
+    function nextPhrase() {
+      currentIndex = (currentIndex + 1) % PHRASES.length;
+      renderPhrase();
+    }
+
+    function togglePlayback() {
+      if (!audioEl) return;
+      if (isPlaying) {
+        audioEl.pause();
+        isPlaying = false;
+        document.getElementById('playBtn').textContent = '▶️';
+      } else {
+        audioEl.play();
+        isPlaying = true;
+        document.getElementById('playBtn').textContent = '⏸️';
+      }
+    }
+
+    function updatePlaybackProgress() {
+      if (!audioEl || !audioEl.duration) return;
+      const pct = (audioEl.currentTime / audioEl.duration) * 100;
+      document.getElementById('playbackFill').style.width = `${pct}%`;
+    }
+
+    function seekPlayback(event) {
+      if (!audioEl || !audioEl.duration) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      const pct = (event.clientX - rect.left) / rect.width;
+      audioEl.currentTime = pct * audioEl.duration;
+    }
+
+    function formatDuration(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remaining = seconds % 60;
+      return `${minutes}:${String(remaining).padStart(2, '0')}`;
+    }
+
+    function init() {
+      App.ensureDefaultState();
+      App.updateDailyPresence();
+      renderPhrase();
+
+      if (!hasMediaRecorder) {
+        document.getElementById('noSupport').style.display = 'block';
+        document.getElementById('recordBtn').disabled = true;
+      }
+
+      document.getElementById('hearBtn').addEventListener('click', hearPhrase);
+      document.getElementById('advanceBtn').addEventListener('click', nextPhrase);
+      document.getElementById('retryBtn').addEventListener('click', () => {
+        clearFeedback();
+        showToast('Let’s try that once more.');
+      });
+      document.getElementById('recordBtn').addEventListener('click', toggleRecord);
+      document.getElementById('playBtn').addEventListener('click', togglePlayback);
+      document.getElementById('playbackTrack').addEventListener('click', seekPlayback);
+    }
+
+    init();
+  </script>
+</body>
+</html>

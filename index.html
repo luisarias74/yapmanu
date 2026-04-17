@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaLanguish — Tu Viaje en Inglés</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* ── Page-specific ── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* World map grid overlay */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(212,168,67,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(212,168,67,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* ── Hero Header ── */
+    .hero-header {
+      padding: 64px 28px 8px;
+      position: relative;
+      z-index: 2;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .app-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .app-name {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--parchment) 0%, var(--gold) 55%, var(--gold-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .app-tagline {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: rgba(245,239,224,0.45);
+      margin-top: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    /* ── Luna Greeting Card ── */
+    .luna-card {
+      margin: 28px 24px 20px;
+      background: var(--parchment);
+      border-radius: var(--radius-lg);
+      padding: 22px 22px 22px 22px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(27,42,74,0.25), 0 1px 3px rgba(212,168,67,0.15);
+      border: 1px solid rgba(212,168,67,0.15);
+      animation: fadeInUp 0.7s 0.15s ease both;
+    }
+
+    .luna-card::before { display: none; }
+
+    .luna-card-stripes {
+      display: none;
+    }
+
+    .luna-card-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .luna-name-tag {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .luna-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+
+    .luna-title {
+      font-size: 0.7rem;
+      color: var(--coral);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .luna-message {
+      font-size: 0.9rem;
+      color: var(--navy);
+      line-height: 1.65;
+      padding-right: 12px;
+    }
+
+    .luna-message strong {
+      color: var(--navy);
+      font-weight: 700;
+    }
+
+    .luna-postmark { display: none; }
+
+    /* ── Setup Form (Passport Style) ── */
+    .setup-section {
+      display: none;
+      margin: 0 24px 24px;
+      animation: fadeInUp 0.5s ease;
+    }
+
+    .setup-section.visible { display: block; }
+
+    .passport-card {
+      background: var(--parchment);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .passport-header {
+      background: var(--navy);
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--gold);
+    }
+
+    .passport-country {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .passport-title-group { text-align: center; }
+
+    .passport-main-title {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--parchment);
+    }
+
+    .passport-subtitle {
+      font-size: 0.55rem;
+      color: rgba(245,239,224,0.5);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .passport-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .passport-field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(27,42,74,0.08);
+    }
+    .passport-field:last-child { border-bottom: none; }
+
+    .passport-field-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(27,42,74,0.45);
+    }
+
+    .passport-field-input {
+      background: none;
+      border: none;
+      outline: none;
+      font-family: var(--font);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--navy);
+      width: 100%;
+      padding: 2px 0;
+    }
+    .passport-field-input::placeholder { color: rgba(27,42,74,0.25); font-weight: 400; }
+
+    .passport-photo-area {
+      width: 72px;
+      height: 86px;
+      background: rgba(27,42,74,0.06);
+      border: 1.5px dashed rgba(27,42,74,0.2);
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 1.5rem;
+      color: rgba(27,42,74,0.3);
+      flex-shrink: 0;
+    }
+
+    .passport-photo-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .passport-top-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 0;
+    }
+
+    .passport-fields-col { flex: 1; }
+
+    .passport-mrz {
+      background: rgba(27,42,74,0.04);
+      padding: 12px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: rgba(27,42,74,0.3);
+      border-top: 1px solid rgba(27,42,74,0.08);
+      line-height: 1.8;
+    }
+
+    /* ── CTA Area ── */
+    .cta-section {
+      padding: 0 24px 36px;
+      animation: fadeInUp 0.8s 0.3s ease both;
+    }
+
+    /* ── Returning user hint ── */
+    .destination-hint {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding: 12px 16px;
+      background: rgba(212,168,67,0.06);
+      border: 1px solid rgba(212,168,67,0.15);
+      border-radius: var(--radius-sm);
+    }
+    .destination-hint-icon { font-size: 1rem; color: rgba(245,239,224,0.5); }
+    .destination-hint-text { font-size: 0.8rem; color: rgba(245,239,224,0.6); line-height: 1.4; }
+
+    /* Inline stamp decorations (corner) */
+    .stamp-decor {
+      display: inline-block;
+      width: 44px;
+      height: 44px;
+      border: 2px dashed rgba(212,168,67,0.45);
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body class="map-bg">
+
+  <div class="hero" id="mainContent">
+
+    <!-- Hero header -->
+    <div class="hero-header">
+      <div class="app-eyebrow">
+        <span class="label" style="font-size:0.6rem;letter-spacing:0.2em;color:rgba(212,168,67,0.55)">🇨🇴 LaLanguish</span>
+      </div>
+      <div class="app-name">LaLanguish</div>
+      <div class="app-tagline">Tu camino al inglés fluido</div>
+    </div>
+
+    <!-- Luna greeting card -->
+    <div class="luna-card" id="lunaGreeting">
+      <div class="luna-card-stripes"></div>
+      <div class="luna-card-header">
+        <div class="luna-avatar">🌙</div>
+        <div class="luna-name-tag">
+          <span class="luna-name">Luna</span>
+          <span class="luna-title">Tu tutora de inglés · Guía de viaje</span>
+        </div>
+      </div>
+      <div class="luna-message" id="lunaGreetingMsg">
+        ¡Hola! Soy Luna — piénsame como tu amiga viajera que habla inglés perfectamente. 🌍<br><br>
+        He estado en <strong>Colombia</strong>, conozco el vocabulario del sector energético, y sí — ya sé todas las historias de los perritos. Mayi y Nube van a salir mucho. 🐾<br><br>
+        ¿Lista para empezar a coleccionar sellos en tu pasaporte? ¡Vamos!
+      </div>
+      <div class="luna-postmark">LUNA<br>AIR<br>MAIL</div>
+    </div>
+
+    <!-- Returning user: direct CTA -->
+    <div id="returningView" style="display:none; padding: 0 24px 24px;">
+      <div class="destination-hint">
+        <span class="destination-hint-icon" style="font-size:1rem">→</span>
+        <div class="destination-hint-text">Tu viaje continúa donde lo dejaste.</div>
+      </div>
+      <div class="flex flex-col gap-12">
+        <a href="chat.html" class="btn btn-primary btn-lg btn-full">
+          Continuar con Luna
+        </a>
+        <a href="practice.html" class="btn btn-outline btn-full">
+          Práctica de Hoy
+        </a>
+      </div>
+      <div class="divider mt-24">⚜</div>
+      <button class="btn btn-ghost btn-sm btn-full mt-16" onclick="resetOnboarding()">Comenzar de nuevo</button>
+    </div>
+
+    <!-- New user: passport setup -->
+    <div class="setup-section" id="setupSection">
+      <div class="label opacity-60 mb-8" style="padding: 0 4px;">
+        Tu Pasaporte de Viaje
+      </div>
+      <div class="passport-card">
+        <div class="passport-header">
+          <span class="passport-country">🇨🇴 Colombia</span>
+          <div class="passport-title-group">
+            <div class="passport-main-title">LaLanguish</div>
+            <div class="passport-subtitle">Pasaporte de Idiomas</div>
+          </div>
+          <div class="stamp-decor">🌙</div>
+        </div>
+        <div class="passport-body">
+          <div class="passport-top-row">
+            <div class="passport-fields-col">
+              <div class="passport-field">
+                <span class="passport-field-label">Nombre Completo</span>
+                <input class="passport-field-input" type="text" id="fieldName"
+                  placeholder="Carolina" autocomplete="off">
+              </div>
+              <div class="passport-field">
+                <span class="passport-field-label">Trabajo / Empresa</span>
+                <input class="passport-field-input" type="text" id="fieldJob"
+                  placeholder="Transforma — Energía" autocomplete="off">
+              </div>
+              <div class="passport-field">
+                <span class="passport-field-label">Mascotas</span>
+                <input class="passport-field-input" type="text" id="fieldPets"
+                  placeholder="Mayi & Nube 🐾" autocomplete="off">
+              </div>
+            </div>
+            <div class="passport-photo-area">
+              <span>🛂</span>
+              <span class="passport-photo-label">Foto</span>
+            </div>
+          </div>
+          <div class="passport-field">
+            <span class="passport-field-label">Pasatiempos</span>
+            <input class="passport-field-input" type="text" id="fieldHobbies"
+              placeholder="Viajes, cocina, música..." autocomplete="off">
+          </div>
+          <div class="passport-field">
+            <span class="passport-field-label">Nivel de Inglés</span>
+            <select class="passport-field-input" id="fieldLevel" style="cursor:pointer">
+              <option value="beginner">Principiante</option>
+              <option value="intermediate" selected>Intermedio</option>
+              <option value="advanced">Avanzado</option>
+            </select>
+          </div>
+        </div>
+        <div class="passport-mrz" id="mrzLine">
+          LALANGUISH&lt;&lt;&lt;CAROLINA&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>
+          COL&lt;TRANSFORMA&lt;ENERGY&lt;&lt;MAYI&lt;NUBE&lt;&lt;&lt;LEV2
+        </div>
+      </div>
+    </div>
+
+    <!-- Fleur-de-lis divider -->
+    <div class="gold-rule" id="fleurDivider"><span class="gold-rule-symbol">⚜</span></div>
+
+    <!-- CTA -->
+    <div class="cta-section" id="ctaSection">
+      <button class="btn btn-primary btn-lg btn-full" id="beginBtn" onclick="handleBegin()">
+        Comenzar Mi Viaje
+      </button>
+    </div>
+
+  </div><!-- /hero -->
+
+  <!-- Bottom nav (hidden on landing, shown after profile exists) -->
+  <nav class="bottom-nav" id="bottomNav" style="display:none">
+    <a href="index.html" class="nav-item active">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Inicio</span>
+    </a>
+    <a href="chat.html" class="nav-item">
+      <span class="nav-icon">💬</span>
+      <span class="nav-label">Chat</span>
+    </a>
+    <a href="practice.html" class="nav-item">
+      <span class="nav-icon">📍</span>
+      <span class="nav-label">Práctica</span>
+    </a>
+    <a href="voice.html" class="nav-item">
+      <span class="nav-icon">🎙️</span>
+      <span class="nav-label">Voz</span>
+    </a>
+    <a href="progress.html" class="nav-item">
+      <span class="nav-icon">🗺️</span>
+      <span class="nav-label">Viaje</span>
+    </a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const LS = {
+      get: k => { try { return JSON.parse(localStorage.getItem('lalanguish_' + k)); } catch { return null; } },
+      set: (k, v) => localStorage.setItem('lalanguish_' + k, JSON.stringify(v))
+    };
+
+    function showToast(msg, duration = 2500) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), duration);
+    }
+
+    function updateMRZ() {
+      const name = (document.getElementById('fieldName').value || 'CAROLINA').toUpperCase().replace(/[^A-Z]/g, '');
+      const job  = (document.getElementById('fieldJob').value || 'TRANSFORMA').toUpperCase().replace(/[^A-Z]/g, '').substring(0, 10);
+      const pets = (document.getElementById('fieldPets').value || 'MAYI NUBE').toUpperCase().replace(/[^A-Z ]/g, '').replace(/ /g, '<').substring(0, 10);
+      const level = document.getElementById('fieldLevel').value || 'INT';
+      document.getElementById('mrzLine').innerHTML =
+        `LALANGUISH&lt;&lt;&lt;${name}&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>COL&lt;${job}&lt;&lt;${pets}&lt;&lt;&lt;${level.substring(0,3).toUpperCase()}`;
+    }
+
+    ['fieldName','fieldJob','fieldPets','fieldHobbies'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateMRZ);
+    });
+
+    function handleBegin() {
+      const profile = LS.get('profile');
+      if (!profile) {
+        // Save new profile
+        const name    = document.getElementById('fieldName').value.trim() || 'Carolina';
+        const job     = document.getElementById('fieldJob').value.trim() || 'Transforma';
+        const pets    = document.getElementById('fieldPets').value.trim() || 'Mayi & Nube';
+        const hobbies = document.getElementById('fieldHobbies').value.trim();
+        const level   = document.getElementById('fieldLevel').value;
+
+        if (!name) { showToast('¡Necesitamos tu nombre! Ingresa tu nombre primero.'); return; }
+
+        LS.set('profile', { name, job, pets, hobbies, level, joined: new Date().toISOString() });
+        LS.set('xp', 0);
+        LS.set('streak', 0);
+        LS.set('stamps', []);
+        LS.set('completed', []);
+        LS.set('last_active', new Date().toISOString().split('T')[0]);
+
+        showToast('¡Bienvenida! Pasaporte sellado. 🛂');
+        setTimeout(() => window.location.href = 'chat.html', 1200);
+      } else {
+        window.location.href = 'chat.html';
+      }
+    }
+
+    function resetOnboarding() {
+      if (confirm('¿Empezar de nuevo? Esto borrará todo tu progreso.')) {
+        localStorage.clear();
+        location.reload();
+      }
+    }
+
+    // ── Init ──────────────────────────────────────────────────
+    function init() {
+      const profile = LS.get('profile');
+      if (profile) {
+        // Returning user
+        document.getElementById('returningView').style.display = 'block';
+        document.getElementById('setupSection').style.display = 'none';
+        document.getElementById('ctaSection').style.display = 'none';
+        document.getElementById('fleurDivider').style.display = 'none';
+        document.getElementById('bottomNav').style.display = 'flex';
+        document.getElementById('lunaGreetingMsg').innerHTML =
+          `¡Bienvenida de vuelta, <strong>${profile.name}</strong>! 🌍<br><br>
+          ¿Lista para seguir coleccionando sellos? Estoy segura de que <strong>${profile.pets || 'tus perritas'}</strong> están orgullosas de ti. Sigamos donde lo dejamos — tu pasaporte se ve cada vez más impresionante. ✈️`;
+      } else {
+        // New user
+        document.getElementById('setupSection').classList.add('visible');
+        document.getElementById('ctaSection').style.display = 'block';
+        document.getElementById('returningView').style.display = 'none';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>

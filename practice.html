@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaLanguish — Build The Pattern</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.34);
+      --glass-border: rgba(255, 255, 255, 0.38);
+      --glass-shadow: 0 24px 60px rgba(70, 118, 160, 0.18);
+      --text-main: #24384b;
+      --text-soft: rgba(36, 56, 75, 0.7);
+      --mint: #67f2e7;
+      --aqua: #2bd9f1;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(143, 255, 230, 0.72), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(108, 206, 255, 0.78), transparent 24%),
+        radial-gradient(circle at 78% 86%, rgba(255, 255, 255, 0.9), transparent 22%),
+        radial-gradient(circle at 20% 88%, rgba(155, 236, 255, 0.55), transparent 18%),
+        linear-gradient(180deg, #b3f4ea 0%, #7ed8ff 46%, #d7f8ff 100%);
+      color: var(--text-main);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .dashboard-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 22px 16px 104px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-card {
+      width: 100%;
+      border-radius: 32px;
+      padding: 18px 18px 90px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 68%);
+      pointer-events: none;
+    }
+
+    .practice-shell {
+      position: relative;
+      z-index: 1;
+    }
+
+    .practice-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.34);
+      color: var(--text-soft);
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    .practice-title {
+      margin-top: 12px;
+      font-size: clamp(2rem, 7vw, 2.6rem);
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--text-main);
+      font-weight: 700;
+      max-width: 11ch;
+    }
+
+    .practice-subtitle {
+      margin-top: 8px;
+      color: var(--text-soft);
+      line-height: 1.55;
+      font-size: 0.95rem;
+      max-width: 34ch;
+    }
+
+    .practice-stack {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .lesson-card,
+    .ladder-card,
+    .coach-card,
+    .continuation-card {
+      border-radius: 24px;
+      padding: 18px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .card-kicker {
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: rgba(36, 56, 75, 0.5);
+    }
+
+    .lesson-line {
+      margin-top: 10px;
+      font-size: clamp(1.75rem, 6vw, 2.15rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 700;
+      color: var(--text-main);
+      max-width: 12ch;
+    }
+
+    .lesson-meaning {
+      margin-top: 8px;
+      display: inline-flex;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.36);
+      color: var(--text-main);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.34);
+    }
+
+    .lesson-copy {
+      margin-top: 10px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      font-size: 0.9rem;
+    }
+
+    .lesson-actions,
+    .variation-actions {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .ladder-line {
+      margin-top: 8px;
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.24);
+      color: var(--text-soft);
+      line-height: 1.45;
+      font-size: 0.86rem;
+      border: 1px solid rgba(255,255,255,0.28);
+    }
+
+    .variation-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .variation-chip {
+      padding: 12px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.22);
+      color: var(--text-main);
+      line-height: 1.4;
+      font-size: 0.86rem;
+      border: 1px solid rgba(255,255,255,0.22);
+      text-align: left;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .variation-chip.active {
+      border-color: rgba(43,217,241,0.34);
+      background: rgba(103,242,231,0.2);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.26);
+    }
+
+    .coach-copy {
+      margin-top: 8px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      font-size: 0.88rem;
+    }
+
+    .continuation-card {
+      display: none;
+    }
+
+    .continuation-card.visible {
+      display: block;
+    }
+
+    .continuation-copy {
+      margin-top: 8px;
+      color: var(--text-soft);
+      line-height: 1.5;
+      font-size: 0.88rem;
+    }
+
+    .micro-progress {
+      margin-top: 8px;
+      color: rgba(36,56,75,0.46);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      color: var(--text-main);
+      border-radius: 999px;
+      box-shadow: 0 14px 28px rgba(32, 217, 234, 0.22);
+    }
+
+    .btn-outline {
+      background: rgba(255,255,255,0.26);
+      color: var(--text-main);
+      border: 1px solid rgba(255,255,255,0.36);
+      border-radius: 999px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.22);
+    }
+
+    .bottom-nav {
+      left: 50%;
+      right: auto;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(430px, calc(100% - 32px));
+      height: 72px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.28);
+      border: 1px solid rgba(255,255,255,0.34);
+      box-shadow: 0 18px 40px rgba(70, 118, 160, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      color: rgba(36, 56, 75, 0.55);
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: #1ed9ea;
+      text-shadow: 0 0 18px rgba(30,217,234,0.3);
+    }
+
+    .nav-label {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: none;
+    }
+
+    .toast {
+      background: rgba(255,255,255,0.86);
+      color: var(--text-main);
+      box-shadow: 0 16px 40px rgba(70, 118, 160, 0.18);
+    }
+  </style>
+</head>
+<body>
+  <main class="dashboard-shell">
+    <section class="dashboard-card">
+      <div class="practice-shell">
+        <div class="practice-kicker">📍 Build The Pattern</div>
+        <h1 class="practice-title" id="practiceTitle">Change one piece.</h1>
+        <p class="practice-subtitle" id="practiceSubtitle">
+          Keep the shape. Swap one word.
+        </p>
+
+        <div class="practice-stack">
+          <section class="lesson-card">
+            <div class="card-kicker">Base Phrase</div>
+            <div class="lesson-line" id="basePhrase">I am opening the door.</div>
+            <div class="lesson-meaning" id="baseMeaning">Estoy abriendo la puerta.</div>
+            <p class="lesson-copy" id="baseCopy">
+              First Carol owns the full sentence. Then we change just one piece of it.
+            </p>
+            <div class="lesson-actions">
+              <a href="voice.html" class="btn btn-primary btn-full">Practice This By Voice</a>
+            </div>
+          </section>
+
+          <section class="ladder-card">
+            <div class="card-kicker">Try This</div>
+            <div class="ladder-line" id="variationPrompt">
+              Keep the same pattern. Only swap one word.
+            </div>
+            <div class="variation-list" id="variationList"></div>
+            <div class="variation-actions">
+              <button class="btn btn-outline btn-full" id="nextPatternBtn">Another Pattern</button>
+            </div>
+          </section>
+
+          <section class="coach-card">
+            <div class="card-kicker">Luna</div>
+            <div class="coach-copy" id="coachCopy">
+              We are not asking Carol to study grammar here. We are letting her feel the pattern stay stable while one word changes.
+            </div>
+            <div class="micro-progress" id="microProgress">pattern confidence stored quietly</div>
+          </section>
+
+          <section class="continuation-card" id="continuationCard">
+            <div class="card-kicker">Keep Going</div>
+            <div class="continuation-copy">
+              Nice. Want another one, or would you rather talk with Luna now?
+            </div>
+            <div class="variation-actions">
+              <button class="btn btn-primary btn-full" id="anotherOneBtn">Another one</button>
+              <a href="chat.html" class="btn btn-outline btn-full">Talk with Luna</a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></a>
+    <a href="chat.html" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></a>
+    <a href="practice.html" class="nav-item active"><span class="nav-icon">📍</span><span class="nav-label">Práctica</span></a>
+    <a href="voice.html" class="nav-item"><span class="nav-icon">🎙️</span><span class="nav-label">Voz</span></a>
+    <a href="progress.html" class="nav-item"><span class="nav-icon">🗺️</span><span class="nav-label">Viaje</span></a>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+  <script>
+    const App = window.LaLanguishApp;
+    const LS = App.store;
+
+    const PATTERNS = [
+      {
+        base: 'I am opening the door.',
+        meaning: 'Estoy abriendo la puerta.',
+        copy: 'First say the whole sentence. Then change one piece.',
+        prompt: 'Keep the same shape. Change one word.',
+        variations: [
+          'I am opening the window.',
+          'I am closing the door.',
+          'I am opening the gate.'
+        ],
+        coach: 'The sentence stays familiar, so the change feels small.',
+        progress: 'pattern confidence · home'
+      },
+      {
+        base: 'I am walking the dog.',
+        meaning: 'Estoy paseando al perro.',
+        copy: 'This stays close to real life, so it sticks faster.',
+        prompt: 'Keep the frame. Change one word.',
+        variations: [
+          'I am feeding the dog.',
+          'I am walking outside.',
+          'I am calling the dog.'
+        ],
+        coach: 'She starts feeling that “I am + action” stays steady.',
+        progress: 'pattern confidence · routines'
+      },
+      {
+        base: 'I am in a meeting right now.',
+        meaning: 'Estoy en una reunión ahora mismo.',
+        copy: 'Now the same shape moves into work.',
+        prompt: 'Keep the frame. Switch the setting.',
+        variations: [
+          'I am at my desk right now.',
+          'I am on a call right now.',
+          'I am with my team right now.'
+        ],
+        coach: 'This is how work English starts feeling natural.',
+        progress: 'pattern confidence · work'
+      }
+    ];
+
+    let currentIndex = 0;
+    let selectedVariation = 0;
+
+    function showContinuation(show) {
+      document.getElementById('continuationCard').classList.toggle('visible', show);
+    }
+
+    function showToast(message, duration = 2200) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    function renderPattern() {
+      const profile = App.getSnapshot().profile || {};
+      const pattern = PATTERNS[currentIndex];
+      const list = document.getElementById('variationList');
+
+      document.getElementById('practiceTitle').textContent = profile.name
+        ? `${profile.name}, change one piece.`
+        : 'Change one piece.';
+      document.getElementById('practiceSubtitle').textContent =
+        'Keep the shape. Swap one word.';
+      document.getElementById('basePhrase').textContent = pattern.base;
+      document.getElementById('baseMeaning').textContent = pattern.meaning;
+      document.getElementById('baseCopy').textContent = pattern.copy;
+      document.getElementById('variationPrompt').textContent = pattern.prompt;
+      document.getElementById('coachCopy').textContent = pattern.coach;
+      document.getElementById('microProgress').textContent = pattern.progress;
+      showContinuation(false);
+
+      list.innerHTML = '';
+      pattern.variations.forEach((variation, index) => {
+        const button = document.createElement('button');
+        button.className = `variation-chip ${index === selectedVariation ? 'active' : ''}`;
+        button.textContent = variation;
+        button.addEventListener('click', () => chooseVariation(index));
+        list.appendChild(button);
+      });
+    }
+
+    function chooseVariation(index) {
+      selectedVariation = index;
+      renderPattern();
+      LS.set('xp', (LS.get('xp', 0) || 0) + 4);
+      showToast('Variation locked in.');
+    }
+
+    function nextPattern() {
+      if (currentIndex >= PATTERNS.length - 1) {
+        showContinuation(true);
+        return;
+      }
+      currentIndex += 1;
+      selectedVariation = 0;
+      renderPattern();
+    }
+
+    function init() {
+      App.ensureDefaultState();
+      renderPattern();
+      document.getElementById('nextPatternBtn').addEventListener('click', nextPattern);
+      document.getElementById('anotherOneBtn').addEventListener('click', () => {
+        currentIndex = 0;
+        selectedVariation = 0;
+        renderPattern();
+      });
+    }
+
+    init();
+  </script>
+</body>
+</html>

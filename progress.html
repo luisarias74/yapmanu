@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaLanguish — Tu Viaje</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    :root {
+      --glass-bg: rgba(255, 255, 255, 0.34);
+      --glass-strong: rgba(255, 255, 255, 0.42);
+      --glass-border: rgba(255, 255, 255, 0.38);
+      --glass-shadow: 0 24px 60px rgba(70, 118, 160, 0.18);
+      --text-main: #24384b;
+      --text-soft: rgba(36, 56, 75, 0.7);
+      --mint: #67f2e7;
+      --aqua: #2bd9f1;
+      --lavender: #c7c4ff;
+    }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(143, 255, 230, 0.72), transparent 28%),
+        radial-gradient(circle at 82% 24%, rgba(108, 206, 255, 0.78), transparent 24%),
+        radial-gradient(circle at 78% 86%, rgba(255, 255, 255, 0.9), transparent 22%),
+        radial-gradient(circle at 20% 88%, rgba(155, 236, 255, 0.55), transparent 18%),
+        linear-gradient(180deg, #b3f4ea 0%, #7ed8ff 46%, #d7f8ff 100%);
+      color: var(--text-main);
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      pointer-events: none;
+    }
+
+    .dashboard-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      padding: 22px 16px 104px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .dashboard-card {
+      width: 100%;
+      border-radius: 32px;
+      padding: 18px 18px 90px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card::after {
+      content: '';
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 210px;
+      height: 210px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 68%);
+      pointer-events: none;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: none;
+      margin: 0;
+      padding: 0;
+      min-height: auto;
+    }
+
+    /* ── Passport cover hero ── */
+    .passport-hero {
+      position: relative;
+      background: transparent;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .passport-hero::before {
+      display: none;
+    }
+
+    .passport-cover {
+      position: relative;
+      background: var(--glass-bg);
+      border-radius: 32px;
+      padding: 18px;
+      box-shadow: var(--glass-shadow);
+      border: 1px solid var(--glass-border);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .passport-cover::before {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 26px;
+      pointer-events: none;
+    }
+
+    .passport-cover-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .passport-cover-country {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+    }
+
+    .passport-cover-emblem {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.34);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.95), rgba(255,255,255,0.55) 55%, rgba(104, 241, 228, 0.35) 100%);
+      box-shadow:
+        0 0 0 4px rgba(255,255,255,0.18),
+        0 0 24px rgba(79, 238, 231, 0.32);
+    }
+
+    .passport-cover-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text-soft);
+      text-align: right;
+    }
+
+    .passport-cover-name-section {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .passport-cover-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: rgba(36,56,75,0.5);
+      margin-bottom: 4px;
+    }
+
+    .passport-cover-name {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.04em;
+    }
+
+    .passport-cover-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.24);
+    }
+
+    .passport-stat {
+      background: rgba(255,255,255,0.16);
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .passport-stat-value {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1;
+    }
+
+    .passport-stat-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: rgba(36,56,75,0.48);
+      margin-top: 3px;
+    }
+
+    /* ── Section headers ── */
+    .section-header {
+      padding: 22px 4px 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-sub {
+      font-size: 0.74rem;
+      color: rgba(36,56,75,0.48);
+    }
+
+    /* ── Streak card ── */
+    .streak-card {
+      margin: 0;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 18px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .streak-flame {
+      font-size: 2.8rem;
+      animation: bounce 2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    .streak-info { flex: 1; }
+
+    .streak-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .streak-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: rgba(36,56,75,0.55);
+      letter-spacing: 0.04em;
+      margin-top: 2px;
+    }
+
+    .streak-dots {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .streak-dot {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      border: 1.5px solid rgba(255,255,255,0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .streak-dot.active {
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      border-color: transparent;
+      box-shadow: 0 0 12px rgba(32,217,234,0.22);
+    }
+
+    /* ── XP level card ── */
+    .xp-card {
+      margin: 12px 0 0;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 18px 16px;
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .xp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .xp-level-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .xp-level-icon {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      box-shadow: 0 12px 22px rgba(32,217,234,0.2);
+    }
+
+    .xp-level-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .xp-level-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .xp-level-num {
+      font-size: 0.68rem;
+      color: rgba(36,56,75,0.52);
+      font-weight: 600;
+    }
+
+    .xp-total {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .xp-next {
+      font-size: 0.72rem;
+      color: rgba(36,56,75,0.46);
+      margin-top: 6px;
+      text-align: right;
+    }
+
+    /* ── Stamps wall ── */
+    .stamps-wall {
+      padding: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stamp-tile {
+      aspect-ratio: 1;
+      border-radius: var(--radius-md);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 8px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+      transition: transform 0.2s;
+    }
+
+    .stamp-tile:hover { transform: scale(1.03) rotate(1deg); }
+
+    .stamp-tile.earned {
+      background: rgba(255,255,255,0.32);
+      box-shadow: var(--glass-shadow);
+      -webkit-mask:
+        radial-gradient(circle at 50% 0,    transparent 7px, #fff 7.5px) top    / 16px 51% repeat-x,
+        radial-gradient(circle at 50% 100%, transparent 7px, #fff 7.5px) bottom / 16px 51% repeat-x,
+        radial-gradient(circle at 0 50%,    transparent 7px, #fff 7.5px) left   / 51% 16px repeat-y,
+        radial-gradient(circle at 100% 50%, transparent 7px, #fff 7.5px) right  / 51% 16px repeat-y;
+      mask:
+        radial-gradient(circle at 50% 0,    transparent 7px, #fff 7.5px) top    / 16px 51% repeat-x,
+        radial-gradient(circle at 50% 100%, transparent 7px, #fff 7.5px) bottom / 16px 51% repeat-x,
+        radial-gradient(circle at 0 50%,    transparent 7px, #fff 7.5px) left   / 51% 16px repeat-y,
+        radial-gradient(circle at 100% 50%, transparent 7px, #fff 7.5px) right  / 51% 16px repeat-y;
+      filter: drop-shadow(0 12px 22px rgba(70, 118, 160, 0.14));
+    }
+
+    .stamp-tile.locked {
+      background: rgba(255,255,255,0.18);
+      border: 1px dashed rgba(255,255,255,0.32);
+      opacity: 0.5;
+    }
+
+    .stamp-tile.earned .stamp-emoji { font-size: 2rem; }
+    .stamp-tile.locked .stamp-emoji { font-size: 1.6rem; filter: grayscale(1); opacity: 0.4; }
+
+    .stamp-tile-name {
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .stamp-tile.earned .stamp-tile-name { color: var(--text-main); }
+    .stamp-tile.locked .stamp-tile-name { color: rgba(36,56,75,0.32); }
+
+    .stamp-tile.earned .stamp-corner-mark {
+      position: absolute;
+      top: 5px; right: 5px;
+      font-size: 0.6rem;
+      color: #1ebdcc;
+      font-weight: 700;
+    }
+
+    /* ── Destinations map list ── */
+    .map-list {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .map-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 22px;
+      transition: border-color 0.2s;
+      box-shadow: var(--glass-shadow);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .map-item.completed {
+      background: rgba(255,255,255,0.38);
+      border-color: rgba(255,255,255,0.42);
+    }
+
+    .map-item-icon {
+      font-size: 1.4rem;
+      width: 36px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .map-item-info { flex: 1; min-width: 0; }
+
+    .map-item-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .map-item.completed .map-item-name { color: var(--text-main); }
+
+    .map-item-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(36,56,75,0.12);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .map-item-fill {
+      height: 100%;
+      border-radius: 100px;
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+    }
+
+    .map-item-badge {
+      flex-shrink: 0;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 100px;
+    }
+
+    .map-item.completed .map-item-badge {
+      background: rgba(103,242,231,0.22);
+      color: #177f83;
+    }
+
+    .map-item:not(.completed) .map-item-badge {
+      background: rgba(255,255,255,0.24);
+      color: rgba(36,56,75,0.45);
+    }
+
+    /* ── Level milestones ── */
+    .milestones-row {
+      display: flex;
+      gap: 0;
+      padding: 0;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .milestones-row::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 36px;
+      right: 36px;
+      height: 2px;
+      background: rgba(255,255,255,0.34);
+      z-index: 0;
+    }
+
+    .milestone {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .milestone-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      background: rgba(255,255,255,0.3);
+    }
+
+    .milestone.reached .milestone-dot {
+      border-color: rgba(43,217,241,0.28);
+      background: rgba(103,242,231,0.24);
+      box-shadow: 0 0 12px rgba(32,217,234,0.22);
+    }
+
+    .milestone-label {
+      font-size: 0.58rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .milestone.reached .milestone-label { color: var(--text-main); }
+    .milestone:not(.reached) .milestone-label { color: rgba(36,56,75,0.36); }
+
+    /* ── Share card ── */
+    .share-card {
+      margin: 0 0 32px;
+      background: var(--glass-bg);
+      border-radius: 24px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: var(--glass-shadow);
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .share-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--mint), var(--aqua), var(--lavender));
+    }
+
+    .share-quote {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      font-style: italic;
+    }
+
+    .share-luna {
+      font-size: 0.78rem;
+      color: #1ebdcc;
+      font-weight: 600;
+    }
+
+    .progress-bar {
+      background: rgba(36,56,75,0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      height: 8px;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, var(--mint), var(--aqua));
+      height: 100%;
+      border-radius: inherit;
+    }
+
+    .gold-rule {
+      color: rgba(36,56,75,0.42);
+    }
+
+    .bottom-nav {
+      left: 50%;
+      right: auto;
+      bottom: 18px;
+      transform: translateX(-50%);
+      width: min(430px, calc(100% - 32px));
+      height: 72px;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.28);
+      border: 1px solid rgba(255,255,255,0.34);
+      box-shadow: 0 18px 40px rgba(70, 118, 160, 0.18);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .nav-item {
+      color: rgba(36, 56, 75, 0.55);
+      gap: 4px;
+    }
+
+    .nav-item.active {
+      color: #1ed9ea;
+      text-shadow: 0 0 18px rgba(30,217,234,0.3);
+    }
+
+    .nav-label {
+      font-size: 0.66rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      text-transform: none;
+    }
+
+    .toast {
+      background: rgba(255,255,255,0.86);
+      color: var(--text-main);
+      box-shadow: 0 16px 40px rgba(70, 118, 160, 0.18);
+    }
+  </style>
+</head>
+<body class="map-bg">
+<main class="dashboard-shell">
+<section class="dashboard-card">
+<div class="page-wrapper">
+
+  <!-- Passport cover hero -->
+  <div class="passport-hero" style="position:relative">
+    <!-- Eiffel Tower watermark -->
+    <div aria-hidden="true" style="position:absolute;right:0;top:50%;transform:translateY(-50%);width:110px;height:auto;color:rgba(36,56,75,0.28);opacity:0.12;pointer-events:none;z-index:0">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 210" fill="currentColor">
+        <rect x="49" y="0" width="2" height="22" rx="1"/>
+        <polygon points="50,22 43,58 57,58"/>
+        <rect x="41" y="56" width="18" height="4" rx="1"/>
+        <polygon points="43,60 34,97 66,97 57,60"/>
+        <rect x="31" y="95" width="38" height="5" rx="1"/>
+        <polygon points="34,100 16,172 40,172 43,100"/>
+        <polygon points="66,100 84,172 60,172 57,100"/>
+        <rect x="14" y="170" width="72" height="6" rx="2"/>
+        <rect x="10" y="176" width="28" height="12" rx="2"/>
+        <rect x="62" y="176" width="28" height="12" rx="2"/>
+        <rect x="6" y="188" width="36" height="10" rx="2"/>
+        <rect x="58" y="188" width="36" height="10" rx="2"/>
+      </svg>
+    </div>
+    <div class="passport-cover" style="position:relative;z-index:1">
+      <div class="passport-cover-top">
+        <div class="passport-cover-country">🇨🇴 Colombia</div>
+        <div class="passport-cover-emblem">🌍</div>
+        <div class="passport-cover-title">LaLanguish<br>Viaje</div>
+      </div>
+      <div class="passport-cover-name-section">
+        <div class="passport-cover-label">Viajera</div>
+        <div class="passport-cover-name" id="travelerName">Carolina</div>
+      </div>
+      <div class="passport-cover-stats">
+        <div class="passport-stat">
+          <div class="passport-stat-value" id="statStamps">0</div>
+          <div class="passport-stat-label">Sellos</div>
+        </div>
+        <div class="passport-stat">
+          <div class="passport-stat-value" id="statXP">0</div>
+          <div class="passport-stat-label">XP</div>
+        </div>
+        <div class="passport-stat">
+          <div class="passport-stat-value" id="statStreak">0</div>
+          <div class="passport-stat-label">Días Seguidos</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Streak -->
+  <div class="section-header">
+    <div class="section-title">Racha Diaria</div>
+    <div class="section-sub" id="streakSubText">¡Sigue así!</div>
+  </div>
+  <div class="streak-card">
+    <div class="streak-flame">🔥</div>
+    <div class="streak-info">
+      <div class="streak-number" id="streakNum">0</div>
+      <div class="streak-label">Días seguidos</div>
+      <div class="streak-dots" id="streakDots"></div>
+    </div>
+  </div>
+
+  <!-- XP Level -->
+  <div class="xp-card">
+    <div class="xp-header">
+      <div class="xp-level-badge">
+        <div class="xp-level-icon" id="levelIcon">✈️</div>
+        <div class="xp-level-text">
+          <div class="xp-level-name" id="levelName">Mochilera</div>
+          <div class="xp-level-num" id="levelNum">Nivel 1</div>
+        </div>
+      </div>
+      <div class="xp-total"><span id="xpTotal">0</span> <span style="font-size:0.7rem;color:rgba(36,56,75,0.52);font-weight:600">XP</span></div>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="xpBar" style="width:0%"></div>
+    </div>
+    <div class="xp-next" id="xpNext">0 XP para el siguiente nivel</div>
+  </div>
+
+  <!-- Fleur-de-lis divider -->
+  <div class="gold-rule" style="margin: 8px 0"><span class="gold-rule-symbol">⚜</span></div>
+
+  <!-- Level milestones -->
+  <div class="section-header" style="padding-bottom: 16px;">
+    <div class="section-title">Hitos del Viaje</div>
+  </div>
+  <div class="milestones-row" id="milestonesRow">
+    <div class="milestone" data-xp="0">
+      <div class="milestone-dot">🎒</div>
+      <div class="milestone-label">Mochilera</div>
+    </div>
+    <div class="milestone" data-xp="100">
+      <div class="milestone-dot">🧭</div>
+      <div class="milestone-label">Exploradora</div>
+    </div>
+    <div class="milestone" data-xp="300">
+      <div class="milestone-dot">✈️</div>
+      <div class="milestone-label">Viajera</div>
+    </div>
+    <div class="milestone" data-xp="600">
+      <div class="milestone-dot">🌍</div>
+      <div class="milestone-label">Globetrottera</div>
+    </div>
+    <div class="milestone" data-xp="1000">
+      <div class="milestone-dot">🏆</div>
+      <div class="milestone-label">Embajadora</div>
+    </div>
+  </div>
+
+  <!-- Stamps collected -->
+  <div class="section-header">
+    <div class="section-title">Sellos Coleccionados</div>
+    <div class="section-sub" id="stampCount">0 / 8</div>
+  </div>
+  <div class="stamps-wall" id="stampsWall"></div>
+
+  <!-- Destinations map -->
+  <div class="section-header">
+    <div class="section-title">Destinos</div>
+    <div class="section-sub" id="destCount">0 completados</div>
+  </div>
+  <div class="map-list" id="mapList"></div>
+
+  <!-- Luna motivational card -->
+  <div class="share-card" id="lunaMotivation">
+    <div class="share-quote" id="lunaQuote">"Toda viajera experta fue alguna vez primeriza. Tu pasaporte se está llenando de manera preciosa. ✈️"</div>
+    <div class="share-luna">— Luna 🌙</div>
+  </div>
+
+</div>
+</section>
+</main>
+
+<!-- Bottom nav -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Inicio</span></a>
+  <a href="chat.html" class="nav-item"><span class="nav-icon">💬</span><span class="nav-label">Chat</span></a>
+  <a href="practice.html" class="nav-item"><span class="nav-icon">📍</span><span class="nav-label">Práctica</span></a>
+  <a href="voice.html" class="nav-item"><span class="nav-icon">🎙️</span><span class="nav-label">Voz</span></a>
+  <a href="progress.html" class="nav-item active"><span class="nav-icon">🗺️</span><span class="nav-label">Viaje</span></a>
+</nav>
+
+<script>
+  const LS = {
+    get: k => { try { return JSON.parse(localStorage.getItem('lalanguish_' + k)); } catch { return null; } },
+    set: (k, v) => localStorage.setItem('lalanguish_' + k, JSON.stringify(v))
+  };
+
+  /* ── All stamps definition ── */
+  const ALL_STAMPS = [
+    { id: 'the-office',      emoji: '🏢', name: 'La Oficina',      color: '#87C1FF' },
+    { id: 'energy-sector',   emoji: '⚡', name: 'Energía Pro',    color: '#D4A843' },
+    { id: 'at-the-airport',  emoji: '✈️', name: 'Aeropuerto',     color: '#E8705A' },
+    { id: 'morning-routine', emoji: '☀️', name: 'Mañanera',       color: '#50C878' },
+    { id: 'small-talk',      emoji: '💬', name: 'Charla Social',  color: '#87C1FF' },
+    { id: 'first_chat',      emoji: '💌', name: 'Primer Chat',    color: '#E8705A' },
+    { id: 'email-mastery',   emoji: '📧', name: 'Domina el Email',color: '#D4A843' },
+    { id: 'voice_practice',  emoji: '🎙️', name: 'Estrella de Voz', color: '#87C1FF' },
+  ];
+
+  /* ── All destinations ── */
+  const ALL_DESTS = [
+    { id: 'the-office',         emoji: '🏢', name: 'La Oficina',        cards: 6 },
+    { id: 'energy-sector',      emoji: '⚡', name: 'Sector Energético', cards: 6 },
+    { id: 'at-the-airport',     emoji: '✈️', name: 'En el Aeropuerto',  cards: 5 },
+    { id: 'morning-routine',    emoji: '☀️', name: 'Rutina Mañanera',   cards: 5 },
+    { id: 'small-talk',         emoji: '💬', name: 'Charla Social',     cards: 5 },
+    { id: 'email-mastery',      emoji: '📧', name: 'Domina el Email',   cards: 4 },
+    { id: 'restaurants',        emoji: '🍽️', name: 'Restaurantes',     cards: 2 },
+    { id: 'presentation-power', emoji: '📊', name: 'Presentaciones',    cards: 2 },
+  ];
+
+  /* ── XP Levels ── */
+  const LEVELS = [
+    { name: 'Mochilera',     icon: '🎒', min: 0,    max: 100  },
+    { name: 'Exploradora',   icon: '🧭', min: 100,  max: 300  },
+    { name: 'Viajera',       icon: '✈️', min: 300,  max: 600  },
+    { name: 'Globetrottera', icon: '🌍', min: 600,  max: 1000 },
+    { name: 'Embajadora',    icon: '🏆', min: 1000, max: 9999 },
+  ];
+
+  /* ── Luna quotes by level ── */
+  const LUNA_QUOTES = [
+    { minXP: 0,   quote: '"Toda viajera experta fue alguna vez primeriza. Tu pasaporte se está llenando de manera preciosa. ✈️"' },
+    { minXP: 50,  quote: '"¡Mírate! Mayi y Nube te escucharon practicando en la sala. Están muy impresionadas. 🐾"' },
+    { minXP: 100, quote: '"¡Ahora eres Exploradora! Ese vocabulario energético va a impresionar en tu próxima reunión en Transforma. ⚡"' },
+    { minXP: 300, quote: '"¡Nivel Viajera desbloqueado! Este tipo de confianza abre puertas en conferencias internacionales. 🌍"' },
+    { minXP: 600, quote: '"¡Eres una Globetrottera! Tu viaje en inglés empezó en Colombia y te está llevando a todas partes. 🏆"' },
+    { minXP: 1000, quote: '"Nivel Embajadora — no solo estás aprendiendo inglés, lo estás dominando. Yo siempre supe que podías. 🌙"' },
+  ];
+
+  function getLevel(xp) {
+    for (let i = LEVELS.length - 1; i >= 0; i--) {
+      if (xp >= LEVELS[i].min) return { ...LEVELS[i], index: i };
+    }
+    return { ...LEVELS[0], index: 0 };
+  }
+
+  function getLunaQuote(xp) {
+    let best = LUNA_QUOTES[0];
+    for (const q of LUNA_QUOTES) {
+      if (xp >= q.minXP) best = q;
+    }
+    return best.quote;
+  }
+
+  /* ── Check / update streak ── */
+  function checkStreak() {
+    const today = new Date().toISOString().split('T')[0];
+    const lastActive = LS.get('last_active');
+    let streak = LS.get('streak') || 0;
+
+    if (!lastActive) {
+      streak = 1;
+    } else if (lastActive === today) {
+      // already counted today
+    } else {
+      const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+      if (lastActive === yesterday) {
+        streak += 1;
+      } else {
+        streak = 1; // broke streak
+      }
+    }
+
+    LS.set('streak', streak);
+    LS.set('last_active', today);
+    return streak;
+  }
+
+  /* ── Render streak dots (last 7 days) ── */
+  function renderStreakDots(streak) {
+    const container = document.getElementById('streakDots');
+    container.innerHTML = '';
+    const days = ['L','M','M','J','V','S','D'];
+    const today = new Date().getDay(); // 0=Sun
+    for (let i = 0; i < 7; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'streak-dot' + (i < Math.min(streak, 7) ? ' active' : '');
+      dot.textContent = days[i];
+      container.appendChild(dot);
+    }
+  }
+
+  /* ── Render stamps ── */
+  function renderStamps(earned) {
+    const wall = document.getElementById('stampsWall');
+    wall.innerHTML = '';
+    ALL_STAMPS.forEach(s => {
+      const isEarned = earned.includes(s.id);
+      const tile = document.createElement('div');
+      tile.className = `stamp-tile ${isEarned ? 'earned' : 'locked'}`;
+      if (isEarned) {
+        tile.innerHTML = `
+          <span class="stamp-corner-mark">★</span>
+          <div class="stamp-emoji">${s.emoji}</div>
+          <div class="stamp-tile-name">${s.name}</div>`;
+        tile.style.animation = 'fadeIn 0.4s ease';
+      } else {
+        tile.innerHTML = `
+          <div class="stamp-emoji">${s.emoji}</div>
+          <div class="stamp-tile-name">${s.name}</div>`;
+      }
+      wall.appendChild(tile);
+    });
+  }
+
+  /* ── Render destinations map ── */
+  function renderDestMap(completed) {
+    const list = document.getElementById('mapList');
+    list.innerHTML = '';
+    ALL_DESTS.forEach(d => {
+      const isDone = completed.includes(d.id);
+      const savedProgress = LS.get('progress_' + d.id) || 0;
+      const pct = isDone ? 100 : Math.round((savedProgress / d.cards) * 100);
+
+      const item = document.createElement('div');
+      item.className = `map-item ${isDone ? 'completed' : ''}`;
+      item.innerHTML = `
+        <div class="map-item-icon">${d.emoji}</div>
+        <div class="map-item-info">
+          <div class="map-item-name">${d.name}</div>
+          <div class="map-item-bar">
+            <div class="map-item-fill" style="width:${pct}%"></div>
+          </div>
+        </div>
+        <div class="map-item-badge">${isDone ? '✓ Listo' : pct > 0 ? pct + '%' : '—'}</div>`;
+      list.appendChild(item);
+    });
+  }
+
+  /* ── Render milestones ── */
+  function renderMilestones(xp) {
+    document.querySelectorAll('.milestone').forEach(m => {
+      const required = parseInt(m.dataset.xp);
+      if (xp >= required) m.classList.add('reached');
+    });
+  }
+
+  /* ── Main init ── */
+  function init() {
+    const profile   = LS.get('profile') || {};
+    const xp        = LS.get('xp') || 0;
+    const stamps    = LS.get('stamps') || [];
+    const completed = LS.get('completed') || [];
+    const streak    = checkStreak();
+
+    /* passport cover */
+    document.getElementById('travelerName').textContent = profile.name || 'Carolina';
+    document.getElementById('statStamps').textContent  = stamps.length;
+    document.getElementById('statXP').textContent      = xp;
+    document.getElementById('statStreak').textContent  = streak;
+
+    /* streak */
+    document.getElementById('streakNum').textContent = streak;
+    renderStreakDots(streak);
+    document.getElementById('streakSubText').textContent =
+      streak === 0 ? '¡Empieza hoy!' :
+      streak < 3   ? 'Tomando impulso...' :
+      streak < 7   ? '🔥 ¡Estás en llamas!' :
+                     '🏆 ¡Imparable!';
+
+    /* XP + level */
+    const level = getLevel(xp);
+    document.getElementById('xpTotal').textContent   = xp;
+    document.getElementById('levelName').textContent = level.name;
+    document.getElementById('levelNum').textContent  = 'Nivel ' + (level.index + 1);
+    document.getElementById('levelIcon').textContent = level.icon;
+    const pct  = level.max === 9999 ? 100 : Math.round(((xp - level.min) / (level.max - level.min)) * 100);
+    const toGo = level.max === 9999 ? 0 : level.max - xp;
+    setTimeout(() => { document.getElementById('xpBar').style.width = pct + '%'; }, 200);
+    document.getElementById('xpNext').textContent = level.max === 9999
+      ? '🏆 ¡Nivel máximo alcanzado!'
+      : `${toGo} XP para ${LEVELS[level.index + 1]?.name || 'el máximo'}`;
+
+    /* milestones */
+    renderMilestones(xp);
+
+    /* stamps */
+    renderStamps(stamps);
+    document.getElementById('stampCount').textContent = `${stamps.length} / ${ALL_STAMPS.length}`;
+
+    /* destinations */
+    renderDestMap(completed);
+    document.getElementById('destCount').textContent = `${completed.length} completados`;
+
+    /* luna quote */
+    document.getElementById('lunaQuote').textContent = getLunaQuote(xp);
+
+    /* animate stats in */
+    document.querySelectorAll('.passport-stat-value, .streak-number, .xp-total').forEach((el, i) => {
+      el.style.animation = `fadeInUp 0.4s ${i * 0.08}s ease both`;
+    });
+  }
+
+  init();
+</script>
+</body>
+</html>
