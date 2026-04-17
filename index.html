@@ -407,29 +407,7 @@
 
   </div><!-- /hero -->
 
-  <!-- Bottom nav (hidden on landing, shown after profile exists) -->
-  <nav class="bottom-nav" id="bottomNav" style="display:none">
-    <a href="index.html" class="nav-item active">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">Inicio</span>
-    </a>
-    <a href="chat.html" class="nav-item">
-      <span class="nav-icon">💬</span>
-      <span class="nav-label">Chat</span>
-    </a>
-    <a href="practice.html" class="nav-item">
-      <span class="nav-icon">📍</span>
-      <span class="nav-label">Práctica</span>
-    </a>
-    <a href="voice.html" class="nav-item">
-      <span class="nav-icon">🎙️</span>
-      <span class="nav-label">Voz</span>
-    </a>
-    <a href="progress.html" class="nav-item">
-      <span class="nav-icon">🗺️</span>
-      <span class="nav-label">Viaje</span>
-    </a>
-  </nav>
+  <div id="bottom-nav"></div>
 
   <div class="toast" id="toast"></div>
 
@@ -502,8 +480,7 @@
         document.getElementById('setupSection').style.display = 'none';
         document.getElementById('ctaSection').style.display = 'none';
         document.getElementById('fleurDivider').style.display = 'none';
-        document.getElementById('bottomNav').style.display = 'flex';
-        document.getElementById('lunaGreetingMsg').innerHTML =
+document.getElementById('lunaGreetingMsg').innerHTML =
           `¡Bienvenida de vuelta, <strong>${profile.name}</strong>! 🌍<br><br>
           ¿Lista para seguir coleccionando sellos? Estoy segura de que <strong>${profile.pets || 'tus perritas'}</strong> están orgullosas de ti. Sigamos donde lo dejamos — tu pasaporte se ve cada vez más impresionante. ✈️`;
       } else {
@@ -516,5 +493,6 @@
 
     init();
   </script>
+  <script src="js/bottom-nav.js"></script>
 </body>
 </html>

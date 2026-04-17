@@ -432,38 +432,6 @@
     .stamp-celebrate-emoji { font-size: 1.4rem; }
     .stamp-celebrate-text { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
 
-    .bottom-nav {
-      left: 50%;
-      right: auto;
-      bottom: 18px;
-      transform: translateX(-50%);
-      width: min(430px, calc(100% - 32px));
-      height: 72px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.28);
-      border: 1px solid rgba(255,255,255,0.34);
-      box-shadow: 0 18px 40px rgba(70, 118, 160, 0.18);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      overflow: hidden;
-    }
-
-    .nav-item {
-      color: rgba(36, 56, 75, 0.55);
-      gap: 4px;
-    }
-
-    .nav-item.active {
-      color: #1ed9ea;
-      text-shadow: 0 0 18px rgba(30,217,234,0.3);
-    }
-
-    .nav-label {
-      font-size: 0.66rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      text-transform: none;
-    }
 
     .toast {
       background: rgba(255,255,255,0.86);
@@ -552,24 +520,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- Bottom nav -->
-  <nav class="bottom-nav">
-    <a href="index.html" class="nav-item">
-      <span class="nav-icon">🏠</span><span class="nav-label">Inicio</span>
-    </a>
-    <a href="chat.html" class="nav-item active">
-      <span class="nav-icon">💬</span><span class="nav-label">Chat</span>
-    </a>
-    <a href="practice.html" class="nav-item">
-      <span class="nav-icon">📍</span><span class="nav-label">Práctica</span>
-    </a>
-    <a href="voice.html" class="nav-item">
-      <span class="nav-icon">🎙️</span><span class="nav-label">Voz</span>
-    </a>
-    <a href="progress.html" class="nav-item">
-      <span class="nav-icon">🗺️</span><span class="nav-label">Viaje</span>
-    </a>
-  </nav>
+  <div id="bottom-nav"></div>
 
   <script src="app.js"></script>
   <script>
@@ -947,5 +898,6 @@ luna_response: "Dilo otra vez."`;
 
     init();
   </script>
+  <script src="js/bottom-nav.js"></script>
 </body>
 </html>
