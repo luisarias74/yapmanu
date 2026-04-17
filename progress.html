@@ -6,73 +6,7 @@
   <title>LaLanguish — Tu Viaje</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    :root {
-      --glass-bg: rgba(255, 255, 255, 0.34);
-      --glass-strong: rgba(255, 255, 255, 0.42);
-      --glass-border: rgba(255, 255, 255, 0.38);
-      --glass-shadow: 0 24px 60px rgba(70, 118, 160, 0.18);
-      --text-main: #24384b;
-      --text-soft: rgba(36, 56, 75, 0.7);
-      --mint: #67f2e7;
-      --aqua: #2bd9f1;
-      --lavender: #c7c4ff;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(circle at 18% 18%, rgba(143, 255, 230, 0.72), transparent 28%),
-        radial-gradient(circle at 82% 24%, rgba(108, 206, 255, 0.78), transparent 24%),
-        radial-gradient(circle at 78% 86%, rgba(255, 255, 255, 0.9), transparent 22%),
-        radial-gradient(circle at 20% 88%, rgba(155, 236, 255, 0.55), transparent 18%),
-        linear-gradient(180deg, #b3f4ea 0%, #7ed8ff 46%, #d7f8ff 100%);
-      color: var(--text-main);
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      pointer-events: none;
-    }
-
-    .dashboard-shell {
-      position: relative;
-      z-index: 1;
-      max-width: 430px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 22px 16px 104px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .dashboard-card {
-      width: 100%;
-      border-radius: 32px;
-      padding: 18px 18px 90px;
-      background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-shadow);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .dashboard-card::after {
-      content: '';
-      position: absolute;
-      inset: auto -60px -80px auto;
-      width: 210px;
-      height: 210px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255,255,255,0.4), transparent 68%);
-      pointer-events: none;
-    }
+    :root { --lavender: #c7c4ff; }
 
     .page-wrapper {
       position: relative;
@@ -598,32 +532,9 @@
       font-weight: 600;
     }
 
-    .progress-bar {
-      background: rgba(36,56,75,0.12);
-      border-radius: 999px;
-      overflow: hidden;
-      height: 8px;
-    }
-
-    .progress-fill {
-      background: linear-gradient(90deg, var(--mint), var(--aqua));
-      height: 100%;
-      border-radius: inherit;
-    }
-
-    .gold-rule {
-      color: rgba(36,56,75,0.42);
-    }
-
-
-    .toast {
-      background: rgba(255,255,255,0.86);
-      color: var(--text-main);
-      box-shadow: 0 16px 40px rgba(70, 118, 160, 0.18);
-    }
   </style>
 </head>
-<body class="map-bg">
+<body>
 <main class="dashboard-shell">
 <section class="dashboard-card">
 <div class="page-wrapper">
