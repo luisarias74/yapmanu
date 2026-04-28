@@ -4077,6 +4077,8 @@
 
     const MIN_LISTEN_MS = 2500;
     let micSessionActive = false;
+    let activeSpeakRecognition = null;
+    let fallbackTimer = null;
     // iOS Safari blocks Audio.play() in async callbacks (including onresult).
     // Only a direct user-tap gesture can unlock audio after mic ends on iOS.
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -4090,6 +4092,35 @@
           console.log('[LaLanguish Mic] iPhone: resetting audioSession playback');
         }
       } catch (e) {}
+    }
+
+    function resetSpeakMicState(reason) {
+      console.log('[Speak Mic] Resetting mic state:', reason);
+      micSessionActive = false;
+      if (fallbackTimer) {
+        clearTimeout(fallbackTimer);
+        fallbackTimer = null;
+      }
+      try {
+        if (activeSpeakRecognition) {
+          activeSpeakRecognition.onresult = null;
+          activeSpeakRecognition.onerror = null;
+          activeSpeakRecognition.onend = null;
+          activeSpeakRecognition.stop();
+        }
+      } catch (e) {
+        console.warn('[Speak Mic] old recognition stop failed:', e.message);
+      }
+      activeSpeakRecognition = null;
+      setLunaState('idle');
+      try {
+        if (navigator.audioSession) {
+          navigator.audioSession.type = 'playback';
+        }
+      } catch (e) {
+        console.warn('[Speak Mic] audioSession reset failed:', e.message);
+      }
+      console.log('[Speak Mic] reset complete');
     }
 
     function showTapToHearBtn() {
@@ -4122,9 +4153,10 @@
         return;
       }
 
-      if (micSessionActive) return;
+      resetSpeakMicState('before new mic start');
 
       const rec = new SpeechRecognition();
+      activeSpeakRecognition = rec;
       rec.lang = 'en-US';
       rec.interimResults = false;
       rec.maxAlternatives = 1;
@@ -4133,7 +4165,6 @@
       let emptyFallbackFired = false;
       let micResultHandled = false;
       const startTime = Date.now();
-      let fallbackTimer = null;
 
       function finishSession(withFallback) {
         if (emptyFallbackFired) return;
@@ -4150,6 +4181,7 @@
         micSessionActive = true;
         setLunaState('listening');
         chatStatus.textContent = 'Listening\u2026 speak naturally';
+        console.log('[Speak Mic] recognition started');
       };
 
       rec.onresult = (event) => {
@@ -4163,17 +4195,15 @@
           micSessionActive = false;
           if (fallbackTimer) { window.clearTimeout(fallbackTimer); fallbackTimer = null; }
           try { rec.stop(); } catch (e) {}
+          activeSpeakRecognition = null;
+          setLunaState('idle');
           if (isIOS) resetAudioSession();
           textInput.value = transcript;
-          console.log('[LaLanguish Mic] Speak recognized successfully:', transcript);
+          console.log('[Speak Mic] result received:', transcript);
           flushAudio();
           if (isIOS) {
-            // iOS Safari blocks Audio.play() in async callbacks — only a user tap can unlock it.
-            // Mute auto-play, let text render, then surface the tap button to resume audio.
-            console.log('[LaLanguish Mic] iPhone post-mic audio requires tap');
             postMicMuted = true;
             sendUserMessage();
-            // Show after addAIMessage's 950ms inner delay + buffer
             window.setTimeout(() => { showTapToHearBtn(); }, 1100);
           } else {
             sendUserMessage();
@@ -4182,6 +4212,8 @@
       };
 
       rec.onend = () => {
+        console.log('[Speak Mic] recognition ended');
+        activeSpeakRecognition = null;
         if (isIOS) resetAudioSession();
         if (gotResult) return;
         const elapsed = Date.now() - startTime;
@@ -4194,15 +4226,14 @@
       };
 
       rec.onerror = (event) => {
-        micSessionActive = false;
-        if (isIOS) resetAudioSession();
+        console.log('[Speak Mic] recognition error:', event.error);
+        resetSpeakMicState('recognition error: ' + event.error);
         if (event.error === 'not-allowed') {
-          finishSession(false);
           addAIMessage("Microphone access denied. Allow microphone permission or type your answer.");
           return;
         }
         if (event.error === 'no-speech' || event.error === 'aborted') return;
-        finishSession(false);
+        addAIMessage("I didn\u2019t catch that. Try one short sentence.", '', true);
       };
 
       try {
@@ -4216,9 +4247,7 @@
         }
         rec.start();
       } catch (err) {
-        micSessionActive = false;
-        setLunaState('idle');
-        chatStatus.textContent = 'Ready when you are';
+        resetSpeakMicState('rec.start() threw');
         addAIMessage("Microphone access denied. Allow microphone permission or type your answer.");
       }
     }
