@@ -2430,7 +2430,7 @@
             <button class="hear-again-btn" id="hear-again-btn" type="button">🔊 Hear it again</button>
           </div>
           <div class="tap-to-hear-row" id="tap-to-hear-row" style="display:none;">
-            <button class="tap-to-hear-btn" id="tap-to-hear-btn" type="button">🔊 Tap to hear Luna</button>
+            <button class="tap-to-hear-btn" id="tap-to-hear-btn" type="button">🔊 Tap to hear next</button>
           </div>
           <div class="session-complete" id="session-complete">Nice progress.</div>
         </section>
@@ -3453,8 +3453,12 @@
     // Public call-site ─────────────────────────────────────────────────────────
     function speakText(text) {
       if (!text) return;
-      lastSpokenPhrase = text; // always captured so tap-to-hear can replay it
-      if (postMicMuted) return; // iOS: wait for user tap before playing
+      lastSpokenPhrase = text;
+      if (postMicMuted) {
+        pendingIphoneSpeakText = text;
+        console.log('[LaLanguish Mic] iPhone: pending speak text =', text);
+        return;
+      }
       if (LUNA_VOICE_PROVIDER === 'elevenlabs') {
         speakWithElevenLabs(text);
       } else {
@@ -4077,21 +4081,37 @@
     // Only a direct user-tap gesture can unlock audio after mic ends on iOS.
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     let postMicMuted = false;
+    let pendingIphoneSpeakText = '';
+
+    function resetAudioSession() {
+      try {
+        if (navigator.audioSession) {
+          navigator.audioSession.type = 'playback';
+          console.log('[LaLanguish Mic] iPhone: resetting audioSession playback');
+        }
+      } catch (e) {}
+    }
 
     function showTapToHearBtn() {
+      if (!pendingIphoneSpeakText) return;
       if (tapToHearRow) tapToHearRow.style.display = 'flex';
     }
 
     function hideTapToHearBtn() {
       if (tapToHearRow) tapToHearRow.style.display = 'none';
       postMicMuted = false;
+      pendingIphoneSpeakText = '';
     }
 
     if (tapToHearBtn) {
       tapToHearBtn.addEventListener('click', () => {
-        console.log('[LaLanguish Mic] User tapped to resume Luna audio');
+        console.log('[LaLanguish Mic] iPhone: tap to hear next clicked');
+        const textToPlay = pendingIphoneSpeakText;
         hideTapToHearBtn();
-        if (lastSpokenPhrase) speakText(lastSpokenPhrase);
+        if (textToPlay) {
+          console.log('[LaLanguish Mic] iPhone: playing pending speak text');
+          speakText(textToPlay);
+        }
       });
     }
 
@@ -4143,6 +4163,7 @@
           micSessionActive = false;
           if (fallbackTimer) { window.clearTimeout(fallbackTimer); fallbackTimer = null; }
           try { rec.stop(); } catch (e) {}
+          if (isIOS) resetAudioSession();
           textInput.value = transcript;
           console.log('[LaLanguish Mic] Speak recognized successfully:', transcript);
           flushAudio();
@@ -4161,6 +4182,7 @@
       };
 
       rec.onend = () => {
+        if (isIOS) resetAudioSession();
         if (gotResult) return;
         const elapsed = Date.now() - startTime;
         const remaining = MIN_LISTEN_MS - elapsed;
@@ -4173,6 +4195,7 @@
 
       rec.onerror = (event) => {
         micSessionActive = false;
+        if (isIOS) resetAudioSession();
         if (event.error === 'not-allowed') {
           finishSession(false);
           addAIMessage("Microphone access denied. Allow microphone permission or type your answer.");
@@ -4183,6 +4206,14 @@
       };
 
       try {
+        if (isIOS) {
+          try {
+            if (navigator.audioSession) {
+              navigator.audioSession.type = 'play-and-record';
+              console.log('[LaLanguish Mic] iPhone: setting audioSession play-and-record');
+            }
+          } catch (e) {}
+        }
         rec.start();
       } catch (err) {
         micSessionActive = false;
