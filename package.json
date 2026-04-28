@@ -1,0 +1,16 @@
+{
+  "name": "lalanguish-server",
+  "version": "1.0.0",
+  "description": "Local proxy for Luna Assist → Anthropic API",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.4.1",
+    "node-fetch": "^2.7.0"
+  }
+}

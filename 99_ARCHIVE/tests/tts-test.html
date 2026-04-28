@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>TTS Test</title>
+</head>
+<body style="font-family: sans-serif; padding: 24px;">
+  <button id="speak">Speak test</button>
+  <pre id="log" style="margin-top:16px; white-space:pre-wrap;"></pre>
+  <script>
+    const logEl = document.getElementById('log');
+    const log = (msg) => logEl.textContent += msg + "\n";
+
+    function runTest() {
+      const voices = speechSynthesis.getVoices();
+      log("voices available: " + voices.length);
+
+      speechSynthesis.cancel();
+
+      const u = new SpeechSynthesisUtterance("Hi, I'm Luna.");
+      u.lang = "en-US";
+      u.rate = 0.92;
+      u.pitch = 1.0;
+      u.volume = 1.0;
+
+      u.onstart = () => log("speech started");
+      u.onend = () => log("speech ended");
+      u.onerror = (e) => log("speech error: " + e.error);
+
+      speechSynthesis.speak(u);
+    }
+
+    speechSynthesis.onvoiceschanged = () => {
+      log("voiceschanged fired: " + speechSynthesis.getVoices().length);
+    };
+
+    log("initial voices: " + speechSynthesis.getVoices().length);
+    document.getElementById("speak").addEventListener("click", runTest);
+  </script>
+</body>
+</html>

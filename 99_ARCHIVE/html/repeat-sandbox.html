@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repeat Sandbox — LaLanguish</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg-top: #081225;
+      --bg-mid: #19173e;
+      --bg-bottom: #081c2f;
+      --cyan: #5de8ff;
+      --lavender: #b7a9ff;
+      --glass: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.14);
+      --text-main: #f6f8ff;
+      --text-soft: rgba(236,240,255,0.70);
+      --text-faint: rgba(236,240,255,0.45);
+      --shadow: 0 24px 80px rgba(0,0,0,0.38);
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100dvh;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(93,232,255,0.16), transparent 20%),
+        radial-gradient(circle at 82% 18%, rgba(183,169,255,0.18), transparent 24%),
+        radial-gradient(circle at 18% 88%, rgba(34,211,238,0.14), transparent 24%),
+        linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 48%, var(--bg-bottom) 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255,255,255,0.08), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(93,232,255,0.06), transparent 30%);
+      mix-blend-mode: screen;
+    }
+
+    .app-shell {
+      width: min(100%, 520px);
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 16px;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      min-height: calc(100dvh - 32px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px 18px 24px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: auto -90px -110px auto;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(183,169,255,0.22), transparent 68%);
+      pointer-events: none;
+    }
+
+    /* ── top bar ── */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+    }
+
+    /* ── luna stage ── */
+    .luna-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .luna-orb-wrap {
+      position: relative;
+      width: 108px; height: 108px;
+      display: grid;
+      place-items: center;
+    }
+
+    .luna-orb-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(93,232,255,0.2), transparent 72%);
+      filter: blur(10px);
+      animation: halo-breathe 4s ease-in-out infinite;
+    }
+
+    .luna-orb-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.12);
+      opacity: 0.8;
+    }
+
+    .luna-orb {
+      position: relative;
+      width: 78px; height: 78px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.98), rgba(201,239,255,0.9) 28%, rgba(105,144,255,0.52) 62%, rgba(19,27,77,0.65) 100%);
+      box-shadow:
+        0 0 0 10px rgba(255,255,255,0.04),
+        0 0 44px rgba(93,232,255,0.34),
+        0 0 84px rgba(183,169,255,0.24);
+      animation: orb-idle 4.8s ease-in-out infinite;
+      overflow: hidden;
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .luna-core {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.98), rgba(255,255,255,0.3) 72%, transparent 100%);
+      filter: blur(1px);
+    }
+
+    .luna-orb.idle    { animation: orb-idle 4.8s ease-in-out infinite; }
+
+    .luna-orb.listening {
+      transform: scale(1.08);
+      box-shadow:
+        0 0 0 14px rgba(93,232,255,0.14),
+        0 0 60px rgba(93,232,255,0.62),
+        0 0 110px rgba(93,232,255,0.38);
+      animation: orb-listening 2.4s ease-in-out infinite;
+    }
+
+    .luna-orb.speaking {
+      transform: scale(1.04);
+      box-shadow:
+        0 0 0 16px rgba(183,169,255,0.16),
+        0 0 70px rgba(183,169,255,0.62),
+        0 0 124px rgba(93,232,255,0.34);
+      animation: orb-speaking 1.5s ease-in-out infinite;
+    }
+
+    .luna-name {
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .luna-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-soft);
+      text-align: center;
+      line-height: 1.45;
+      min-height: 1.2em;
+    }
+
+    /* ── challenge card ── */
+    .challenge-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .repeat-prompt {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      text-align: center;
+    }
+
+    .repeat-cue {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--cyan);
+      text-align: center;
+      line-height: 1.4;
+      min-height: 1.4em;
+    }
+
+    .repeat-feedback {
+      font-size: 0.88rem;
+      color: var(--text-soft);
+      text-align: center;
+      line-height: 1.5;
+      min-height: 1.4em;
+    }
+
+    /* ── input area ── */
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      min-height: 56px;
+      border-radius: var(--radius-pill);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--glass-border);
+    }
+
+    .repeat-input {
+      flex: 1;
+      min-width: 0;
+      background: transparent;
+      border: 0;
+      outline: 0;
+      color: var(--text-main);
+      font-size: 0.96rem;
+      font-family: inherit;
+    }
+
+    .repeat-input::placeholder { color: var(--text-faint); }
+
+    /* ── buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 0 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.10);
+      color: var(--text-main);
+      font-size: 0.92rem;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(0,220,220,0.35), rgba(100,210,230,0.25));
+      border-color: rgba(0,210,215,0.35);
+      color: var(--cyan);
+    }
+
+    .btn-next {
+      background: linear-gradient(135deg, rgba(183,169,255,0.35), rgba(120,100,220,0.25));
+      border-color: rgba(183,169,255,0.40);
+      color: var(--lavender);
+    }
+
+    .btn:disabled {
+      opacity: 0.38;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .hidden { display: none !important; }
+    #repeat-next-btn.visible { display: inline-flex !important; }
+
+    /* ── debug panel ── */
+    .debug {
+      margin-top: auto;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      background: rgba(0,0,0,0.28);
+      border: 1px solid rgba(255,255,255,0.07);
+      font-size: 0.72rem;
+      color: var(--text-faint);
+      font-family: monospace;
+      line-height: 1.6;
+    }
+
+    /* ── animations ── */
+    @keyframes halo-breathe {
+      0%,100% { opacity: 0.8; transform: scale(1); }
+      50%      { opacity: 1;   transform: scale(1.05); }
+    }
+
+    @keyframes orb-idle {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-3px) scale(1.012); }
+    }
+
+    @keyframes orb-listening {
+      0%,100% { transform: scale(1.08); }
+      50%      { transform: scale(1.11); }
+    }
+
+    @keyframes orb-speaking {
+      0%,100% { transform: scale(1.04); }
+      50%      { transform: scale(1.07); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="card">
+
+      <div class="top-bar">
+        <span class="badge">Repeat Sandbox</span>
+      </div>
+
+      <!-- Luna -->
+      <div class="luna-stage">
+        <div class="luna-orb-wrap">
+          <div class="luna-orb idle" id="orb">
+            <div class="luna-core"></div>
+          </div>
+        </div>
+        <div class="luna-name">Luna</div>
+        <div class="luna-subtitle" id="luna-sub">Let's rebuild one short phrase.</div>
+      </div>
+
+      <!-- Challenge card -->
+      <div class="challenge-card">
+        <div class="repeat-prompt" id="prompt">Build this sentence.</div>
+        <div class="repeat-cue"    id="cue">Spanish: …</div>
+        <div class="repeat-feedback" id="feedback">Type the phrase and press Check.</div>
+
+        <div class="input-wrap">
+          <input
+            class="repeat-input"
+            id="answer-input"
+            type="text"
+            placeholder="Type your answer…"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
+        </div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="check-btn">Check</button>
+          <button class="btn btn-next hidden" id="repeat-next-btn" style="display: none;">Next</button>
+        </div>
+      </div>
+
+      <!-- Debug panel -->
+      <div class="debug" id="debug-panel"></div>
+
+    </div>
+  </div>
+
+  <script>
+    var PHRASES = [
+      { en: 'I feel good', es: 'Me siento bien' },
+      { en: 'I am ready', es: 'Estoy listo' },
+      { en: 'Where is the bathroom?', es: '¿Dónde está el baño?' },
+      { en: 'I would like some water', es: 'Quisiera un poco de agua' }
+    ];
+
+    let currentPhraseIndex = 0;
+    var confirmationRound = 1;
+    var attempts = 0;
+
+    var checkBtn = document.getElementById('check-btn');
+    var input = document.getElementById('answer-input');
+    var feedback = document.getElementById('feedback');
+    var cue = document.getElementById('cue');
+    var prompt = document.getElementById('prompt');
+    var orb = document.getElementById('orb');
+    var lunaSub = document.getElementById('luna-sub');
+    var debugEl = document.getElementById('debug-panel');
+    const repeatNextBtn = document.getElementById('repeat-next-btn');
+    console.log('[Repeat] next button:', repeatNextBtn);
+
+    function normalize(text) {
+      return String(text || '')
+        .toLowerCase()
+        .replace(/[¿¡?!.,-]/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function logNextState() {
+      console.log('[Repeat] phrase index:', currentPhraseIndex);
+      console.log('[Repeat] next display:', repeatNextBtn.style.display, repeatNextBtn.className);
+    }
+
+    function showRepeatNext() {
+      repeatNextBtn.style.display = 'inline-flex';
+      repeatNextBtn.classList.remove('hidden');
+      repeatNextBtn.style.opacity = '1';
+      repeatNextBtn.style.visibility = 'visible';
+      logNextState();
+    }
+
+    function hideRepeatNext() {
+      repeatNextBtn.style.display = 'none';
+      repeatNextBtn.classList.add('hidden');
+      logNextState();
+    }
+
+    function renderState(phrase) {
+      prompt.textContent = 'Build this sentence';
+      cue.textContent = 'Spanish: ' + phrase.es;
+      debugEl.textContent =
+        'index: ' + currentPhraseIndex +
+        ' | phrase: ' + phrase.en +
+        ' | round: ' + confirmationRound +
+        ' | attempts: ' + attempts;
+      console.log('[Repeat] phrase index:', currentPhraseIndex);
+    }
+
+    function resetForPhrase(phrase) {
+      confirmationRound = 1;
+      attempts = 0;
+      input.value = '';
+      feedback.textContent = 'Type the phrase and press Check.';
+      checkBtn.disabled = false;
+      hideRepeatNext();
+      orb.className = 'luna-orb idle';
+      lunaSub.textContent = "Let's rebuild one short phrase.";
+      renderState(phrase);
+      input.focus();
+    }
+
+    function loadPhrase(index) {
+      const phrase = PHRASES[index];
+      resetForPhrase(phrase);
+    }
+
+    checkBtn.addEventListener('click', function() {
+      var phrase = PHRASES[currentPhraseIndex];
+      var typed = input.value.trim();
+      var isCorrect = normalize(typed) === normalize(phrase.en);
+
+      if (!isCorrect) {
+        attempts += 1;
+        feedback.textContent = 'Not quite. Try again.';
+        input.value = '';
+        orb.className = 'luna-orb idle';
+        lunaSub.textContent = 'Almost. Try again.';
+        if (attempts >= 2) {
+          showRepeatNext();
+        }
+        renderState(phrase);
+        input.focus();
+        return;
+      }
+
+      if (confirmationRound === 1) {
+        confirmationRound = 2;
+        feedback.textContent = 'Good. Type it one more time.';
+        input.value = '';
+        orb.className = 'luna-orb listening';
+        lunaSub.textContent = 'One more time.';
+        hideRepeatNext();
+        renderState(phrase);
+        input.focus();
+        return;
+      }
+
+      feedback.textContent = 'Perfect. You can move on.';
+      checkBtn.disabled = true;
+      input.value = '';
+      orb.className = 'luna-orb speaking';
+      lunaSub.textContent = 'Perfect. You can move on.';
+      showRepeatNext();
+      renderState(phrase);
+    });
+
+    input.addEventListener('keydown', function(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        checkBtn.click();
+      }
+    });
+
+    repeatNextBtn.addEventListener('click', function() {
+      currentPhraseIndex = (currentPhraseIndex + 1) % PHRASES.length;
+      console.log('[Repeat] next index:', currentPhraseIndex);
+      console.log('[Repeat] phrase:', PHRASES[currentPhraseIndex].en);
+      loadPhrase(currentPhraseIndex);
+    });
+
+    loadPhrase(currentPhraseIndex);
+    window.showRepeatNext = showRepeatNext;
+  </script>
+</body>
+</html>

@@ -1092,57 +1092,6 @@
     .assist-textarea::placeholder { color: rgba(255,255,255,0.22); }
     .assist-textarea:focus { border-color: rgba(255,255,255,0.2); }
     .assist-submit-btn { margin-top: 12px; }
-    #assist-suggestions {
-      display: none;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 8px;
-    }
-    #assist-suggestions.visible { display: flex; }
-    .assist-suggestion-chip {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: rgba(236,240,255,0.75);
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s;
-      white-space: nowrap;
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .assist-suggestion-chip:hover {
-      background: rgba(0,210,215,0.12);
-      color: rgba(236,240,255,0.95);
-      border-color: rgba(0,210,215,0.3);
-    }
-    .assist-textarea-wrap { position: relative; }
-    #assist-mic-btn {
-      position: absolute;
-      bottom: 8px; right: 8px;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.45);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      transition: background 0.18s, color 0.18s, border-color 0.18s;
-      padding: 0;
-    }
-    #assist-mic-btn:hover { background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8); }
-    #assist-mic-btn.listening {
-      background: rgba(220,50,50,0.25);
-      border-color: rgba(220,80,80,0.5);
-      color: rgba(255,100,100,0.95);
-      animation: assistMicPulse 1s ease-in-out infinite;
-    }
-    @keyframes assistMicPulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(220,50,50,0.35); }
-      50%       { box-shadow: 0 0 0 5px rgba(220,50,50,0); }
-    }
 
     .assist-result-card {
       margin-top: 20px;
@@ -1242,368 +1191,6 @@
     .assist-hear-btn:hover { color: rgba(255,255,255,0.72); border-color: rgba(255,255,255,0.18); }
     .assist-loading { text-align: center; padding: 16px 0; color: rgba(255,255,255,0.35); font-size: 14px; }
 
-    /* ── WhatsApp Chat Mode ───────────────────────────────────────────────── */
-    .assist-intent-btn--wa { border-color: rgba(37,211,102,0.35); }
-    .assist-intent-btn--wa.active { background: rgba(37,211,102,0.18); border-color: rgba(37,211,102,0.6); color: #25d366; }
-
-    /* Pane layout shifts when WA chat is active */
-    #luna-assist-pane.wa-mode {
-      overflow: hidden;
-      padding-bottom: 0;
-    }
-    #luna-assist-pane.wa-mode .assist-pane-header,
-    #luna-assist-pane.wa-mode .assist-mode-row {
-      flex-shrink: 0;
-    }
-
-    /* Chat area fills remaining pane height */
-    #wa-chat-area {
-      flex: 1;
-      min-height: 0;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    #wa-chat-area.hidden { display: none !important; }
-
-    /* Scrollable message log */
-    #wa-chat-messages {
-      flex: 1;
-      min-height: 0;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      padding: 4px 0 10px;
-      scroll-behavior: smooth;
-    }
-    #wa-chat-messages::-webkit-scrollbar { width: 3px; }
-    #wa-chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-    /* A single conversation block (friend message + Luna reply) */
-    .wa-block { display: flex; flex-direction: column; gap: 6px; }
-
-    /* Individual row types */
-    .wa-row { display: flex; flex-direction: column; gap: 2px; }
-    .wa-row-label {
-      font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-      opacity: 0.42; padding: 0 2px;
-    }
-    .wa-bubble {
-      padding: 9px 12px;
-      border-radius: 14px;
-      font-size: 13.5px;
-      line-height: 1.5;
-      word-break: break-word;
-      animation: waBubbleIn 0.18s ease;
-    }
-    @keyframes waBubbleIn {
-      from { opacity: 0; transform: translateY(5px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .wa-bubble--friend {
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: rgba(255,255,255,0.88);
-      border-bottom-left-radius: 4px;
-      align-self: flex-start;
-    }
-    .wa-bubble--luna {
-      background: rgba(37,211,102,0.12);
-      border: 1px solid rgba(37,211,102,0.22);
-      color: rgba(255,255,255,0.9);
-      border-bottom-left-radius: 4px;
-      align-self: flex-start;
-    }
-    .wa-bubble--spanish {
-      font-size: 12px;
-      color: rgba(255,255,255,0.42);
-      font-style: italic;
-      padding: 0 4px;
-      align-self: flex-start;
-    }
-    .wa-bubble--note {
-      font-size: 12px;
-      padding: 7px 10px;
-      border-left: 2px solid rgba(37,211,102,0.45);
-      border-radius: 0 8px 8px 0;
-      background: rgba(255,255,255,0.03);
-      color: rgba(255,255,255,0.48);
-      align-self: flex-start;
-    }
-    .wa-copy-row {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 3px;
-      padding: 0 2px;
-    }
-    .wa-copy-btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: rgba(37,211,102,0.1);
-      border: 1px solid rgba(37,211,102,0.25);
-      border-radius: 8px;
-      padding: 4px 10px;
-      font-size: 11.5px; font-weight: 600;
-      color: rgba(37,211,102,0.9);
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.15s;
-    }
-    .wa-copy-btn:hover { background: rgba(37,211,102,0.2); }
-
-    /* ── Chat-style WhatsApp blocks ── */
-    @keyframes waSlideInLeft {
-      from { opacity: 0; transform: translateX(-8px) translateY(4px); }
-      to   { opacity: 1; transform: translateX(0)    translateY(0);    }
-    }
-    @keyframes waSlideInRight {
-      from { opacity: 0; transform: translateX(8px) translateY(4px); }
-      to   { opacity: 1; transform: translateX(0)   translateY(0);   }
-    }
-
-    .wa-chat { display: flex; flex-direction: column; gap: 12px; }
-
-    .wa-bubble {
-      max-width: 78%;
-      padding: 10px 14px;
-      border-radius: 18px;
-      font-size: 15px;
-      line-height: 1.45;
-    }
-
-    .wa-bubble-friend {
-      align-self: flex-start;
-      border-bottom-left-radius: 4px;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(10px);
-      animation: waSlideInLeft 220ms ease-out both;
-    }
-
-    .wa-bubble-user {
-      align-self: flex-end;
-      border-bottom-right-radius: 4px;
-      font-weight: 500;
-      font-size: 15.5px;
-      background: linear-gradient(135deg, rgba(0,220,140,0.28), rgba(0,170,120,0.18));
-      border: 1px solid rgba(90,255,190,0.25);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18), 0 0 18px rgba(0,220,140,0.08);
-      animation: waSlideInRight 240ms ease-out both;
-    }
-
-    .wa-translation {
-      font-size: 12.5px;
-      opacity: 0.55;
-      margin-top: -6px;
-      padding: 0 5px;
-      letter-spacing: 0.01em;
-      font-style: italic;
-    }
-    .wa-translation.wa-translation--right { align-self: flex-end; text-align: right; }
-
-    .copy-reply-btn {
-      align-self: flex-end;
-      background: rgba(0,200,120,0.13);
-      border: 1px solid rgba(0,200,120,0.32);
-      color: inherit;
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 13px;
-      cursor: pointer;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.14);
-      transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
-    }
-    .copy-reply-btn:hover {
-      background: rgba(0,200,120,0.26);
-      transform: translateY(-1px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
-    }
-
-    .wa-tip {
-      font-size: 12px;
-      opacity: 0.5;
-      padding: 8px 5px 2px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      letter-spacing: 0.01em;
-    }
-
-    /* Input dock pinned to bottom of chat area */
-    #wa-chat-dock {
-      flex-shrink: 0;
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      padding: 10px 0 14px;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      margin-top: 6px;
-    }
-    #wa-chat-textarea {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 9px 13px;
-      color: rgba(255,255,255,0.88);
-      font-family: inherit;
-      font-size: 13.5px;
-      line-height: 1.4;
-      resize: none;
-      outline: none;
-      max-height: 90px;
-      overflow-y: auto;
-      transition: border-color 0.18s;
-    }
-    #wa-chat-textarea::placeholder { color: rgba(255,255,255,0.28); }
-    #wa-chat-textarea:focus { border-color: rgba(37,211,102,0.4); }
-    #wa-chat-send-btn {
-      flex-shrink: 0;
-      width: 38px; height: 38px;
-      border-radius: 50%;
-      background: rgba(37,211,102,0.2);
-      border: 1px solid rgba(37,211,102,0.35);
-      color: rgba(37,211,102,0.9);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, transform 0.1s;
-    }
-    #wa-chat-send-btn:hover  { background: rgba(37,211,102,0.32); }
-    #wa-chat-send-btn:active { transform: scale(0.9); }
-    #wa-chat-send-btn:disabled { opacity: 0.3; cursor: default; }
-
-    /* Thinking indicator */
-    .wa-thinking {
-      font-size: 12px; color: rgba(255,255,255,0.3); font-style: italic;
-      padding: 4px 2px;
-      animation: waBubbleIn 0.2s ease;
-    }
-
-    /* ── Conversation Practice home button ─────────────────────────────────── */
-    .conv-entry-btn { margin-top: 8px; }
-
-    /* ── Conversation Practice screen ──────────────────────────────────────── */
-    .conv-card {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: 0;
-      overflow: hidden;
-    }
-    .conv-card .top-bar {
-      padding: 14px 18px 10px;
-      flex-shrink: 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .conv-header {
-      padding: 12px 18px 10px;
-      flex-shrink: 0;
-    }
-    .conv-header-title {
-      font-size: 15px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.88);
-      letter-spacing: 0.01em;
-    }
-    .conv-header-sub {
-      font-size: 12px;
-      color: rgba(255,255,255,0.38);
-      margin-top: 2px;
-    }
-    .conv-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 12px 16px 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
-    }
-    .conv-messages::-webkit-scrollbar { width: 3px; }
-    .conv-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
-
-    /* individual message bubbles */
-    .conv-bubble {
-      max-width: 80%;
-      padding: 9px 13px;
-      border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.5;
-      word-break: break-word;
-      animation: convBubbleIn 0.18s ease;
-    }
-    @keyframes convBubbleIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .conv-bubble--user {
-      align-self: flex-end;
-      background: rgba(0, 210, 215, 0.18);
-      border: 1px solid rgba(0, 210, 215, 0.25);
-      color: rgba(255,255,255,0.9);
-      border-bottom-right-radius: 4px;
-    }
-    .conv-bubble--luna {
-      align-self: flex-start;
-      background: rgba(255,255,255,0.07);
-      border: 1px solid rgba(255,255,255,0.09);
-      color: rgba(255,255,255,0.82);
-      border-bottom-left-radius: 4px;
-    }
-    .conv-bubble--typing {
-      align-self: flex-start;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.07);
-      color: rgba(255,255,255,0.35);
-      font-style: italic;
-      font-size: 13px;
-    }
-
-    /* input dock */
-    .conv-input-dock {
-      flex-shrink: 0;
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      padding: 10px 14px 14px;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      background: rgba(0,0,0,0.08);
-    }
-    .conv-textarea {
-      flex: 1;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 14px;
-      padding: 10px 14px;
-      color: rgba(255,255,255,0.88);
-      font-family: inherit;
-      font-size: 14px;
-      line-height: 1.4;
-      resize: none;
-      outline: none;
-      max-height: 100px;
-      overflow-y: auto;
-      transition: border-color 0.18s;
-    }
-    .conv-textarea::placeholder { color: rgba(255,255,255,0.28); }
-    .conv-textarea:focus { border-color: rgba(0,210,215,0.35); }
-    .conv-send-btn {
-      flex-shrink: 0;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(0,210,215,0.22);
-      border: 1px solid rgba(0,210,215,0.35);
-      color: rgba(0,210,215,0.9);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.18s, transform 0.12s;
-    }
-    .conv-send-btn:hover  { background: rgba(0,210,215,0.32); }
-    .conv-send-btn:active { transform: scale(0.9); }
-    .conv-send-btn:disabled { opacity: 0.35; cursor: default; }
-
     /* ═══ SCHEMA VISUAL DESIGN — appended, does not replace ═══ */
     body {
       background:
@@ -1617,34 +1204,6 @@
         linear-gradient(to bottom, #050510 0%, #070714 25%, #090920 50%, #0b0b28 75%, #0e0e30 100%) !important;
     }
     body::before { display: none !important; }
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image:
-        radial-gradient(circle at  8% 12%, rgba(255,255,255,.65) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 22%  7%, rgba(255,255,255,.45) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 38% 16%, rgba(255,255,255,.55) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 64%  9%, rgba(255,255,255,.58) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 81% 22%, rgba(255,255,255,.50) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 13% 42%, rgba(255,255,255,.42) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 47% 35%, rgba(255,255,255,.48) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 73% 48%, rgba(255,255,255,.52) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 90% 61%, rgba(255,255,255,.46) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 18% 76%, rgba(255,255,255,.40) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 52% 84%, rgba(255,255,255,.44) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 77% 72%, rgba(255,255,255,.48) 0 1px, transparent 1.5px);
-      animation: subtleStarTwinkle 6s ease-in-out infinite;
-    }
-    @keyframes subtleStarTwinkle {
-      0%   { opacity: 0.45; }
-      25%  { opacity: 0.75; }
-      50%  { opacity: 0.55; }
-      75%  { opacity: 0.85; }
-      100% { opacity: 0.45; }
-    }
     .app-shell { padding: 0 !important; width: 100% !important; max-width: 100% !important; }
     .app-card {
       background: transparent !important;
@@ -1729,24 +1288,8 @@
 
     /* Stars */
     .schema-star { position:absolute; border-radius:50%; background:white; pointer-events:none; z-index:0; }
-    .schema-star.tw { animation: schema-twinkle 6s ease-in-out infinite; }
-    @keyframes schema-twinkle { 0%,100%{opacity:0.32} 50%{opacity:0.06} }
-
-    /* Luna greeting overlay */
-    #luna-greeting {
-      position: fixed;
-      left: 50%;
-      top: 66%;
-      transform: translateX(-50%);
-      width: min(90vw, 520px);
-      text-align: center;
-      font-size: 1rem;
-      line-height: 1.4;
-      color: rgba(236,240,255,0.68);
-      z-index: 30;
-      pointer-events: none;
-      white-space: nowrap;
-    }
+    .schema-star.tw { animation: schema-twinkle 3s ease-in-out infinite; }
+    @keyframes schema-twinkle { 0%,100%{opacity:inherit} 50%{opacity:.1} }
 
     /* Beams */
     #schema-beams { display: none !important; }
@@ -1978,14 +1521,6 @@
     #repeat-screen .chip-bank,
     #repeat-screen .repeat-feedback,
     #repeat-screen .repeat-actions { display: none !important; }
-    #repeat-screen .repeat-card.challenge-active .schema-topics { display: none !important; }
-    #repeat-screen .repeat-card.challenge-active .repeat-prompt { display: block !important; }
-    #repeat-screen .repeat-card.challenge-active .repeat-cue { display: block !important; }
-    #repeat-screen .repeat-card.challenge-active .answer-assembly { display: none !important; }
-    #repeat-screen .repeat-card.challenge-active .chip-bank { display: none !important; }
-    #repeat-screen .repeat-card.challenge-active .repeat-feedback { display: block !important; }
-    #repeat-screen .repeat-card.challenge-active .repeat-actions { display: flex !important; }
-    #repeat-screen .repeat-card.challenge-active .repeat-recall { display: block !important; }
     #repeat-screen .repeat-card {
       background: transparent !important;
       border: none !important;
@@ -2013,210 +1548,52 @@
     .schema-topic-card:active { transform: scale(0.97); }
 
     /* ═══ UNDERSTAND SCREEN ═══ */
-    #understand-screen .top-bar    { display: none !important; }
-    #understand-screen .session-context  { text-align: center; padding-top: 36px; }
-    #understand-screen .session-kicker   { color: rgba(0,210,215,.9); }
-    #understand-screen .session-subtitle { color: rgba(255,255,255,.45); }
-
-    .und-content-card {
-      display: flex; flex-direction: column; gap: 14px;
-      padding: 20px 16px;
-      border-radius: 24px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,.14);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      box-shadow: inset 0 1px 0 0 rgba(255,255,255,.18), 0 8px 32px rgba(0,0,0,0.18);
-      align-items: center;
-      width: 100%;
-    }
-    .und-phrase-text {
-      font-size: 1.25rem; font-weight: 500;
-      text-align: center; line-height: 1.45; color: #f6f8ff;
-    }
-    .und-placeholder { font-size: 1rem; font-weight: 400; color: rgba(236,240,255,.45); font-style: italic; }
-    .und-phrase-meaning { font-size: 0.88rem; color: #5de8ff; font-style: italic; text-align: center; margin-top: -4px; }
-    .und-feedback-line  { font-size: 0.82rem; color: rgba(236,240,255,.45); text-align: center; min-height: 1.1em; }
-    .und-practice-area  { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-    .und-practice-label { font-size: 0.82rem; color: rgba(236,240,255,.7); text-align: center; }
-    .und-practice-row   { display: flex; gap: 8px; }
-    .und-practice-input {
-      flex: 1; padding: 11px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
-      color: #f6f8ff; font-size: 0.94rem; font-family: inherit; outline: none;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
-    }
-    .und-practice-input::placeholder { color: rgba(236,240,255,.45); }
-    .und-practice-input:focus { border-color: rgba(93,232,255,.4); }
-    .und-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; width: 100%; }
-    #understand-screen button.und-primary {
-      min-height: 44px;
-      padding: 0 22px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(0,210,215,.35);
-      background: linear-gradient(135deg, rgba(0,220,220,.35), rgba(100,210,230,.25));
-      color: #5de8ff;
-      font-size: 0.92rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      touch-action: manipulation;
-    }
-    #understand-screen button.und-primary:hover {
-      background: linear-gradient(135deg, rgba(0,220,220,.45), rgba(100,210,230,.35));
-    }
-    .und-mic-btn {
-      flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
-      border: 1px solid rgba(255,255,255,.15);
-      background: rgba(255,255,255,.06);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; padding: 0;
-      box-shadow: inset 0 1px 0 0 rgba(255,255,255,.35);
-      transition: background .15s, border-color .15s, box-shadow .15s, transform .1s;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .und-mic-btn:hover  { background: rgba(255,255,255,.11); }
-    .und-mic-btn:active { transform: scale(0.97); }
-    .und-mic-btn.listening { background: rgba(0,210,215,.12); border-color: rgba(0,210,215,.4); animation: und-mic-pulse 1.2s ease-in-out infinite; }
-    .und-mic-btn svg { stroke: rgba(255,255,255,.55); fill: none; }
-    .und-mic-btn.listening svg { stroke: rgba(0,210,215,.9); }
-    @keyframes und-mic-pulse {
-      0%,100% { box-shadow: inset 0 1px 0 0 rgba(255,255,255,.35), 0 0 8px rgba(0,210,215,.25); }
-      50%      { box-shadow: inset 0 1px 0 0 rgba(255,255,255,.35), 0 0 18px rgba(0,210,215,.55); }
-    }
-
-    /* ═══ BABY LUNA (Assist entry) ═══ */
-    .baby-luna {
-      position: fixed;
-      bottom: 100px;
-      right: 20px;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      cursor: pointer;
-      z-index: 998;
-      background:
-        radial-gradient(circle at 30% 25%, rgba(255,255,255,.85) 0%, rgba(255,255,255,.25) 35%, transparent 50%),
-        radial-gradient(circle at 65% 30%, rgba(140,100,190,.4) 0%, transparent 50%),
-        radial-gradient(circle at 50% 70%, rgba(160,215,235,.35) 0%, transparent 50%),
-        linear-gradient(155deg, rgba(225,220,240,.7), rgba(195,210,230,.6) 50%, rgba(200,195,225,.65));
+    #understand-screen .top-bar { display: none !important; }
+    #understand-screen .session-title { display: none !important; }
+    #understand-screen .luna-subtitle { display: none !important; }
+    #understand-screen .luna-stage { order: -1 !important; padding-top: 10vh !important; }
+    #understand-screen .session-context { text-align: left !important; }
+    #understand-screen .session-kicker { color: rgba(0,210,215,.9) !important; }
+    #understand-screen .session-subtitle { color: rgba(255,255,255,.45) !important; }
+    #understand-screen .repeat-card {
       box-shadow:
-        inset 0 0 8px 3px rgba(255,255,255,.35),
-        inset 0 0 16px 5px rgba(255,255,255,.12),
-        0 0 12px 6px rgba(255,255,255,.2),
-        0 0 24px 12px rgba(220,210,255,.1);
-      animation: babyBreathe 4s ease-in-out infinite;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
+        inset 0 1px 0 0 rgba(255,255,255,.3),
+        inset 0 0 8px 2px rgba(255,255,255,.06),
+        inset 0 0 15px 4px rgba(255,255,255,.03) !important;
     }
-    .baby-luna::after {
-      content: '';
-      position: absolute;
-      top: 22%;
-      left: 28%;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 0 3px 1px rgba(255,255,255,.6);
+    #understand-screen .repeat-prompt {
+      font-size: 1.1rem !important;
+      font-weight: 400 !important;
+      text-align: center !important;
+      padding: 10px 0 !important;
     }
-    .baby-luna:active {
-      transform: scale(0.9);
+    #understand-screen .repeat-feedback {
+      display: none !important;
     }
-    @keyframes babyBreathe {
-      0%, 100% { transform: scale(1); box-shadow: inset 0 0 8px 3px rgba(255,255,255,.35), inset 0 0 16px 5px rgba(255,255,255,.12), 0 0 12px 6px rgba(255,255,255,.2), 0 0 24px 12px rgba(220,210,255,.1); }
-      50% { transform: scale(1.06); box-shadow: inset 0 0 8px 3px rgba(255,255,255,.4), inset 0 0 16px 5px rgba(255,255,255,.15), 0 0 16px 8px rgba(255,255,255,.25), 0 0 30px 14px rgba(220,210,255,.14); }
+    #understand-screen .repeat-actions {
+      display: flex !important;
+      gap: 8px !important;
+      justify-content: center !important;
     }
-    /* ── Luna Assist Pane ───────────────────────────────────────────── */
-    #luna-assist-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 490;
-      background: rgba(0,0,0,0.4);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
+    #understand-screen .repeat-actions.hidden {
+      display: flex !important;
     }
-    #luna-assist-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
+    #understand-screen #understand-reflect-actions {
+      display: none !important;
     }
-    #luna-assist-pane {
-      position: fixed;
-      top: 0; right: 0;
-      width: min(340px, 88vw);
-      height: 100vh;
-      height: 100dvh;
-      z-index: 500;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      background: rgba(20, 24, 40, 0.25);
-      border-left: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(20px) saturate(140%);
-      -webkit-backdrop-filter: blur(20px) saturate(140%);
-      box-shadow: -8px 0 24px rgba(0,0,0,0.18), inset 0 0 30px rgba(255,255,255,0.02);
-      transform: translateX(100%);
-      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow-y: auto;
-      padding: 24px 20px 100px;
-    }
-    #luna-assist-pane::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      pointer-events: none;
-      z-index: 0;
-    }
-    #luna-assist-pane > * { position: relative; z-index: 1; }
-    #luna-assist-pane * { color: rgba(255,255,255,0.9); }
-    #luna-assist-pane textarea,
-    #luna-assist-pane input {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-    }
-    #luna-assist-pane.open {
-      transform: translateX(0);
-    }
-    .assist-pane-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .assist-pane-title {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: rgba(0,210,215,0.85);
-      font-weight: 700;
-      margin-bottom: 5px;
-    }
-    .assist-pane-subtitle {
-      font-size: 0.85rem;
-      color: rgba(236,240,255,0.72);
-      line-height: 1.4;
-    }
-    .assist-pane-close {
-      flex-shrink: 0;
-      background: none;
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 50%;
-      width: 28px; height: 28px;
-      display: flex; align-items: center; justify-content: center;
-      color: rgba(255,255,255,0.45);
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
-    }
-    .assist-pane-close:hover { color: rgba(255,255,255,0.85); border-color: rgba(255,255,255,0.3); }
-    .assist-mode-row {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 18px;
+    #understand-screen .repeat-actions .home-start-btn,
+    #understand-screen .repeat-actions .repeat-reset-btn {
+      min-width: auto !important; min-height: auto !important;
+      padding: 10px 20px !important;
+      font-size: 13px !important;
+      border-radius: 20px !important;
+      background: rgba(255,255,255,.06) !important;
+      backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255,255,255,.12) !important;
+      color: rgba(255,255,255,.7) !important;
+      box-shadow:
+        inset 0 1px 0 0 rgba(255,255,255,.25),
+        inset 0 0 6px 2px rgba(255,255,255,.04) !important;
     }
 
     /* Bottom nav */
@@ -2254,7 +1631,7 @@
 </head>
 <body>
   <!-- Schema stars -->
-  <div id="schema-stars" style="position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden">
+  <div id="schema-stars" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
     <div class="schema-star" style="left:45px;top:28px;width:1.5px;height:1.5px;opacity:.5"></div>
     <div class="schema-star tw" style="left:312px;top:65px;width:1px;height:1px;opacity:.35;animation-delay:.3s"></div>
     <div class="schema-star" style="left:78px;top:120px;width:1.2px;height:1.2px;opacity:.4"></div>
@@ -2321,7 +1698,6 @@
         </div>
         <button class="home-start-btn" id="home-start-btn" type="button">Start speaking</button>
         <button class="assist-entry-btn" id="home-assist-btn" type="button">Luna Assist</button>
-        <button class="assist-entry-btn conv-entry-btn" id="home-conv-btn" type="button">Practice conversation &#128168;</button>
       </section>
     </div>
 
@@ -2523,146 +1899,123 @@
     </div>
     <div id="understand-screen" class="screen">
       <section class="app-card">
+        <header class="top-bar">
+          <div class="presence-chip">
+            <span class="presence-dot"></span>
+            <div class="presence-copy">
+              <span class="presence-label">Luna</span>
+              <span class="presence-state" id="understand-state-label">Idle</span>
+            </div>
+          </div>
+          <button class="top-action" type="button" id="understand-home-btn">Home</button>
+        </header>
 
-        <!-- Luna -->
-        <div class="luna-stage">
+        <section class="session-context" aria-label="Understand context">
+          <div class="session-kicker">Understand Mode</div>
+          <h2 class="session-title">Listen with Luna</h2>
+          <p class="session-subtitle">Hear the phrase. Let it settle before you respond.</p>
+        </section>
+
+        <section class="luna-stage" aria-label="Luna presence">
           <div class="luna-orb-wrap">
-            <div class="luna-orb idle" id="und-orb"><div class="luna-core"></div></div>
+            <div class="luna-orb idle" id="understand-luna-orb">
+              <div class="luna-core"></div>
+            </div>
           </div>
           <div class="luna-copy">
             <h1 class="luna-name">Luna</h1>
-            <p class="luna-subtitle" id="und-luna-sub">Ready when you are.</p>
+            <p class="luna-subtitle" id="understand-luna-subtitle">Ready when you are.</p>
           </div>
-        </div>
+        </section>
 
-        <!-- Mode label -->
-        <div class="session-context">
-          <div class="session-kicker">Understand Mode</div>
-          <p class="session-subtitle">Hear the phrase. Let it settle before you respond.</p>
-        </div>
-
-        <!-- Content card -->
-        <div class="und-content-card">
-          <div class="und-phrase-text und-placeholder" id="und-phrase-text">Listen first</div>
-          <div class="und-phrase-meaning hidden" id="und-phrase-meaning"></div>
-          <div class="und-feedback-line" id="und-feedback">Tap Listen to hear the phrase.</div>
-
-          <div class="und-practice-area hidden" id="und-practice-area">
-            <div class="und-practice-label">Now type what you heard.</div>
-            <div class="und-practice-row">
-              <input class="und-practice-input" id="und-practice-input" type="text"
-                placeholder="Type the phrase…" autocomplete="off">
-              <button class="und-mic-btn" id="und-mic-btn" aria-label="Speak your answer">
-                <svg width="16" height="16" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none">
-                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                  <line x1="12" y1="19" x2="12" y2="23"/>
-                  <line x1="8"  y1="23" x2="16" y2="23"/>
-                </svg>
-              </button>
-              <button id="und-check-btn">Check</button>
+        <section class="repeat-card" aria-label="Understand challenge">
+          <div class="repeat-prompt" id="understand-phrase">Good day, how are you today?</div>
+          <div class="repeat-cue hidden" id="understand-meaning"></div>
+          <div class="repeat-feedback" id="understand-feedback">Tap Listen to hear the phrase.</div>
+          <div class="understand-practice hidden" id="understand-practice">
+            <div class="understand-practice-copy" id="understand-practice-copy">Now say it.</div>
+            <div class="understand-keywords" id="understand-keywords"></div>
+            <div class="repeat-recall-input-wrap">
+              <button class="repeat-submit-btn" id="understand-mic-btn" type="button">🎙️</button>
+              <input
+                class="repeat-recall-input"
+                id="understand-input"
+                type="text"
+                placeholder="Say it or type it softly..."
+                autocomplete="off"
+              >
+              <button class="repeat-submit-btn" id="understand-check-btn" type="button">Check</button>
             </div>
           </div>
-
-          <div class="und-actions" id="und-listen-actions">
-            <button class="und-primary" id="und-listen-btn">🔊 Listen</button>
-            <button class="hidden" id="und-reveal-btn">👁 Reveal</button>
+          <div class="repeat-actions" id="understand-listen-actions">
+            <button class="home-start-btn" id="understand-listen-btn" type="button">🔊 Play</button>
+            <button class="repeat-reset-btn" id="understand-meaning-btn" type="button">👁 Reveal</button>
           </div>
-
-          <div class="und-actions hidden" id="und-reflect-actions">
-            <button id="und-yes-btn">Yes, I got it</button>
-            <button id="und-notyet-btn">Not yet</button>
+          <div class="repeat-actions hidden" id="understand-reflect-actions">
+            <button class="repeat-reset-btn" id="understand-yes-btn" type="button">Yes</button>
+            <button class="repeat-reset-btn" id="understand-notyet-btn" type="button">Not yet</button>
           </div>
+          <div class="repeat-actions hidden" id="understand-next-actions">
+            <button class="home-start-btn" id="understand-next-btn" type="button">→ Next</button>
+          </div>
+        </section>
+      </section>
+    </div>
+    <div id="assist-screen" class="screen hidden">
+      <section class="app-card">
+        <header class="top-bar">
+          <div class="presence-chip">
+            <span class="presence-dot"></span>
+            <div class="presence-copy">
+              <span class="presence-label">Luna</span>
+              <span class="presence-state" id="assist-state-label">Assist</span>
+            </div>
+          </div>
+          <button class="top-action" id="assist-home-btn" type="button">&larr; Home</button>
+        </header>
 
-          <div class="und-actions hidden" id="und-next-actions">
-            <button class="und-primary" id="und-next-btn">→ Next</button>
+        <section class="session-context">
+          <div class="session-kicker">Luna Assist</div>
+          <h2 class="session-title">I can help right now.</h2>
+          <p class="session-subtitle">Ask me to explain English, or help you say something.</p>
+        </section>
+
+        <div class="assist-intent-row">
+          <button class="assist-intent-btn active" id="assist-understand-btn" type="button">Understand this</button>
+          <button class="assist-intent-btn" id="assist-say-btn" type="button">Help me say this</button>
+        </div>
+
+        <div class="assist-input-wrap">
+          <label class="assist-input-label" id="assist-input-label">Type English to understand</label>
+          <textarea class="assist-textarea" id="assist-textarea" rows="3" placeholder="e.g. &ldquo;I&rsquo;m all set&rdquo; or a phrase you heard"></textarea>
+          <button class="home-start-btn assist-submit-btn" id="assist-submit-btn" type="button">Ask Luna</button>
+        </div>
+
+        <div class="assist-result-card hidden" id="assist-result-card">
+          <div class="assist-result-phrase" id="assist-result-phrase"></div>
+          <div class="assist-result-simpler hidden" id="assist-result-simpler"></div>
+          <div class="assist-result-meaning" id="assist-result-meaning"></div>
+          <div class="assist-result-divider" id="assist-pron-divider"></div>
+          <div id="assist-pron-section">
+            <div class="assist-result-label">Pronunciation</div>
+            <div class="assist-result-text" id="assist-result-pron"></div>
+          </div>
+          <div class="assist-result-divider" id="assist-ex-divider"></div>
+          <div id="assist-ex-section">
+            <div class="assist-result-label">Example</div>
+            <div class="assist-result-text" id="assist-result-ex"></div>
+          </div>
+          <div class="assist-micro-guidance hidden" id="assist-micro-guidance">
+            <div class="assist-micro-tip" id="assist-micro-tip"></div>
+            <div class="assist-micro-prompt" id="assist-micro-prompt"></div>
+          </div>
+          <div class="assist-result-actions">
+            <button class="assist-try-btn" id="assist-try-btn" type="button">Try saying it &rarr;</button>
+            <button class="assist-hear-btn" id="assist-hear-btn" type="button">&#128266; Hear it</button>
           </div>
         </div>
 
       </section>
-    </div>
-    <!-- assist-screen kept as empty placeholder so existing JS refs don't break -->
-    <div id="assist-screen" class="screen hidden" aria-hidden="true"></div>
-
-    <!-- Luna Assist slide-in pane -->
-    <div id="luna-assist-overlay"></div>
-    <div id="luna-assist-pane" role="dialog" aria-label="Ask Luna" aria-modal="true">
-      <span id="assist-state-label" style="display:none">Assist</span>
-
-      <div class="assist-pane-header">
-        <div>
-          <div class="assist-pane-title">YAPMANU</div>
-          <div class="assist-pane-subtitle">Say it better. Reply smarter.</div>
-        </div>
-        <button class="assist-pane-close" id="assist-home-btn" type="button" aria-label="Close pane">&#10005;</button>
-      </div>
-
-      <div class="assist-mode-row">
-        <button class="assist-intent-btn active" id="assist-understand-btn" type="button">Explain this</button>
-        <button class="assist-intent-btn" id="assist-say-btn" type="button">Help me say it</button>
-        <button class="assist-intent-btn" id="assist-translate-btn" type="button">Translate</button>
-        <button class="assist-intent-btn assist-intent-btn--wa" id="assist-whatsapp-btn" type="button">Reply Helper &#128172;</button>
-      </div>
-
-      <div class="assist-input-wrap">
-        <label class="assist-input-label" id="assist-input-label">Type English to explain</label>
-        <div class="assist-textarea-wrap">
-          <textarea class="assist-textarea" id="assist-textarea" rows="3" placeholder="Ask Luna anything about English or Spanish&hellip;"></textarea>
-          <button id="assist-mic-btn" type="button" aria-label="Speak your question" title="Speak your question">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
-          </button>
-        </div>
-        <div id="assist-suggestions" role="listbox" aria-label="Suggestions"></div>
-        <button class="home-start-btn assist-submit-btn" id="assist-submit-btn" type="button">Ask Luna</button>
-      </div>
-
-      <div class="assist-result-card hidden" id="assist-result-card">
-        <div class="assist-result-phrase" id="assist-result-phrase"></div>
-        <div class="assist-result-simpler hidden" id="assist-result-simpler"></div>
-        <div class="assist-result-meaning" id="assist-result-meaning"></div>
-        <div class="assist-result-divider" id="assist-pron-divider"></div>
-        <div id="assist-pron-section">
-          <div class="assist-result-label">Pronunciation</div>
-          <div class="assist-result-text" id="assist-result-pron"></div>
-        </div>
-        <div class="assist-result-divider" id="assist-ex-divider"></div>
-        <div id="assist-ex-section">
-          <div class="assist-result-label">Example</div>
-          <div class="assist-result-text" id="assist-result-ex"></div>
-        </div>
-        <div class="assist-micro-guidance hidden" id="assist-micro-guidance">
-          <div class="assist-micro-tip" id="assist-micro-tip"></div>
-          <div class="assist-micro-prompt" id="assist-micro-prompt"></div>
-        </div>
-        <div class="assist-result-actions">
-          <button class="assist-try-btn" id="assist-try-btn" type="button">Try saying it &rarr;</button>
-          <button class="assist-hear-btn" id="assist-hear-btn" type="button">&#128266; Hear it</button>
-        </div>
-      </div>
-
-      <!-- WhatsApp Chat Mode — shown only when assistIntent === 'whatsapp' -->
-      <div id="wa-chat-area" class="hidden">
-        <div id="wa-chat-messages" aria-live="polite" aria-label="Conversation"></div>
-        <div id="wa-chat-dock">
-          <textarea
-            id="wa-chat-textarea"
-            rows="2"
-            placeholder="Paste your friend&#39;s message or type your reply&hellip;"
-            autocomplete="off"
-            spellcheck="false"
-          ></textarea>
-          <button id="wa-chat-send-btn" type="button" aria-label="Send">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
-        </div>
-      </div>
     </div>
 
     <div id="progress-screen" class="screen hidden">
@@ -2721,12 +2074,6 @@
               <div class="schema-stat-card"><div style="font-size:18px;margin-bottom:2px">⭐</div><div style="font-size:22px;font-weight:500">0</div><div style="color:rgba(255,255,255,.35);font-size:10px">Score</div></div>
             </div>
           </div>
-          <div class="progress-panel" id="progress-summary-panel">
-            <div class="progress-panel-title">Your Learning Progress</div>
-            <div class="progress-list" id="progress-summary-list">
-              <div class="progress-row"><span>No practice yet</span><strong>—</strong></div>
-            </div>
-          </div>
           <div class="progress-panel" id="progress-data-panel" style="display:none">
             <div class="progress-panel-title">Current Session</div>
             <div class="progress-list" id="progress-list"></div>
@@ -2739,48 +2086,6 @@
       </section>
     </div>
 
-    <!-- Conversation Practice Screen -->
-    <div id="conv-practice-screen" class="screen hidden">
-      <section class="app-card conv-card">
-        <header class="top-bar">
-          <div class="presence-chip">
-            <span class="presence-dot"></span>
-            <div class="presence-copy">
-              <span class="presence-label">Luna</span>
-              <span class="presence-state">Chat</span>
-            </div>
-          </div>
-          <button class="top-action" id="conv-home-btn" type="button">&larr; Home</button>
-        </header>
-
-        <div class="conv-header">
-          <div class="conv-header-title">Practice conversation</div>
-          <div class="conv-header-sub">Type anything &mdash; Luna will respond.</div>
-        </div>
-
-        <div class="conv-messages" id="conv-messages" role="log" aria-live="polite" aria-label="Conversation"></div>
-
-        <div class="conv-input-dock">
-          <textarea
-            class="conv-textarea"
-            id="conv-textarea"
-            rows="1"
-            placeholder="Type your message&hellip;"
-            autocomplete="off"
-            spellcheck="false"
-          ></textarea>
-          <button class="conv-send-btn" id="conv-send-btn" type="button" aria-label="Send">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
-            </svg>
-          </button>
-        </div>
-      </section>
-    </div>
-
-    <!-- Baby Luna (Assist entry) -->
-    <div class="baby-luna" id="baby-luna" aria-label="Luna Assist"></div>
-
     <!-- Schema bottom nav -->
     <nav class="schema-nav" id="schema-nav">
       <div class="schema-nav-btn on" data-screen="home-screen"><svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -2789,7 +2094,6 @@
       <div class="schema-nav-btn" data-screen="repeat-screen"><svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
       <div class="schema-nav-btn" data-screen="progress-screen"><svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
     </nav>
-    <p id="luna-greeting"></p>
   </main>
 
   <script src="./app.js"></script>
@@ -2800,7 +2104,6 @@
     const understandScreen = document.getElementById('understand-screen');
     const assistScreen = document.getElementById('assist-screen');
     const progressScreen = document.getElementById('progress-screen');
-    const convPracticeScreen = document.getElementById('conv-practice-screen');
     const homeStartBtn = document.getElementById('home-start-btn');
     const homeTitle = document.getElementById('home-title');
     const homeSubtitle = document.getElementById('home-subtitle');
@@ -2811,7 +2114,6 @@
     const progressHomeBtn = document.getElementById('progress-home-btn');
     const progressSubtitle = document.getElementById('progress-subtitle');
     const progressList = document.getElementById('progress-list');
-    const progressSummaryList = document.getElementById('progress-summary-list');
     const progressDataPanel = document.getElementById('progress-data-panel');
     const progressPlaceholderPanel = document.getElementById('progress-placeholder-panel');
 
@@ -2859,7 +2161,6 @@
     let activeMicTimer = null;
 
     let repeatComplete = false;
-    let repeatConfirmRound = 1;
     let repeatResetTimer = null;
     let currentRepeatLesson = null;
     let currentRepeatPhrase = '';
@@ -2867,8 +2168,6 @@
     let repeatWords = [];
     let repeatSelection = [];
     let repeatChallengeType = 'sentence_builder';
-    let repeatPhraseIndex = 0;
-    let repeatAttempts = 0;
 
     let speakTargetPhrase = '';
     let speakAttemptCount = 0;
@@ -3011,72 +2310,14 @@
       { phrase: 'I need help', meaning: 'Necesito ayuda' }
     ];
 
-    const PHRASES_BY_TOPIC = {
-      morning: [
-        { phrase: 'Good morning', meaning: 'Buenos días' },
-        { phrase: 'I am tired', meaning: 'Estoy cansado' },
-        { phrase: 'I am hungry', meaning: 'Tengo hambre' },
-        { phrase: 'I feel good', meaning: 'Me siento bien' },
-        { phrase: 'I am ready', meaning: 'Estoy listo' },
-        { phrase: 'I need coffee', meaning: 'Necesito café' }
-      ],
-      travel: [
-        { phrase: 'Where is the airport', meaning: '¿Dónde está el aeropuerto?' },
-        { phrase: 'I need a taxi', meaning: 'Necesito un taxi' },
-        { phrase: 'I have a reservation', meaning: 'Tengo una reservación' },
-        { phrase: 'Where is the gate', meaning: '¿Dónde está la puerta?' },
-        { phrase: 'How much is the ticket', meaning: '¿Cuánto cuesta el boleto?' }
-      ],
-      restaurant: [
-        { phrase: 'I would like some water', meaning: 'Quisiera un poco de agua' },
-        { phrase: 'The menu please', meaning: 'El menú por favor' },
-        { phrase: 'I am vegetarian', meaning: 'Soy vegetariano' },
-        { phrase: 'Check please', meaning: 'La cuenta por favor' },
-        { phrase: 'This is delicious', meaning: 'Esto está delicioso' }
-      ],
-      work: [
-        { phrase: 'I have a meeting', meaning: 'Tengo una reunión' },
-        { phrase: 'Can you help me', meaning: '¿Puedes ayudarme?' },
-        { phrase: 'I need more time', meaning: 'Necesito más tiempo' },
-        { phrase: 'The project is ready', meaning: 'El proyecto está listo' }
-      ],
-      hotel: [
-        { phrase: 'I have a reservation', meaning: 'Tengo una reservación' },
-        { phrase: 'Where is the elevator', meaning: '¿Dónde está el elevador?' },
-        { phrase: 'I need more towels', meaning: 'Necesito más toallas' },
-        { phrase: 'What time is checkout', meaning: '¿A qué hora es el checkout?' },
-        { phrase: 'The room is clean', meaning: 'La habitación está limpia' }
-      ],
-      taxi: [
-        { phrase: 'Take me to the hotel', meaning: 'Llévame al hotel' },
-        { phrase: 'How much does it cost', meaning: '¿Cuánto cuesta?' },
-        { phrase: 'Stop here please', meaning: 'Para aquí por favor' },
-        { phrase: 'Turn left here', meaning: 'Gira a la izquierda aquí' }
-      ],
-      emergency: [
-        { phrase: 'I need help', meaning: 'Necesito ayuda' },
-        { phrase: 'Call the police', meaning: 'Llama a la policía' },
-        { phrase: 'I am lost', meaning: 'Estoy perdido' },
-        { phrase: 'I feel sick', meaning: 'Me siento mal' }
-      ],
-      shopping: [
-        { phrase: 'How much is this', meaning: '¿Cuánto cuesta esto?' },
-        { phrase: 'Do you have this in blue', meaning: '¿Tiene esto en azul?' },
-        { phrase: 'I am just looking', meaning: 'Solo estoy mirando' },
-        { phrase: 'I would like to pay', meaning: 'Quisiera pagar' }
-      ]
-    };
-
-    let currentPhraseSet = repeatPhrasePool;
-
     const repeatChallengeConfig = {
       sentence_builder: {
-        prompt: 'Build this sentence.',
-        feedbackHint: 'Tap the words in order to build the sentence.'
+        prompt: 'Tap the words to build the sentence.',
+        feedbackHint: 'Build the sentence one word at a time.'
       },
       quick_recall: {
-        prompt: 'Type this from memory.',
-        feedbackHint: 'Type the full phrase from memory.'
+        prompt: 'Type the phrase from memory.',
+        feedbackHint: 'Type the phrase from memory, softly and simply.'
       },
       guided_fill: {
         prompt: 'Complete the phrase.',
@@ -3209,7 +2450,8 @@
     // Set LUNA_VOICE_PROVIDER to 'elevenlabs' to use premium neural TTS.
     // Browser TTS is always available as fallback.
 
-    const LUNA_VOICE_PROVIDER = 'elevenlabs'; // 'browser' | 'elevenlabs'
+    const LUNA_VOICE_PROVIDER = 'browser'; // 'browser' | 'elevenlabs'
+    const ELEVENLABS_API_KEY  = 'e66e7e529aa9967e8e873388a837ccaeff9eaca448f8b0ea1c9db18b5137b9d6';
     const ELEVENLABS_VOICE_ID = 'IDHS58OMlK9jZvRdhEVy';
 
     // Browser TTS (fallback) ──────────────────────────────────────────────────
@@ -3231,7 +2473,6 @@
     function speakWithBrowser(text, rate = 0.86) {
       if (!window.speechSynthesis) return;
       window.speechSynthesis.cancel();
-      console.log('[LaLanguish Voice] Speak voice:', lunaVoice ? lunaVoice.name : 'null/default', '| rate:', rate, '| pitch: 1.03');
       const parts = text.split(/(?<=[.?!])\s+/).map(s => s.trim()).filter(Boolean);
       const segments = parts.length > 1 ? parts : [text];
       segments.forEach(segment => {
@@ -3353,16 +2594,22 @@
       elPlaying = true;
       const { text, resolve, voiceSettings, browserRate } = elQueue.shift();
       try {
-        const response = await fetch('/api/voice', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            text,
-            voiceId: ELEVENLABS_VOICE_ID,
-            model_id: 'eleven_turbo_v2',
-            voice_settings: voiceSettings || { stability: 0.5, similarity_boost: 0.75 }
-          })
-        });
+        const response = await fetch(
+          'https://api.elevenlabs.io/v1/text-to-speech/' + ELEVENLABS_VOICE_ID,
+          {
+            method: 'POST',
+            headers: {
+              'xi-api-key': ELEVENLABS_API_KEY,
+              'Content-Type': 'application/json',
+              'Accept': 'audio/mpeg'
+            },
+            body: JSON.stringify({
+              text: text,
+              model_id: 'eleven_turbo_v2',
+              voice_settings: voiceSettings || { stability: 0.5, similarity_boost: 0.75 }
+            })
+          }
+        );
 
         if (!response.ok) {
           const errText = await response.text();
@@ -3387,7 +2634,6 @@
           resolve();
           playElQueue();
         };
-        console.log('[LaLanguish Voice] Speak voice: ElevenLabs (neural) — playing');
         currentAudio.play();
       } catch (err) {
         console.warn('[Luna/EL] FAILED — falling back to browser TTS. Reason:', err.message);
@@ -3520,19 +2766,7 @@
 
       // Critical-word check: every critical word must appear exactly in input
       const criticalWordsFail = criticalWords.filter(w => !input.split(' ').includes(w));
-
-      // Pronoun/subject check: if target contains a subject pronoun, input must use the same one
-      const SPEAK_PRONOUNS = ['i','you','he','she','we','they','it','my','your','his','her','our','their'];
-      const inputTokens = input.split(' ');
-      const targetCritical = targetWords.filter(w => SPEAK_PRONOUNS.includes(w));
-      const heardCritical  = inputTokens.filter(w => SPEAK_PRONOUNS.includes(w));
-      const pronounFail    = targetCritical.filter(p => !heardCritical.includes(p));
-      const allCriticalFail = criticalWordsFail.concat(pronounFail.filter(p => !criticalWordsFail.includes(p)));
-      const criticalOk = allCriticalFail.length === 0;
-
-      console.log('[LaLanguish Speak Check] targetCritical:', targetCritical);
-      console.log('[LaLanguish Speak Check] heardCritical:', heardCritical);
-      console.log('[LaLanguish Speak Check] criticalOk:', criticalOk);
+      const criticalOk = criticalWordsFail.length === 0;
 
       const isDone = currentStep && currentStep.done;
 
@@ -3641,7 +2875,7 @@
       } else if (matchRatio >= 0.75 && !criticalOk) {
         speakWeakAttempts++;
         speakSessionStruggled = true;
-        const wrong = allCriticalFail[0];
+        const wrong = criticalWordsFail[0];
         const corrections = {
           he: 'Not \u201cshe\u201d \u2014 this one is \u201che.\u201d',
           she: 'Not \u201che\u201d \u2014 this one is \u201cshe.\u201d',
@@ -3712,23 +2946,21 @@
         // Level 1 — gentle replay (all stages)
         if (speakWeakAttempts === 1) {
           hideBeginnerHelp();
-          const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           const msgs = [
-            'The phrase is: \u201c' + stepTarget + '.\u201d Try once more.',
-            'Say: \u201c' + stepTarget + '.\u201d'
+            'The phrase is: \u201c' + speakTargetPhrase + '.\u201d Try once more.',
+            'Say: \u201c' + speakTargetPhrase + '.\u201d'
           ];
           const hPrefix = Math.random() < 0.4 ? getEmotionalTone('hesitation') + ' ' : '';
           addAIMessage(hPrefix + msgs[speakAttemptCount % msgs.length], '', true);
-          window.setTimeout(() => speakSlowPhrase(stepTarget), getTimingProfile('gentle_replay', stepTarget, stage));
+          window.setTimeout(() => speakSlowPhrase(speakTargetPhrase), getTimingProfile('gentle_replay', speakTargetPhrase, stage));
 
         // Full breakdown — only when stage allows and threshold reached
         } else if (speakWeakAttempts >= thresh.breakdown) {
           hearAgainBtn.classList.add('is-suggested');
-          const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           sessionState.reinforcementMode = 'repeat';
-          sessionState.reinforcementPhrase = stepTarget;
+          sessionState.reinforcementPhrase = speakTargetPhrase;
           sessionState.lastResult = 'struggle';
-          sessionState.lastPhrase = stepTarget;
+          sessionState.lastPhrase = speakTargetPhrase;
           const cycleIndex = speakWeakAttempts - thresh.breakdown;
           const msgs = [
             'No rush. Let\u2019s look at the pieces.',
@@ -3736,44 +2968,39 @@
             'Here\u2019s the meaning one more time.'
           ];
           addAIMessage(msgs[cycleIndex % msgs.length], '', false);
-          window.setTimeout(() => showBeginnerHelp(stepTarget, cycleIndex), getTimingProfile('beginner_help', stepTarget, stage));
-          window.setTimeout(() => speakSlowPhrase(stepTarget), getTimingProfile('after_help', stepTarget, stage));
+          window.setTimeout(() => showBeginnerHelp(speakTargetPhrase, cycleIndex), getTimingProfile('beginner_help', speakTargetPhrase, stage));
+          window.setTimeout(() => speakSlowPhrase(speakTargetPhrase), getTimingProfile('after_help', speakTargetPhrase, stage));
 
         // Chunked coaching — when stage allows and chunked threshold reached
         } else if (speakWeakAttempts >= thresh.chunked) {
           hideBeginnerHelp();
           hearAgainBtn.classList.add('is-suggested');
-          const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           if (!sessionState.reinforcementMode) {
-            updatePhraseMastery(stepTarget, 'struggle');
+            updatePhraseMastery(speakTargetPhrase, 'struggle');
           }
           sessionState.reinforcementMode = 'repeat';
-          sessionState.reinforcementPhrase = stepTarget;
+          sessionState.reinforcementPhrase = speakTargetPhrase;
           sessionState.lastResult = 'struggle';
-          sessionState.lastPhrase = stepTarget;
+          sessionState.lastPhrase = speakTargetPhrase;
           addAIMessage('Say it like this, one word at a time.', '', false);
-          window.setTimeout(() => speakChunkedPhrase(stepTarget), getTimingProfile('chunked', stepTarget, stage));
+          window.setTimeout(() => speakChunkedPhrase(speakTargetPhrase), getTimingProfile('chunked', speakTargetPhrase, stage));
 
         // Extra gentle replay — for stages that escalate slowly
         } else {
           hideBeginnerHelp();
-          const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           addAIMessage(getEmotionalTone('hesitation') + ' Try once more.', '', true);
-          window.setTimeout(() => speakSlowPhrase(stepTarget), getTimingProfile('gentle_replay', stepTarget, stage));
+          window.setTimeout(() => speakSlowPhrase(speakTargetPhrase), getTimingProfile('gentle_replay', speakTargetPhrase, stage));
         }
       }
     }
 
     function showScreen(screen) {
-      [homeScreen, speakScreen, repeatScreen, understandScreen, assistScreen, progressScreen, convPracticeScreen].forEach((item) => {
+      [homeScreen, speakScreen, repeatScreen, understandScreen, assistScreen, progressScreen].forEach((item) => {
         item.classList.remove('active');
         item.classList.add('hidden');
       });
       screen.classList.remove('hidden');
       screen.classList.add('active');
-      // Always sync the welcome overlay — must be home-only
-      var screenId = screen && screen.id ? screen.id : '';
-      updateHomeWelcome(screenId);
     }
 
     function setSpeakModeLabel(label) {
@@ -3784,20 +3011,6 @@
     function pickRepeatResponse(type) {
       const pool = repeatResponsePools[type] || [];
       return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    function updateHomeWelcome(screenId) {
-      const el = document.getElementById('luna-greeting');
-      if (!el) return;
-      if (screenId !== 'home-screen') {
-        el.textContent = '';
-        el.style.display = 'none';
-        return;
-      }
-      const hasVisited = localStorage.getItem('lalanguish_has_visited_home') === 'true';
-      el.textContent = hasVisited ? 'Welcome Back' : 'Welcome';
-      el.style.display = 'block';
-      localStorage.setItem('lalanguish_has_visited_home', 'true');
     }
 
     function getRepeatTopicLabel(phrase) {
@@ -3869,17 +3082,6 @@
         const hideCount = word.length >= 6 ? 3 : 2;
         const start = Math.floor((word.length - hideCount) / 2);
         return word.slice(0, start) + '_'.repeat(hideCount) + word.slice(start + hideCount);
-      }).join(' ');
-    }
-
-    function buildRepeatHint(phrase) {
-      const stopWords = new Set(['i','a','am','an','is','are','the','to','for','of','some','and','or','in','on','at','it','do','my','me']);
-      return phrase.split(' ').map(function(token) {
-        const m = token.match(/^([^a-zA-Z']*)([a-zA-Z']+)([^a-zA-Z']*)$/);
-        if (!m) return token;
-        const pre = m[1], word = m[2], post = m[3];
-        if (stopWords.has(word.toLowerCase()) || word.length <= 2) return token;
-        return pre + word[0] + '_'.repeat(word.length - 1) + post;
       }).join(' ');
     }
 
@@ -3966,79 +3168,96 @@
       }, 80);
     }
 
-    function renderRepeatPhrase() {
-      const lesson = currentPhraseSet[repeatPhraseIndex];
-      currentRepeatLesson = lesson;
-      currentRepeatPhrase = lesson.phrase;
-      repeatConfirmRound = 1;
-      repeatAttempts = 0;
+    function resetRepeatChallenge() {
+      if (repeatResetTimer) {
+        window.clearTimeout(repeatResetTimer);
+        repeatResetTimer = null;
+      }
+
+      repeatSelection = [];
       repeatComplete = false;
-      repeatPrompt.textContent = 'Type the phrase from memory.';
-      repeatCue.innerHTML = 'Spanish: ' + lesson.meaning + '.<br><span style="opacity:0.65;font-size:0.9em;">Hint: ' + buildRepeatHint(lesson.phrase) + '</span>';
       repeatRecallInput.value = '';
-      repeatRecallInput.disabled = false;
-      repeatSubmitBtn.disabled = false;
-      setRepeatFeedback('Type the English phrase.');
+      repeatResetBtn.textContent = 'Try again';
+      repeatPrompt.textContent = repeatChallengeConfig[repeatChallengeType].prompt;
       setRepeatLunaState('listening', pickRepeatResponse('intro'));
-      repeatResetBtn.textContent = 'Next phrase';
+      setRepeatFeedback(repeatChallengeConfig[repeatChallengeType].feedbackHint);
+      renderRepeatChallengeUI();
     }
 
     function checkRepeatAnswer() {
-      if (repeatComplete) return;
-      const lesson = currentPhraseSet[repeatPhraseIndex];
-      const answer = normalizeRepeatText(repeatRecallInput.value.trim());
-      const target = normalizeRepeatText(lesson.phrase);
+      const isRecallLike = repeatChallengeType === 'quick_recall' || repeatChallengeType === 'guided_fill';
+      const built = isRecallLike ? repeatRecallInput.value.trim() : getRepeatBuiltSentence();
+      const correct = normalizeRepeatText(built) === normalizeRepeatText(currentRepeatPhrase);
 
-      if (!answer) {
-        setRepeatFeedback('Type your answer first.');
+      if (correct) {
+        recordRepeatOutcome(currentRepeatPhrase, true);
+        updatePhraseMastery(currentRepeatPhrase, 'repeat_success');
+        sessionState.lastMode = 'repeat';
+        sessionState.lastResult = 'success';
+        sessionState.lastPhrase = currentRepeatPhrase;
+        sessionState.reinforcementMode = null;
+        sessionState.reinforcementPhrase = null;
+        repeatComplete = true;
+        repeatResetBtn.textContent = 'Next challenge';
+        repeatPrompt.textContent = repeatChallengeType === 'guided_fill'
+          ? `Good. You completed: "${currentRepeatPhrase}."`
+          : repeatChallengeType === 'quick_recall'
+            ? `Good. You recalled: "${currentRepeatPhrase}."`
+            : `Good. You built: "${currentRepeatPhrase}."`;
+        setRepeatLunaState('speaking', pickRepeatResponse('success'));
+        setRepeatFeedback(pickRepeatResponse('success'));
         return;
       }
 
-      repeatAttempts += 1;
+      recordRepeatOutcome(currentRepeatPhrase, false);
+      setRepeatLunaState('idle', pickRepeatResponse('retry'));
+      repeatPrompt.textContent = isRecallLike
+        ? 'Try the same phrase once more from memory.'
+        : 'Try the same phrase once more.';
+      setRepeatFeedback(pickRepeatResponse('retry'));
+      repeatResetBtn.textContent = 'Try again';
 
-      if (answer !== target) {
-        setRepeatFeedback(pickRepeatResponse('retry'));
-        setRepeatLunaState('idle', pickRepeatResponse('retry'));
-        repeatRecallInput.value = '';
-        repeatRecallInput.focus();
-        return;
-      }
-
-      if (repeatConfirmRound === 1) {
-        repeatConfirmRound = 2;
-        repeatPrompt.textContent = 'How would you say this?';
-        repeatCue.textContent = 'Spanish: ' + lesson.meaning + '.';
-        repeatRecallInput.value = '';
-        setRepeatLunaState('listening', 'Good. Type it one more time.');
-        setRepeatFeedback('Good. Type it one more time.');
-        repeatRecallInput.focus();
-        return;
-      }
-
-      // Round 2 correct → complete
-      repeatComplete = true;
-      recordRepeatOutcome(lesson.phrase, true);
-      updatePhraseMastery(lesson.phrase, 'repeat_success');
-      sessionState.lastMode = 'repeat';
-      sessionState.lastResult = 'success';
-      sessionState.lastPhrase = lesson.phrase;
-      sessionState.reinforcementMode = null;
-      sessionState.reinforcementPhrase = null;
-      repeatPrompt.textContent = 'Perfect. You rebuilt it.';
-      repeatCue.textContent = 'Spanish: ' + lesson.meaning + '.';
-      setRepeatLunaState('speaking', pickRepeatResponse('success'));
-      setRepeatFeedback(pickRepeatResponse('success'));
-      repeatSubmitBtn.disabled = true;
-      repeatRecallInput.disabled = true;
+      repeatResetTimer = window.setTimeout(() => {
+        resetRepeatChallenge();
+        repeatResetTimer = null;
+      }, 950);
     }
 
     function startRepeatChallenge(phrase) {
-      // If a specific phrase is requested, find its index; otherwise keep current index
-      if (phrase) {
-        const idx = currentPhraseSet.findIndex(l => l.phrase === phrase);
-        if (idx !== -1) repeatPhraseIndex = idx;
+      if (repeatResetTimer) {
+        window.clearTimeout(repeatResetTimer);
+        repeatResetTimer = null;
       }
-      renderRepeatPhrase();
+
+      const _almRepeat = !phrase ? getBestAssistLearningPhraseForRepeat() : null;
+      if (_almRepeat) _almIncrementSession(_almRepeat.en);
+      const _almRepeatLesson = _almRepeat ? repeatPhrasePool.find(l => l.phrase === _almRepeat.en) : null;
+      const _topicPool = currentRepeatTopic === 'All'
+        ? repeatPhrasePool
+        : repeatPhrasePool.filter(l => getRepeatTopicLabel(l.phrase) === currentRepeatTopic);
+      currentRepeatLesson = (phrase && repeatPhrasePool.find(l => l.phrase === phrase))
+        || _almRepeatLesson
+        || _topicPool[Math.floor(Math.random() * _topicPool.length)]
+        || repeatPhrasePool[Math.floor(Math.random() * repeatPhrasePool.length)];
+      currentRepeatPhrase = currentRepeatLesson.phrase;
+      currentRepeatTopic = getRepeatTopicLabel(currentRepeatPhrase);
+      repeatWords = currentRepeatPhrase.split(' ')
+        .map((word) => ({ word, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((item) => item.word);
+      repeatSelection = [];
+      repeatComplete = false;
+      repeatChallengeType = getRepeatChallengeType(currentRepeatPhrase);
+      repeatRecallInput.value = '';
+      repeatCue.textContent = repeatChallengeType === 'guided_fill'
+        ? `Fill in: ${buildGuidedFillCue(currentRepeatPhrase)}`
+        : `Meaning: ${currentRepeatLesson.meaning}.`;
+      repeatResetBtn.textContent = 'Try again';
+      repeatPrompt.textContent = repeatChallengeConfig[repeatChallengeType].prompt;
+      setRepeatLunaState('listening', pickRepeatResponse('intro'));
+      setRepeatFeedback(repeatChallengeConfig[repeatChallengeType].feedbackHint);
+      renderRepeatTopics();
+      renderRepeatChallengeUI();
     }
 
     const MIN_LISTEN_MS = 2500;
@@ -4052,6 +3271,10 @@
       }
 
       if (micSessionActive) return;
+      micSessionActive = true;
+
+      setLunaState('listening');
+      chatStatus.textContent = 'Listening\u2026 speak naturally';
 
       const rec = new SpeechRecognition();
       rec.lang = 'en-US';
@@ -4074,12 +3297,6 @@
           addAIMessage("I didn\u2019t catch that. Try one short sentence.", '', true);
         }
       }
-
-      rec.onstart = () => {
-        micSessionActive = true;
-        setLunaState('listening');
-        chatStatus.textContent = 'Listening\u2026 speak naturally';
-      };
 
       rec.onresult = (event) => {
         if (micResultHandled) return;
@@ -4109,24 +3326,11 @@
       };
 
       rec.onerror = (event) => {
-        micSessionActive = false;
-        if (event.error === 'not-allowed') {
-          finishSession(false);
-          addAIMessage("Microphone access denied. Allow microphone permission or type your answer.");
-          return;
-        }
         if (event.error === 'no-speech' || event.error === 'aborted') return;
         finishSession(false);
       };
 
-      try {
-        rec.start();
-      } catch (err) {
-        micSessionActive = false;
-        setLunaState('idle');
-        chatStatus.textContent = 'Ready when you are';
-        addAIMessage("Microphone access denied. Allow microphone permission or type your answer.");
-      }
+      rec.start();
     }
 
     sendButton.addEventListener('click', sendUserMessage);
@@ -4143,7 +3347,16 @@
     });
 
     hearAgainBtn.addEventListener('click', () => {
-      if (lastSpokenPhrase) speakText(lastSpokenPhrase);
+      const speakTextValue = speakTargetPhrase || phraseEnEl.textContent || '';
+      if (speakTextValue) {
+        window.speechSynthesis.cancel();
+        const speakVoice = new SpeechSynthesisUtterance(speakTextValue);
+        speakVoice.lang = "en-US";
+        speakVoice.rate = 0.88;
+        speakVoice.pitch = 1.03;
+        speakVoice.volume = 1.0;
+        window.speechSynthesis.speak(speakVoice);
+      }
     });
 
     openRepeatButton.addEventListener('click', () => {
@@ -4156,17 +3369,23 @@
     });
 
     repeatResetBtn.addEventListener('click', () => {
-      repeatPhraseIndex = (repeatPhraseIndex + 1) % currentPhraseSet.length;
-      renderRepeatPhrase();
-      console.log('[Repeat Next] index:', repeatPhraseIndex, 'phrase:', currentPhraseSet[repeatPhraseIndex].phrase);
+      if (repeatComplete) {
+        startRepeatChallenge();
+        return;
+      }
+      resetRepeatChallenge();
     });
 
     repeatSubmitBtn.addEventListener('click', () => {
-      checkRepeatAnswer();
+      const isRecallLike = repeatChallengeType === 'quick_recall' || repeatChallengeType === 'guided_fill';
+      if (isRecallLike && !repeatComplete) {
+        checkRepeatAnswer();
+      }
     });
 
     repeatRecallInput.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
+      const isRecallLike = repeatChallengeType === 'quick_recall' || repeatChallengeType === 'guided_fill';
+      if (event.key === 'Enter' && isRecallLike && !repeatComplete) {
         event.preventDefault();
         checkRepeatAnswer();
       }
@@ -4373,28 +3592,6 @@
     }
     // ─────────────────────────────────────────────────────────────────────────
 
-    function getProgressSummary() {
-      const records = Object.entries(repeatPhraseRecord || {});
-      let totalAttempts = 0, correct = 0, mistakes = 0;
-      let topicsPracticed = new Set();
-      records.forEach(function([phrase, rec]) {
-        totalAttempts += (rec.hits || 0) + (rec.misses || 0);
-        correct += rec.hits || 0;
-        mistakes += rec.misses || 0;
-      });
-      if (currentRepeatTopic && currentRepeatTopic !== 'All') {
-        topicsPracticed.add(currentRepeatTopic);
-      }
-      return {
-        totalAttempts,
-        correct,
-        mistakes,
-        topicCount: topicsPracticed.size,
-        lastPhrase: currentRepeatPhrase || null,
-        lastTopic: currentRepeatTopic || 'All'
-      };
-    }
-
     function getProgressSnapshot() {
       const masteryValues = Object.values(masteryMap || {});
       const touched = masteryValues.filter(v => v > 0).length;
@@ -4416,29 +3613,6 @@
     }
 
     function renderProgressScreen() {
-      const summary = getProgressSummary();
-      const summaryRows = [];
-      if (summary.totalAttempts > 0) {
-        summaryRows.push(['Total attempts', String(summary.totalAttempts)]);
-        summaryRows.push(['Correct answers', String(summary.correct)]);
-        summaryRows.push(['Mistakes', String(summary.mistakes)]);
-      }
-      if (summary.lastPhrase) {
-        summaryRows.push(['Last phrase', summary.lastPhrase]);
-      }
-      if (summary.lastTopic && summary.lastTopic !== 'All') {
-        summaryRows.push(['Topic', summary.lastTopic.charAt(0).toUpperCase() + summary.lastTopic.slice(1)]);
-      }
-      if (progressSummaryList) {
-        if (summaryRows.length) {
-          progressSummaryList.innerHTML = summaryRows.map(function([label, value]) {
-            return '<div class="progress-row"><span>' + label + '</span><strong>' + value + '</strong></div>';
-          }).join('');
-        } else {
-          progressSummaryList.innerHTML = '<div class="progress-row"><span>No practice yet</span><strong>—</strong></div>';
-        }
-      }
-
       const snapshot = getProgressSnapshot();
       const rows = [];
 
@@ -4653,11 +3827,7 @@
       assistChainedCategory = '';
       assistChainedPressure = '';
       if (understandPlayTimer) { window.clearTimeout(understandPlayTimer); understandPlayTimer = null; }
-      if (speakNextStepTimer) { window.clearTimeout(speakNextStepTimer); speakNextStepTimer = null; }
-      if (speakPhraseTransitionTimer) { window.clearTimeout(speakPhraseTransitionTimer); speakPhraseTransitionTimer = null; }
-      if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-      if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
-      updateHomeRecommendation(false);
+      updateHomeRecommendation(true);
       showScreen(homeScreen);
     }
 
@@ -4839,11 +4009,10 @@
       // Anticipatory note takes priority over normal coach tip when it fires
       const anticipatory = getAnticipatoryNote(step, phraseTarget);
       if (stage === 'settling') {
-        return { cue: target ? 'Now: \u201c' + target + '.\u201d' : step.cue, coach: anticipatory || '', meaning: '' };
+        return { cue: target ? '\u201c' + target + '.\u201d' : step.cue, coach: anticipatory || '', meaning: '' };
       }
       if (stage === 'ready_more') {
-        const cueTxt = target ? '\u201c' + target + '.\u201d Your turn.' : 'Your turn.';
-        return { cue: cueTxt, coach: anticipatory || '', meaning: '' };
+        return { cue: 'Your turn.', coach: anticipatory || '', meaning: '' };
       }
       if (stage === 'building') {
         const defaultCoach = Math.random() < 0.5 ? '' : (step.coach || '');
@@ -5161,308 +4330,277 @@
     }
     // ─────────────────────────────────────────────────────────────────────────
 
-    // ── Understand Mode ───────────────────────────────────────────────────────
-    const undOrb           = document.getElementById('und-orb');
-    const undLunaSub       = document.getElementById('und-luna-sub');
-    const undPhraseText    = document.getElementById('und-phrase-text');
-    const undPhraseMeaning = document.getElementById('und-phrase-meaning');
-    const undFeedback      = document.getElementById('und-feedback');
-    const undPracticeArea  = document.getElementById('und-practice-area');
-    const undPracticeInput = document.getElementById('und-practice-input');
-    const undMicBtn        = document.getElementById('und-mic-btn');
-    const undListenActions  = document.getElementById('und-listen-actions');
-    const undReflectActions = document.getElementById('und-reflect-actions');
-    const undNextActions    = document.getElementById('und-next-actions');
-    const undListenBtn  = document.getElementById('und-listen-btn');
-    const undRevealBtn  = document.getElementById('und-reveal-btn');
-    const undCheckBtn   = document.getElementById('und-check-btn');
-    const undYesBtn     = document.getElementById('und-yes-btn');
-    const undNotyetBtn  = document.getElementById('und-notyet-btn');
-    const undNextBtn    = document.getElementById('und-next-btn');
+    const understandLunaOrb = document.getElementById('understand-luna-orb');
+    const understandStateLabel = document.getElementById('understand-state-label');
+    const understandLunaSubtitle = document.getElementById('understand-luna-subtitle');
+    const understandPhrase = document.getElementById('understand-phrase');
+    const understandMeaning = document.getElementById('understand-meaning');
+    const understandFeedback = document.getElementById('understand-feedback');
+    const understandListenBtn = document.getElementById('understand-listen-btn');
+    const understandMeaningBtn = document.getElementById('understand-meaning-btn');
+    const understandListenActions = document.getElementById('understand-listen-actions');
+    const understandReflectActions = document.getElementById('understand-reflect-actions');
+    const understandPractice = document.getElementById('understand-practice');
+    const understandPracticeCopy = document.getElementById('understand-practice-copy');
+    const understandKeywords = document.getElementById('understand-keywords');
+    const understandInput = document.getElementById('understand-input');
+    const understandMicBtn = document.getElementById('understand-mic-btn');
+    const understandCheckBtn = document.getElementById('understand-check-btn');
+    const understandNextActions = document.getElementById('understand-next-actions');
+    const understandNextBtn = document.getElementById('understand-next-btn');
+    const understandYesBtn = document.getElementById('understand-yes-btn');
+    const understandNotyetBtn = document.getElementById('understand-notyet-btn');
+    const understandHomeBtn = document.getElementById('understand-home-btn');
 
-    const UND_PHRASES = [
-      { en: 'Good day, how are you today?', es: '¿Buen día, cómo estás hoy?',      alts: ['morning', 'evening'] },
-      { en: 'I need help, please.',          es: 'Necesito ayuda, por favor.',       alts: ['assistance', 'support'] },
-      { en: 'Where is the bathroom?',        es: '¿Dónde está el baño?',            alts: ['restroom', 'toilet', 'washroom'] },
-      { en: 'I am doing well, thank you.',   es: 'Estoy bien, gracias.',             alts: ['fine', 'great', 'good'] },
-      { en: 'Can you say that again?',       es: '¿Puedes repetir eso?',            alts: ['repeat', 'pardon'] },
-      { en: 'How much does this cost?',      es: '¿Cuánto cuesta esto?',            alts: ['price', 'much'] },
-      { en: 'I would like some water.',      es: 'Quisiera un poco de agua.',        alts: ['drink'] },
+    const understandLessonPool = [
+      { phrase: 'I am tired', meaning: 'Estoy cansado' },
+      { phrase: 'I am hungry', meaning: 'Tengo hambre' },
+      { phrase: 'I am ready', meaning: 'Estoy listo' },
+      { phrase: 'I feel good', meaning: 'Me siento bien' },
+      { phrase: 'I need help', meaning: 'Necesito ayuda' }
     ];
 
-    let undCurrentPhrase   = null;
-    let undLastCheckResult = null;
-    let undLunaVoice       = null;
-    let undRecognition     = null;
-    let undMicActive       = false;
+    let currentUnderstandLesson = null;
+    let understandPlayTimer = null;
+    let understandPracticeTarget = '';
+    let understandPracticeAttempts = 0;
+    let understandRecognitionActive = false;
 
-    const UND_SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
-    if (!UND_SR) undMicBtn.classList.add('hidden');
-
-    function undStopMic() {
-      if (undRecognition) { try { undRecognition.abort(); } catch (e) {} undRecognition = null; }
-      undMicActive = false;
-      undMicBtn.classList.remove('listening');
+    function setUnderstandLunaState(state, subtitle) {
+      understandLunaOrb.className = 'luna-orb ' + state;
+      understandStateLabel.textContent = state.charAt(0).toUpperCase() + state.slice(1);
+      if (subtitle) understandLunaSubtitle.textContent = subtitle;
     }
 
-    function undStartMic() {
-      if (!UND_SR) return;
-      if (undMicActive) { undStopMic(); undSetFeedback('Type the phrase back.'); return; }
-      undRecognition = new UND_SR();
-      undRecognition.lang = 'en-US';
-      undRecognition.interimResults = false;
-      undRecognition.maxAlternatives = 1;
-      undRecognition.onstart = () => { undMicActive = true; undMicBtn.classList.add('listening'); undSetFeedback('Listening…'); undSetOrb('listening'); };
-      undRecognition.onresult = (e) => {
-        const t = (e.results[0][0].transcript || '').trim();
-        console.log('[LaLanguish Mic] transcript:', t);
-        undStopMic(); undSetOrb('idle');
-        if (!t) { undSetFeedback("I didn't catch that. Try again or type it."); return; }
-        undPracticeInput.value = t;
-        undSetFeedback('I heard: ' + t);
-        setTimeout(undRunCheck, 700);
-      };
-      undRecognition.onerror = (e) => {
-        undStopMic(); undSetOrb('idle');
-        undSetFeedback(
-          e.error === 'not-allowed' ? 'Microphone access denied. Type the phrase instead.' :
-          e.error === 'no-speech'   ? 'No speech detected. Try again or type it.' :
-                                      'Mic unavailable. Type the phrase instead.'
-        );
-      };
-      undRecognition.onend = () => { if (undMicActive) undStopMic(); };
-      undRecognition.start();
+    function renderUnderstandKeywords() {
+      const words = (currentUnderstandLesson ? currentUnderstandLesson.phrase : '')
+        .split(' ')
+        .map(w => w.trim())
+        .filter(Boolean)
+        .filter((word, index, arr) => arr.indexOf(word) === index);
+
+      understandKeywords.innerHTML = '';
+      words.forEach((word) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'understand-keyword-btn' + (understandPracticeTarget === word ? ' active' : '');
+        button.textContent = word;
+        button.addEventListener('click', () => {
+          understandPracticeTarget = word;
+          understandPracticeAttempts = 0;
+          understandPracticeCopy.textContent = `Now say it. Or repeat: "${word}".`;
+          understandInput.placeholder = `Say or type "${word}"...`;
+          renderUnderstandKeywords();
+          understandInput.focus();
+        });
+        understandKeywords.appendChild(button);
+      });
     }
 
-    if (UND_SR) undMicBtn.addEventListener('click', undStartMic);
-
-    function undLoadVoice() {
-      const v = window.speechSynthesis.getVoices();
-      undLunaVoice =
-        v.find(x => x.name.includes('Samantha')) ||
-        v.find(x => x.name.includes('Google US English')) ||
-        v.find(x => x.lang === 'en-US' && x.localService) ||
-        v.find(x => x.lang === 'en-US') ||
-        v[0] || null;
-    }
-    if (window.speechSynthesis) {
-      window.speechSynthesis.addEventListener('voiceschanged', undLoadVoice);
-      undLoadVoice();
+    function resetUnderstandPractice() {
+      understandPracticeTarget = currentUnderstandLesson ? currentUnderstandLesson.phrase : '';
+      understandPracticeAttempts = 0;
+      understandInput.value = '';
+      understandInput.placeholder = 'Say it or type it softly...';
+      understandPracticeCopy.textContent = 'Now say it.';
+      understandPractice.classList.add('hidden');
+      understandNextActions.classList.add('hidden');
+      renderUnderstandKeywords();
     }
 
-    function undSpeak(text, rate, onEnd) {
-      if (!window.speechSynthesis || !text) { if (onEnd) onEnd(); return; }
-      window.speechSynthesis.cancel();
-      setTimeout(() => {
-        if (window.speechSynthesis.paused) window.speechSynthesis.resume();
-        const u = new SpeechSynthesisUtterance(text);
-        if (lunaVoice) u.voice = lunaVoice;
-        console.log('[LaLanguish Voice] Understand voice:', lunaVoice ? lunaVoice.name : 'null/default', '| rate:', rate || 0.9, '| pitch: 1.02');
-        u.rate = rate || 0.9; u.pitch = 1.02; u.lang = 'en-US';
-        u.onstart = () => undSetOrb('speaking');
-        u.onend   = () => { undSetOrb('idle'); if (onEnd) onEnd(); };
-        u.onerror = () => { undSetOrb('idle'); if (onEnd) onEnd(); };
-        window.speechSynthesis.speak(u);
-      }, 60);
-    }
-
-    function undSetOrb(state) { undOrb.className = 'luna-orb ' + state; }
-    function undSetLuna(txt)  { undLunaSub.textContent = txt; }
-    function undSetFeedback(txt) { undFeedback.textContent = txt; }
-    function undShow(el) { el.classList.remove('hidden'); }
-    function undHide(el) { el.classList.add('hidden'); }
-
-    const UND_STOPWORDS = new Set([
-      'where','is','the','a','an','to','do','you','i','would','like',
-      'some','please','am','are','was','were','be','been','being',
-      'have','has','had','can','could','will','would','should','may',
-      'how','what','when','who','this','that','it','at','in','on',
-      'of','for','and','or','not','so','much','does','did','your',
-      'my','me','we','our','say','again','day','good'
-    ]);
-
-    function undNormalize(s) {
-      return (s || '').toLowerCase().replace(/[^a-z\s]/g, '').replace(/\s+/g, ' ').trim();
-    }
-
-    function undEditDist(a, b) {
-      const m = a.length, n = b.length;
-      const dp = Array.from({ length: m + 1 }, (_, i) => [i]);
-      for (let j = 0; j <= n; j++) dp[0][j] = j;
-      for (let i = 1; i <= m; i++)
-        for (let j = 1; j <= n; j++)
-          dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1] : 1 + Math.min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]);
-      return dp[m][n];
-    }
-
-    function undContentWordFound(tw, heardWords, alts) {
-      const accepted = [tw, ...(alts || [])].map(undNormalize);
-      for (const heard of heardWords)
-        for (const cand of accepted) {
-          if (heard === cand) return true;
-          const maxDist = Math.floor(cand.length * 0.4);
-          if (maxDist >= 1 && undEditDist(heard, cand) <= Math.min(2, maxDist)) return true;
-        }
-      return false;
-    }
-
-    function undGetContentWords(phrase) {
-      return undNormalize(phrase).split(' ').filter(w => w && !UND_STOPWORDS.has(w));
-    }
-
-    function undIsClose(input, target, alts) {
-      const a = undNormalize(input), b = undNormalize(target);
-      if (!a) return false;
-      const heardWords = a.split(' ');
-      const targetContentWords = undGetContentWords(b);
-      console.log('[LaLanguish Check] targetContentWords:', targetContentWords);
-      console.log('[LaLanguish Check] heardWords:', heardWords);
-      const contentPass = targetContentWords.every(tw => undContentWordFound(tw, heardWords, alts));
-      if (!contentPass) { console.log('[LaLanguish Check] passed: false (content word missing)'); return false; }
-      const targetWords = b.split(' ');
-      const overallPass = targetWords.filter(w => heardWords.includes(w)).length / targetWords.length >= 0.5
-        || a === b || b.includes(a) || a.includes(b);
-      console.log('[LaLanguish Check] passed:', overallPass);
-      return overallPass;
-    }
-
-    const UND_PROGRESS_KEY = 'lalanguish_understand_progress_v1';
-    function undLoadProgress() {
-      try { return JSON.parse(localStorage.getItem(UND_PROGRESS_KEY)) || {}; } catch (e) { return {}; }
-    }
-    function undSaveProgress(phrase, result) {
-      if (!result) return;
-      const prog = undLoadProgress();
-      const key = phrase.en;
-      const ent = prog[key] || { attempts: 0, successes: 0, perfects: 0, misses: 0, lastResult: null };
-      ent.attempts++;
-      if (result === 'perfect') { ent.successes++; ent.perfects++; }
-      else if (result === 'good') { ent.successes++; }
-      else { ent.misses++; }
-      ent.lastResult = result;
-      prog[key] = ent;
-      try { localStorage.setItem(UND_PROGRESS_KEY, JSON.stringify(prog)); } catch (e2) {}
-      console.log('[LaLanguish Progress]', ent);
-    }
-
-    function startNewUnderstandLesson() {
-      undStopMic();
-      undLastCheckResult = null;
-      undCurrentPhrase = UND_PHRASES[Math.floor(Math.random() * UND_PHRASES.length)];
-
-      undPhraseText.textContent = 'Listen first';
-      undPhraseText.className = 'und-phrase-text und-placeholder';
-      undHide(undPhraseMeaning);
-      undSetFeedback('Tap Listen to hear the phrase.');
-      undSetLuna('Ready when you are.');
-      undSetOrb('idle');
-
-      undPracticeInput.value = '';
-      undHide(undPracticeArea);
-
-      undShow(undListenActions);
-      undHide(undRevealBtn);
-      undListenBtn.disabled = false;
-      undListenBtn.textContent = '🔊 Listen';
-
-      undHide(undReflectActions);
-      undHide(undNextActions);
-    }
-
-    undListenBtn.addEventListener('click', () => {
-      undListenBtn.disabled = true;
-      undListenBtn.textContent = 'Playing…';
-      undSetFeedback('Hear it closely.');
-      undSetLuna('Listen closely.');
-      undSetOrb('speaking');
-      speakText(undCurrentPhrase.en);
-      window.setTimeout(() => {
-        undSetOrb('idle');
-        undPhraseText.textContent = undCurrentPhrase.en;
-        undPhraseText.className = 'und-phrase-text fade-in';
-        undShow(undRevealBtn);
-        undListenBtn.textContent = '🔊 Again';
-        undListenBtn.disabled = false;
-        undSetFeedback('Tap Reveal when ready, or listen again.');
-        undSetLuna('How did that feel?');
-      }, Math.max(1800, undCurrentPhrase.en.split(' ').length * 500 + 800));
-    });
-
-    undRevealBtn.addEventListener('click', () => {
-      undPhraseMeaning.textContent = undCurrentPhrase.es;
-      undShow(undPhraseMeaning);
-      undPhraseMeaning.classList.add('fade-in');
-      undHide(undListenActions);
-      undShow(undPracticeArea);
-      undPracticeInput.focus();
-      undSetFeedback('Type the phrase back.');
-      undSetLuna('Now say it.');
-    });
-
-    function undRunCheck() {
-      const val = undPracticeInput.value.trim();
-      if (!val) return;
-      const exactMatch = undNormalize(val) === undNormalize(undCurrentPhrase.en);
-      const fuzzyMatch = !exactMatch && undIsClose(val, undCurrentPhrase.en, undCurrentPhrase.alts);
-      if (exactMatch) {
-        undLastCheckResult = 'perfect';
-        undSetFeedback('Perfect. You said it clearly.');
-        undSetLuna('That phrase is landing.');
-        undHide(undPracticeArea);
-        undShow(undNextActions);
-        undNextActions.classList.add('fade-in');
-      } else if (fuzzyMatch) {
-        undLastCheckResult = 'good';
-        undSetFeedback('Good. You caught the important words.');
-        undSetLuna('That phrase is starting to land.');
-        undHide(undPracticeArea);
-        undShow(undNextActions);
-        undNextActions.classList.add('fade-in');
-      } else {
-        undLastCheckResult = 'try_again';
-        undSetFeedback('Not quite. Listen again or try typing it.');
-        undSetLuna('No rush. One more try.');
-        undShow(undNextActions);
+    function finishUnderstandPractice(canAdvance) {
+      if (canAdvance) {
+        understandNextActions.classList.remove('hidden');
       }
     }
 
-    undCheckBtn.addEventListener('click', undRunCheck);
-    undPracticeInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); undRunCheck(); } });
+    function runUnderstandPracticeCheck(text) {
+      const heard = normalizeRepeatText(text);
+      if (!heard) return;
 
-    undNextBtn.addEventListener('click', () => {
-      undHide(undNextActions);
-      undHide(undPracticeArea);
-      undSetFeedback('Did that feel familiar?');
-      undSetLuna('Take your time.');
-      undShow(undReflectActions);
-      undReflectActions.classList.add('fade-in');
+      const target = normalizeRepeatText(understandPracticeTarget || '');
+      const strong = target && (heard === target || heard.includes(target) || target.includes(heard));
+
+      if (strong) {
+        understandFeedback.textContent = 'Good.';
+        setUnderstandLunaState('speaking', 'Good.');
+        finishUnderstandPractice(true);
+        return;
+      }
+
+      understandPracticeAttempts += 1;
+      if (understandPracticeAttempts < 2) {
+        understandFeedback.textContent = 'Say it clearly.';
+        setUnderstandLunaState('idle', 'Say it clearly.');
+        return;
+      }
+
+      understandFeedback.textContent = 'Good. Keep it in mind.';
+      setUnderstandLunaState('idle', 'Good. Keep it in mind.');
+      finishUnderstandPractice(true);
+    }
+
+    function startUnderstandPracticeListening() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        understandInput.focus();
+        understandFeedback.textContent = 'Type it if your browser does not support the mic.';
+        return;
+      }
+
+      if (understandRecognitionActive) return;
+      understandRecognitionActive = true;
+      setUnderstandLunaState('listening', 'Now say it.');
+      understandFeedback.textContent = 'Listening...';
+
+      const rec = new SpeechRecognition();
+      rec.lang = 'en-US';
+      rec.interimResults = false;
+      rec.maxAlternatives = 1;
+
+      let transcript = '';
+
+      rec.onresult = (event) => {
+        transcript = collapseDuplicatedTranscript((event.results[0][0].transcript || '').trim());
+        understandInput.value = transcript;
+      };
+
+      rec.onerror = () => {
+        understandRecognitionActive = false;
+        setUnderstandLunaState('idle', 'Try it one more time.');
+        understandFeedback.textContent = 'Type it if the mic missed you.';
+      };
+
+      rec.onend = () => {
+        understandRecognitionActive = false;
+        if (transcript) {
+          runUnderstandPracticeCheck(transcript);
+        } else {
+          setUnderstandLunaState('idle', 'Try it one more time.');
+          understandFeedback.textContent = 'Say it clearly.';
+        }
+      };
+
+      rec.start();
+    }
+
+    function startNewUnderstandLesson() {
+      if (understandPlayTimer) {
+        window.clearTimeout(understandPlayTimer);
+        understandPlayTimer = null;
+      }
+
+      currentUnderstandLesson = understandLessonPool[Math.floor(Math.random() * understandLessonPool.length)];
+      understandPhrase.textContent = 'Listen first';
+      understandPhrase.classList.add('placeholder');
+      understandMeaning.textContent = 'Meaning: ' + currentUnderstandLesson.meaning;
+      understandMeaning.classList.add('hidden');
+      understandMeaningBtn.classList.add('hidden');
+      understandReflectActions.classList.add('hidden');
+      understandListenActions.classList.remove('hidden');
+      resetUnderstandPractice();
+      understandListenBtn.disabled = false;
+      understandListenBtn.textContent = 'Listen';
+      understandFeedback.textContent = 'Tap Listen to hear the phrase.';
+      setUnderstandLunaState('idle', 'Ready when you are.');
+    }
+
+    function handleReflection(understood) {
+      if (understood) {
+        setUnderstandLunaState('speaking', 'Good. That phrase is settling in.');
+        understandFeedback.textContent = 'Nice. You recognized it clearly.';
+        const understoodPhrase = currentUnderstandLesson ? currentUnderstandLesson.phrase : null;
+        updatePhraseMastery(understoodPhrase, 'understand_success');
+        sessionState.lastMode = 'understand';
+        sessionState.lastResult = 'success';
+        sessionState.lastPhrase = understoodPhrase;
+        window.setTimeout(() => returnToHome(), 1800);
+      } else {
+        setUnderstandLunaState('idle', 'No rush. Hear it one more time.');
+        understandFeedback.textContent = 'That\'s okay. Take another listen.';
+        understandReflectActions.classList.add('hidden');
+        understandMeaning.classList.add('hidden');
+        resetUnderstandPractice();
+        understandListenActions.classList.remove('hidden');
+        understandMeaningBtn.classList.add('hidden');
+        understandListenBtn.disabled = false;
+        understandListenBtn.textContent = 'Listen again';
+      }
+    }
+
+    understandListenBtn.addEventListener('click', () => {
+      window.speechSynthesis.cancel();
+      const playTest = new SpeechSynthesisUtterance(currentUnderstandLesson.phrase);
+      playTest.lang = "en-US";
+      playTest.rate = 0.88;
+      playTest.pitch = 1.03;
+      playTest.volume = 1.0;
+      window.speechSynthesis.speak(playTest);
+      understandListenBtn.disabled = true;
+      understandListenBtn.textContent = 'Playing...';
+      setUnderstandLunaState('speaking', 'Listen closely.');
+      understandFeedback.textContent = 'Hear it softly.';
+
+      understandPlayTimer = window.setTimeout(() => {
+        understandPhrase.textContent = currentUnderstandLesson.phrase;
+        understandPhrase.classList.remove('placeholder');
+        setUnderstandLunaState('idle', 'How did that feel?');
+        understandListenBtn.textContent = 'Listen';
+        understandMeaningBtn.classList.remove('hidden');
+        understandFeedback.textContent = 'Tap Show meaning when ready, or listen again.';
+        understandListenBtn.disabled = false;
+        understandPlayTimer = null;
+      }, 1800);
     });
 
-    undYesBtn.addEventListener('click', () => {
-      undSaveProgress(undCurrentPhrase, undLastCheckResult);
-      undHide(undReflectActions);
-      undSetFeedback('That phrase is settling in. ✓');
-      undSetLuna('Good. On to the next one.');
-      undSetOrb('speaking');
-      setTimeout(() => { undSetOrb('idle'); startNewUnderstandLesson(); }, 1600);
+    understandMeaningBtn.addEventListener('click', () => {
+      understandMeaning.classList.remove('hidden');
+      understandMeaningBtn.classList.add('hidden');
+      understandPractice.classList.remove('hidden');
+      understandListenActions.classList.remove('hidden');
+      understandReflectActions.classList.add('hidden');
+      understandFeedback.textContent = 'Now say it.';
+      setUnderstandLunaState('idle', 'Now say it.');
+      understandInput.focus();
     });
 
-    undNotyetBtn.addEventListener('click', () => {
-      undStopMic();
-      undHide(undReflectActions);
-      undHide(undPhraseMeaning);
-      undPracticeInput.value = '';
-      undHide(undPracticeArea);
-      undPhraseText.textContent = 'Listen first';
-      undPhraseText.className = 'und-phrase-text und-placeholder';
-      undShow(undListenActions);
-      undHide(undRevealBtn);
-      undListenBtn.textContent = '🔊 Listen again';
-      undListenBtn.disabled = false;
-      undSetFeedback("No rush. Let's try it again.");
-      undSetLuna('Hear it one more time.');
+    understandCheckBtn.addEventListener('click', () => {
+      runUnderstandPracticeCheck(understandInput.value.trim());
     });
+
+    understandInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        runUnderstandPracticeCheck(understandInput.value.trim());
+      }
+    });
+
+    understandMicBtn.addEventListener('click', () => {
+      startUnderstandPracticeListening();
+    });
+
+    understandNextBtn.addEventListener('click', () => {
+      understandNextActions.classList.add('hidden');
+      understandListenActions.classList.add('hidden');
+      understandReflectActions.classList.remove('hidden');
+      understandFeedback.textContent = 'Did that feel familiar?';
+      setUnderstandLunaState('idle', 'Take your time.');
+    });
+
+    understandYesBtn.addEventListener('click', () => handleReflection(true));
+    understandNotyetBtn.addEventListener('click', () => handleReflection(false));
+    understandHomeBtn.addEventListener('click', () => returnToHome());
     progressHomeBtn.addEventListener('click', () => returnToHome());
+
+    let ttsPrimed = false;
+    function primeTTS() {
+      if (ttsPrimed || !window.speechSynthesis) return;
+      ttsPrimed = true;
+      const silent = new SpeechSynthesisUtterance('');
+      silent.volume = 0;
+      window.speechSynthesis.speak(silent);
+    }
+    document.addEventListener('click', primeTTS, { once: true });
 
     homeStartBtn.addEventListener('click', () => {
       if (nextRecommendedMode === 'scenario') {
@@ -7047,222 +6185,27 @@
     const assistHomeBtn     = document.getElementById('assist-home-btn');
     const homeAssistBtn     = document.getElementById('home-assist-btn');
 
-    let assistIntent = 'understand';  // 'understand' | 'say' | 'translate'
+    let assistIntent = 'understand';  // 'understand' | 'say'
+
+    // Savable result — structured for future phrase saving, repeat practice, scenario injection
+    // Shape: { intent, input, english, simpler, meaning, pronunciation, example, practicePrompt,
+    //          phraseCandidate: { en, es } }
     let assistLastResult = null;
-
-    const assistTranslateBtn  = document.getElementById('assist-translate-btn');
-    const assistWhatsAppBtn   = document.getElementById('assist-whatsapp-btn');
-
-    // ── Luna Assist mic (isolated from Speak/Understand mic) ─────────────
-    let assistRecognition  = null;
-    let assistMicActive    = false;
-    let assistMicTimer     = null;
-    const ASSIST_MIC_TIMEOUT = 8000;
-
-    (function initAssistMic() {
-      const micBtn = document.getElementById('assist-mic-btn');
-      if (!micBtn) return;
-
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SR) {
-        micBtn.style.display = 'none';
-        return;
-      }
-
-      function setAssistMicState(listening) {
-        assistMicActive = listening;
-        micBtn.classList.toggle('listening', listening);
-        micBtn.setAttribute('aria-label', listening ? 'Listening\u2026' : 'Speak your question');
-        if (listening) {
-          assistTextarea.placeholder = 'Listening\u2026 speak now';
-        } else {
-          assistTextarea.placeholder = 'Ask Luna anything about English or Spanish\u2026';
-        }
-      }
-
-      function clearAssistMicTimer() {
-        if (assistMicTimer) { clearTimeout(assistMicTimer); assistMicTimer = null; }
-      }
-
-      function stopAssistMic() {
-        clearAssistMicTimer();
-        if (assistRecognition) {
-          try { assistRecognition.stop(); } catch (_) {}
-        }
-        setAssistMicState(false);
-      }
-
-      micBtn.addEventListener('click', function() {
-        if (assistMicActive) {
-          stopAssistMic();
-          return;
-        }
-
-        assistRecognition = new SR();
-        assistRecognition.lang            = 'en-US';
-        assistRecognition.continuous      = false;
-        assistRecognition.interimResults  = true;
-        assistRecognition.maxAlternatives = 1;
-
-        assistRecognition.onstart = function() {
-          setAssistMicState(true);
-          // 8-second hard timeout — stops listening if user goes silent
-          assistMicTimer = setTimeout(function() {
-            stopAssistMic();
-            if (!assistTextarea.value.trim()) {
-              assistTextarea.placeholder = 'I couldn\u2019t hear anything. Try again or type it.';
-              setTimeout(function() {
-                assistTextarea.placeholder = 'Ask Luna anything about English or Spanish\u2026';
-              }, 3000);
-            }
-          }, ASSIST_MIC_TIMEOUT);
-        };
-
-        assistRecognition.onresult = function(e) {
-          var interim = '';
-          var final   = '';
-          for (var i = 0; i < e.results.length; i++) {
-            var t = e.results[i][0].transcript;
-            if (e.results[i].isFinal) { final += t; }
-            else                       { interim += t; }
-          }
-          // Show interim text live while user is still speaking
-          if (final) {
-            clearAssistMicTimer();
-            assistTextarea.value = final.trim();
-            assistTextarea.focus();
-            assistTextarea.placeholder = 'I heard you. Review it, then press Send.';
-            setAssistMicState(false);
-            if (typeof refreshAssistSuggestions === 'function') refreshAssistSuggestions();
-          } else if (interim) {
-            assistTextarea.value = interim;
-          }
-        };
-
-        assistRecognition.onerror = function(e) {
-          clearAssistMicTimer();
-          if (e.error !== 'aborted') {
-            assistTextarea.placeholder = 'I couldn\u2019t hear that. Try again or type it.';
-            setTimeout(function() {
-              assistTextarea.placeholder = 'Ask Luna anything about English or Spanish\u2026';
-            }, 3000);
-          }
-          setAssistMicState(false);
-        };
-
-        assistRecognition.onend = function() {
-          clearAssistMicTimer();
-          setAssistMicState(false);
-        };
-
-        try {
-          assistRecognition.start();
-        } catch (e) {
-          stopAssistMic();
-        }
-      });
-
-      // Stop mic cleanly if pane closes while listening
-      document.getElementById('luna-assist-overlay').addEventListener('click', stopAssistMic);
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') stopAssistMic();
-      });
-    })();
-
-    // --- Context detection ---
-    // Reads the current Repeat topic so Luna can tailor responses
-    function getLunaContext() {
-      if (typeof currentRepeatTopic !== 'undefined' && currentRepeatTopic && currentRepeatTopic !== 'All') {
-        return currentRepeatTopic;
-      }
-      return 'general';
-    }
-
-    // --- Input type detection ---
-    // Classifies user input into translate / explain / phrase without any API call
-    function detectAssistInputType(input) {
-      const s = input.toLowerCase().trim();
-      if (/\b(how (do|can) (i|we) say|c[oó]mo (se dice|digo)|translate|translat|traduci)\b/.test(s)) {
-        return 'translate';
-      }
-      if (/\b(what does .+ mean|what is |why (do|does|did) we say|explain|significa|qu[eé] significa)\b/.test(s)) {
-        return 'explain';
-      }
-      return 'phrase';
-    }
-
-    // --- Fallback mock when no API key is set ---
-    function getMockAssistResult(input, inputType) {
-      const msgs = {
-        translate: 'Add your API key to get translations.',
-        explain:   'Add your API key to get explanations.',
-        phrase:    'Add your API key to have Luna review this phrase.'
-      };
-      return {
-        intent: inputType, input,
-        english: input,
-        meaning: msgs[inputType] || msgs.phrase,
-        pronunciation: '', example: '', practicePrompt: '',
-        simpler: null,
-        phraseCandidate: { en: input, es: '' }
-      };
-    }
-
-    function openLunaAssistPane() {
-      document.getElementById('luna-assist-pane').classList.add('open');
-      document.getElementById('luna-assist-overlay').classList.add('open');
-      setAssistIntent('understand');
-      const ta = document.getElementById('assist-textarea');
-      if (ta) setTimeout(function() { ta.focus(); }, 350);
-    }
-
-    function closeLunaAssistPane() {
-      document.getElementById('luna-assist-pane').classList.remove('open');
-      document.getElementById('luna-assist-overlay').classList.remove('open');
-    }
-
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeLunaAssistPane();
-    });
-
-    document.getElementById('luna-assist-overlay').addEventListener('click', closeLunaAssistPane);
 
     function setAssistIntent(intent) {
       assistIntent = intent;
       assistUnderstandBtn.classList.toggle('active', intent === 'understand');
       assistSayBtn.classList.toggle('active', intent === 'say');
-      if (assistTranslateBtn) assistTranslateBtn.classList.toggle('active', intent === 'translate');
-      if (assistWhatsAppBtn)  assistWhatsAppBtn.classList.toggle('active', intent === 'whatsapp');
       if (intent === 'understand') {
-        assistInputLabel.textContent = 'Type English to explain';
-        assistTextarea.placeholder = 'Ask Luna anything about English or Spanish\u2026';
-      } else if (intent === 'translate') {
-        assistInputLabel.textContent = 'What do you want to translate?';
-        assistTextarea.placeholder = 'e.g. \u201cI need a doctor\u201d or \u201cNecesito agua\u201d';
-      } else if (intent === 'whatsapp') {
-        // WA chat mode — no label/placeholder needed (chat UI replaces the standard input area)
+        assistInputLabel.textContent = 'Type English to understand';
+        assistTextarea.placeholder = '\u201cI\u2019m all set\u201d or any phrase you heard';
       } else {
         assistInputLabel.textContent = 'What do you want to say? (Spanish is fine)';
         assistTextarea.placeholder = 'e.g. Necesito una cita m\u00e9dica';
       }
-      const isWaMode = (intent === 'whatsapp');
-
-      // WA chat mode: swap input area ↔ chat area
-      var assistInputWrap = document.getElementById('luna-assist-pane') && document.querySelector('.assist-input-wrap');
-      if (assistInputWrap) assistInputWrap.style.display = isWaMode ? 'none' : '';
-      if (waChatArea) {
-        waChatArea.classList.toggle('hidden', !isWaMode);
-        if (isWaMode && assistPane) assistPane.classList.add('wa-mode');
-        else if (assistPane) assistPane.classList.remove('wa-mode');
-      }
-
-      if (!isWaMode) {
-        assistTextarea.value = '';
-        assistResultCard.classList.add('hidden');
-        assistMicroGuidance.classList.add('hidden');
-        // Refresh suggestions for the new mode (textarea is now empty → shows mode defaults)
-        if (typeof refreshAssistSuggestions === 'function') refreshAssistSuggestions();
-      }
+      assistTextarea.value = '';
+      assistResultCard.classList.add('hidden');
+      assistMicroGuidance.classList.add('hidden');
     }
 
     async function runLunaAssist() {
@@ -7282,11 +6225,12 @@
         }
       } catch (e) {
         assistResultCard.classList.remove('hidden');
-        const isOffline = e && e.message === 'SERVER_OFFLINE';
-        assistResultPhrase.textContent = isOffline ? 'Luna server is offline.' : 'Something went wrong.';
-        assistResultMeaning.textContent = isOffline
-          ? 'Run: node server.js in the project folder, then try again.'
-          : (e && e.message) || 'Check your connection and try again.';
+        assistResultPhrase.textContent = e && e.message === 'NO_API_KEY'
+          ? 'Luna Assist needs your API key.'
+          : 'Something went wrong.';
+        assistResultMeaning.textContent = e && e.message === 'NO_API_KEY'
+          ? 'Add your saved Assist API key, then try again.'
+          : 'Check your connection or API key and try again.';
         assistResultSimpler.classList.add('hidden');
         assistPronSection.style.display = 'none';
         assistPronDivider.style.display = 'none';
@@ -7300,39 +6244,57 @@
     }
 
     async function fetchAssistResult(intent, input) {
-      const lunaContext = getLunaContext();
-      const inputType   = intent === 'whatsapp' ? 'whatsapp' : detectAssistInputType(input);
-
-      // All API calls go through the local proxy — API key never touches the browser
-      let p;
-      try {
-        const res = await fetch('http://localhost:3001/api/luna', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input, context: lunaContext, inputType, intent })
-        });
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.error || 'Server error ' + res.status);
-        }
-        p = await res.json();
-      } catch (e) {
-        if (e.message && e.message.includes('fetch')) {
-          throw new Error('SERVER_OFFLINE');
-        }
-        throw e;
+      const apiKey = getAssistApiKey();
+      if (!apiKey) {
+        throw new Error('NO_API_KEY');
       }
 
-      // WA mode is handled by the waChatInit IIFE — fetchAssistResult never runs for WA
+      const systemUnderstand = `You are Luna, a calm English tutor for Spanish-speaking learners. ` +
+        `The learner gave you English they want to understand. ` +
+        `Reply ONLY with a valid JSON object — no markdown, no extra text — with these exact keys: ` +
+        `"english" (the phrase, cleaned if needed), "meaning" (short Spanish translation, 1 sentence), ` +
+        `"pronunciation" (one practical tip on stress or linked sounds), ` +
+        `"example" (one short sentence using the phrase naturally), ` +
+        `"practicePrompt" (a short cue to say it, e.g. "Now say: \u2018I\u2019m all set.\u2019"). Keep everything short and calm.`;
 
+      const systemSay = `You are Luna, a calm English tutor for Spanish-speaking learners. ` +
+        `The learner described something they want to say (may be in Spanish or mixed). ` +
+        `Reply ONLY with a valid JSON object — no markdown, no extra text — with these exact keys: ` +
+        `"english" (natural English version), "simpler" (shorter/simpler version if helpful, else null), ` +
+        `"meaning" (brief Spanish confirmation, 1 sentence), ` +
+        `"pronunciation" (one practical tip), ` +
+        `"example" (one short sentence showing it in context), ` +
+        `"practicePrompt" (a short cue to try saying it). Keep it short and calm.`;
+
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 420,
+          system: intent === 'understand' ? systemUnderstand : systemSay,
+          messages: [{ role: 'user', content: input }]
+        })
+      });
+
+      if (!res.ok) throw new Error('API ' + res.status);
+      const data = await res.json();
+      const raw = data.content && data.content[0] && data.content[0].text;
+      if (!raw) throw new Error('Empty');
+      const p = JSON.parse(raw.trim());
       return {
-        intent, input, inputType,
-        english:        p.english || input,
-        simpler:        null,
-        meaning:        p.meaning || '',
-        pronunciation:  p.note    || '',
-        example:        p.example || '',
-        practicePrompt: '',
+        intent, input,
+        english:        p.english       || input,
+        simpler:        p.simpler       || null,
+        meaning:        p.meaning       || '',
+        pronunciation:  p.pronunciation || '',
+        example:        p.example       || '',
+        practicePrompt: p.practicePrompt || 'Try saying it out loud.',
         phraseCandidate: { en: p.english || input, es: p.meaning || '' }
       };
     }
@@ -7394,36 +6356,30 @@
     const assistMicroTip       = document.getElementById('assist-micro-tip');
     const assistMicroPrompt    = document.getElementById('assist-micro-prompt');
 
-    // WA chat elements — referenced by the WA IIFE below
-    const waChatArea     = document.getElementById('wa-chat-area');
-    const waChatMessages = document.getElementById('wa-chat-messages');
-    const waChatTextarea = document.getElementById('wa-chat-textarea');
-    const waChatSendBtn  = document.getElementById('wa-chat-send-btn');
-    const assistPane     = document.getElementById('luna-assist-pane');
-
     function renderAssistResult(result) {
-      _clearAssistChainState();
+      _clearAssistChainState(); // stale chain from a previous phrase is no longer relevant
+      assistResultPhrase.textContent = result.english;
 
-      // WA mode is handled entirely by the WA chat IIFE — nothing to do here
-      if (result.mode === 'whatsapp') return;
+      if (result.simpler) {
+        assistResultSimpler.textContent = 'Simpler: \u201c' + result.simpler + '\u201d';
+        assistResultSimpler.classList.remove('hidden');
+      } else {
+        assistResultSimpler.classList.add('hidden');
+      }
 
-      assistResultSimpler.classList.add('hidden');
-      assistResultPhrase.style.display  = '';
-      assistResultMeaning.style.display = '';
+      assistResultMeaning.textContent = result.meaning;
 
-      assistResultPhrase.textContent  = result.english;
-      assistResultMeaning.textContent = result.meaning ? 'Spanish: ' + result.meaning : '';
-
-      const hasNote = !!result.pronunciation;
-      assistPronSection.style.display = hasNote ? '' : 'none';
-      assistPronDivider.style.display = hasNote ? '' : 'none';
-      if (hasNote) assistResultPron.textContent = result.pronunciation;
+      const hasPron = !!result.pronunciation;
+      assistPronSection.style.display = hasPron ? '' : 'none';
+      assistPronDivider.style.display = hasPron ? '' : 'none';
+      if (hasPron) assistResultPron.textContent = result.pronunciation;
 
       const hasEx = !!result.example;
       assistExSection.style.display = hasEx ? '' : 'none';
       assistExDivider.style.display = hasEx ? '' : 'none';
       if (hasEx) assistResultEx.textContent = result.example;
 
+      const shortPhrase = result.english.split(' ').slice(0, 5).join(' ');
       const _tryEntry = getAssistLearningEntry(result.english);
       const _tryLabel = !_tryEntry || _tryEntry.timesPracticed === 0 ? 'Say it once \u2192'
                       : _tryEntry.timesPracticed < 4               ? 'Practice it \u2192'
@@ -7432,7 +6388,7 @@
 
       const _cat = inferAssistCategory(result.english);
       const _mg = getAssistMicroGuidance(result.english, result.meaning, _cat);
-      assistMicroTip.textContent    = _mg.usageTip + '\u2002\u00b7\u2002' + _mg.toneTip;
+      assistMicroTip.textContent = _mg.usageTip + '\u2002\u00b7\u2002' + _mg.toneTip;
       assistMicroPrompt.textContent = _mg.followUpPrompt;
       assistMicroGuidance.classList.remove('hidden');
 
@@ -7441,158 +6397,10 @@
 
     assistUnderstandBtn.addEventListener('click', () => setAssistIntent('understand'));
     assistSayBtn.addEventListener('click', () => setAssistIntent('say'));
-    if (assistWhatsAppBtn) assistWhatsAppBtn.addEventListener('click', () => setAssistIntent('whatsapp'));
     assistSubmitBtn.addEventListener('click', runLunaAssist);
     assistTextarea.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runLunaAssist(); }
     });
-
-    // ── Luna Assist auto-suggestions ─────────────────────────────────────────
-    const assistSuggestionsEl = document.getElementById('assist-suggestions');
-
-    // Mode-aware default chips shown when input is empty
-    const ASSIST_MODE_DEFAULTS = {
-      translate: [
-        'Translate tengo hambre',
-        'Translate necesito ayuda',
-        'Translate d\u00f3nde est\u00e1 el ba\u00f1o'
-      ],
-      say: [
-        'I need help.',
-        'I need water.',
-        'I would like to check in.'
-      ],
-      understand: [
-        'What does bathroom mean?',
-        'Why do we say \u201cI am hungry\u201d?',
-        'Explain \u201cI would like\u201d'
-      ],
-      whatsapp: [
-        'Are you free later?',
-        'What are you doing?',
-        'Do you want to meet?'
-      ]
-    };
-
-    // Text-prefix rules tested against the current input (first match wins)
-    const ASSIST_TEXT_RULES = [
-      [/^how do i say\b/i, [
-        'How do I say I am hungry?',
-        'How do I say I need help?',
-        'How do I say where is the bathroom?'
-      ]],
-      [/^translate\b/i, [
-        'Translate tengo hambre',
-        'Translate necesito ayuda',
-        'Translate d\u00f3nde est\u00e1 el ba\u00f1o'
-      ]],
-      [/^what does\b/i, [
-        'What does hungry mean?',
-        'What does checkout mean?',
-        'What does I\u2019m all set mean?'
-      ]],
-      [/^why do we say\b/i, [
-        'Why do we say \u201cI\u2019m all set\u201d?',
-        'Why do we say \u201ccheck out\u201d?',
-        'Why do we say \u201cI\u2019m starving\u201d?'
-      ]],
-      [/^explain\b/i, [
-        'Explain \u201cI would like\u201d',
-        'Explain \u201cI\u2019m all set\u201d',
-        'Explain \u201ccheck in\u201d'
-      ]],
-      [/^i need\b/i, [
-        'I need help.',
-        'I need water.',
-        'I need to check in.'
-      ]],
-      [/^i am\b/i, [
-        'I am hungry.',
-        'I am tired.',
-        'I am ready to order.'
-      ]],
-      [/^i would\b/i, [
-        'I would like a table.',
-        'I would like the check.',
-        'I would like some water.'
-      ]],
-      [/^can (i|you)\b/i, [
-        'Can I have the check?',
-        'Can you help me?',
-        'Can I get a table for two?'
-      ]],
-      [/^where\b/i, [
-        'Where is the bathroom?',
-        'Where is the exit?',
-        'Where is the nearest pharmacy?'
-      ]],
-      [/^tengo\b/i, [
-        'tengo hambre',
-        'tengo sed',
-        'tengo una reserva'
-      ]],
-      [/^necesito\b/i, [
-        'necesito ayuda',
-        'necesito agua',
-        'necesito un taxi'
-      ]],
-      [/^c[oó]mo\b/i, [
-        'c\u00f3mo digo necesito ayuda',
-        'c\u00f3mo digo tengo hambre',
-        'c\u00f3mo digo d\u00f3nde est\u00e1 el ba\u00f1o'
-      ]]
-    ];
-
-    // Returns chips based on current text and mode.
-    // Empty text → show mode defaults. Text present → use prefix rules.
-    function getAssistSuggestions(text, mode) {
-      const t = (text || '').trim();
-      if (!t) {
-        return ASSIST_MODE_DEFAULTS[mode] || ASSIST_MODE_DEFAULTS['understand'];
-      }
-      for (var i = 0; i < ASSIST_TEXT_RULES.length; i++) {
-        if (ASSIST_TEXT_RULES[i][0].test(t)) return ASSIST_TEXT_RULES[i][1];
-      }
-      return [];
-    }
-
-    // Single render + wire function
-    function renderAssistSuggestions(chips) {
-      if (!chips || !chips.length) {
-        assistSuggestionsEl.innerHTML = '';
-        assistSuggestionsEl.classList.remove('visible');
-        return;
-      }
-      assistSuggestionsEl.innerHTML = chips.map(function(c) {
-        return '<button class="assist-suggestion-chip" type="button" role="option">' +
-          c.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') +
-          '</button>';
-      }).join('');
-      assistSuggestionsEl.classList.add('visible');
-      assistSuggestionsEl.querySelectorAll('.assist-suggestion-chip').forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          assistTextarea.value = btn.textContent;
-          assistTextarea.focus();
-          // After chip fill, refresh with the new text value
-          refreshAssistSuggestions();
-        });
-      });
-    }
-
-    // Central refresh — always reads live textarea value and current assistIntent
-    function refreshAssistSuggestions() {
-      var chips = getAssistSuggestions(assistTextarea.value, assistIntent);
-      renderAssistSuggestions(chips);
-    }
-
-    // Textarea input
-    assistTextarea.addEventListener('input', refreshAssistSuggestions);
-
-    // Clear on submit (capture phase — runs before runLunaAssist)
-    assistSubmitBtn.addEventListener('click', function() {
-      assistSuggestionsEl.innerHTML = '';
-      assistSuggestionsEl.classList.remove('visible');
-    }, true);
 
     assistHearBtn.addEventListener('click', () => {
       if (assistLastResult && assistLastResult.english) speakText(assistLastResult.english);
@@ -7668,13 +6476,12 @@
       }, 650);
     });
 
-    assistHomeBtn.addEventListener('click', () => closeLunaAssistPane());
+    assistHomeBtn.addEventListener('click', () => returnToHome());
 
-    if (assistTranslateBtn) {
-      assistTranslateBtn.addEventListener('click', () => setAssistIntent('translate'));
-    }
-
-    homeAssistBtn.addEventListener('click', () => openLunaAssistPane());
+    homeAssistBtn.addEventListener('click', () => {
+      showScreen(assistScreen);
+      setAssistIntent('understand');
+    });
 
     homeProgressWrap.addEventListener('click', () => {
       renderProgressScreen();
@@ -7695,7 +6502,7 @@
       var beams = document.getElementById('schema-beams');
       var beamAnchor = document.getElementById('beam-anchor');
       var navEl = document.getElementById('schema-nav');
-      var allScreens = [homeScreen, speakScreen, understandScreen, repeatScreen, progressScreen];
+      var allScreens = [homeScreen, speakScreen, understandScreen, repeatScreen, assistScreen, progressScreen];
       var screenMap = {
         'home-screen': homeScreen,
         'speak-screen': speakScreen,
@@ -7725,27 +6532,14 @@
         btn.addEventListener('click', function() {
           var targetId = btn.getAttribute('data-screen');
           if (targetId === 'home-screen') {
-            window.speechSynthesis && window.speechSynthesis.cancel();
-            showScreen(homeScreen);
-            updateNavActive('home-screen');
             returnToHome();
           } else if (targetId === 'progress-screen') {
             if (typeof renderProgressScreen === 'function') renderProgressScreen();
             showScreen(progressScreen);
           } else {
             var target = screenMap[targetId];
-            if (target) {
-              showScreen(target);
-              if (targetId === 'understand-screen') startNewUnderstandLesson();
-              if (targetId === 'speak-screen') startNewSpeakSession(null);
-              if (targetId === 'repeat-screen') {
-                var rc = document.querySelector('#repeat-screen .repeat-card');
-                if (rc) rc.classList.add('challenge-active');
-                startRepeatChallenge();
-              }
-            }
+            if (target) showScreen(target);
           }
-          updateHomeWelcome(targetId);
           updateNavActive(targetId);
           updateBeams();
           setTimeout(updateBeams, 50);
@@ -7771,323 +6565,25 @@
         observer.observe(s, { attributes: true, attributeFilter: ['class'] });
       });
 
-      updateHomeWelcome('home-screen');
-
       // Luna orb tap on home → start recommended flow
       var homeLuna = document.getElementById('home-luna-orb');
       if (homeLuna) {
         homeLuna.addEventListener('click', function() {
+          window.speechSynthesis.cancel();
+          const orbTest = new SpeechSynthesisUtterance("Testing Luna voice");
+          orbTest.lang = "en-US";
+          orbTest.rate = 0.92;
+          orbTest.pitch = 1.0;
+          orbTest.volume = 1.0;
+          window.speechSynthesis.speak(orbTest);
           homeStartBtn.click();
         });
       }
-
-      // Wire visible topic cards to existing Repeat logic
-      var repeatCard = document.querySelector('#repeat-screen .repeat-card');
-      var topicCards = document.querySelectorAll('.schema-topic-card');
-      topicCards.forEach(function(card) {
-        card.addEventListener('click', function() {
-          var topic = card.getAttribute('data-topic') || 'All';
-          currentRepeatTopic = topic;
-          currentPhraseSet = PHRASES_BY_TOPIC[topic] || repeatPhrasePool;
-          repeatPhraseIndex = 0;
-          if (repeatCard) repeatCard.classList.add('challenge-active');
-          startRepeatChallenge();
-        });
-      });
-
-      // Baby Luna → opens Luna Assist pane
-      var babyLuna = document.getElementById('baby-luna');
-      if (babyLuna) {
-        babyLuna.addEventListener('click', function() {
-          openLunaAssistPane();
-        });
-      }
-
-      // Reset topic grid when repeat screen becomes active
-      var repeatObs = new MutationObserver(function() {
-        if (repeatScreen.classList.contains('active') && repeatCard) {
-          repeatCard.classList.remove('challenge-active');
-        }
-      });
-      repeatObs.observe(repeatScreen, { attributes: true, attributeFilter: ['class'] });
 
       updateBeams();
       window.addEventListener('resize', updateBeams);
       // Delayed update to catch layout shifts
       setTimeout(updateBeams, 300);
-    })();
-
-    // ═══ CONVERSATION PRACTICE ═══════════════════════════════════════════════
-    (function convPracticeInit() {
-      var convMessages  = document.getElementById('conv-messages');
-      var convTextarea  = document.getElementById('conv-textarea');
-      var convSendBtn   = document.getElementById('conv-send-btn');
-      var convHomeBtn   = document.getElementById('conv-home-btn');
-      var homeConvBtn   = document.getElementById('home-conv-btn');
-
-      var LUNA_REPLIES = [
-        'That\u2019s interesting!',
-        'Tell me more.',
-        'Nice!',
-        'I like that.',
-        'Go on\u2026',
-        'Really? That\u2019s cool.',
-        'Good one!',
-        'Can you say more about that?',
-        'Sounds good!',
-        'Thanks for sharing!'
-      ];
-
-      var typingBubble = null;
-
-      // Append a message bubble to the chat log.
-      // Returns the created element so callers can remove typing bubbles.
-      function appendConvMessage(text, role) {
-        var bubble = document.createElement('div');
-        bubble.className = 'conv-bubble conv-bubble--' + role;
-        bubble.textContent = text;
-        convMessages.appendChild(bubble);
-        convMessages.scrollTop = convMessages.scrollHeight;
-        return bubble;
-      }
-
-      // Simulate Luna typing then responding with a random fake reply
-      function lunaRespond() {
-        convSendBtn.disabled = true;
-        typingBubble = appendConvMessage('Luna is typing\u2026', 'typing');
-        setTimeout(function() {
-          if (typingBubble && typingBubble.parentNode) {
-            typingBubble.parentNode.removeChild(typingBubble);
-            typingBubble = null;
-          }
-          var reply = LUNA_REPLIES[Math.floor(Math.random() * LUNA_REPLIES.length)];
-          appendConvMessage(reply, 'luna');
-          convSendBtn.disabled = false;
-          convTextarea.focus();
-        }, 800 + Math.random() * 400);
-      }
-
-      // Read textarea, post user bubble, clear input, trigger Luna reply
-      function handleConvSend() {
-        var text = convTextarea.value.trim();
-        if (!text) return;
-        appendConvMessage(text, 'user');
-        convTextarea.value = '';
-        convTextarea.style.height = '';
-        lunaRespond();
-      }
-
-      // Auto-grow textarea up to its max-height
-      convTextarea.addEventListener('input', function() {
-        convTextarea.style.height = 'auto';
-        convTextarea.style.height = convTextarea.scrollHeight + 'px';
-      });
-
-      convTextarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          handleConvSend();
-        }
-      });
-
-      convSendBtn.addEventListener('click', handleConvSend);
-
-      convHomeBtn.addEventListener('click', function() {
-        showScreen(homeScreen);
-      });
-
-      if (homeConvBtn) {
-        homeConvBtn.addEventListener('click', function() {
-          // Clear chat and add Luna's opening line on each fresh session
-          convMessages.innerHTML = '';
-          appendConvMessage('Hola! Let\u2019s practice. Say anything in English.', 'luna');
-          showScreen(convPracticeScreen);
-        });
-      }
-
-      // Expose for external callers / future AI wiring
-      window.convPractice = {
-        appendMessage: appendConvMessage,
-        messagesEl: convMessages
-      };
-    })();
-
-    // ═══ WHATSAPP CHAT MODE ═══════════════════════════════════════════════════
-    (function waChatInit() {
-      if (!waChatArea || !waChatMessages || !waChatTextarea || !waChatSendBtn) return;
-
-      // ── Helpers ──────────────────────────────────────────────────────────────
-
-      function copyText(text, btn) {
-        if (!text) return;
-        navigator.clipboard.writeText(text).then(function() {
-          var orig = btn.textContent;
-          btn.textContent = '\u2713 Copied';
-          setTimeout(function() { btn.textContent = orig; }, 1400);
-        }).catch(function() {});
-      }
-
-      function scrollToBottom() {
-        waChatMessages.scrollTop = waChatMessages.scrollHeight;
-      }
-
-      // Append a generic thinking indicator; returns element so caller can remove it
-      function showThinking() {
-        var el = document.createElement('div');
-        el.className = 'wa-thinking';
-        el.textContent = 'Luna is thinking\u2026';
-        waChatMessages.appendChild(el);
-        scrollToBottom();
-        return el;
-      }
-
-      // Build and append a full conversation block from server response
-      function makeLabel(text) {
-        var el = document.createElement('div');
-        el.className = 'wa-row-label';
-        el.textContent = text;
-        return el;
-      }
-      function makeBubble(cls, text) {
-        var el = document.createElement('div');
-        el.className = 'wa-bubble ' + cls;
-        el.textContent = text;
-        return el;
-      }
-
-      function renderWaBlock(userInput, p) {
-        var chat = document.createElement('div');
-        chat.className = 'wa-chat';
-
-        // ── Friend bubble (left) ─────────────────────────────────────────────
-        var friendBubble = document.createElement('div');
-        friendBubble.className = 'wa-bubble wa-bubble-friend';
-        friendBubble.textContent = userInput;
-        chat.appendChild(friendBubble);
-
-        var friendMeaning = p.friendMeaningSpanish || p.friendMeaning || '';
-        if (friendMeaning) {
-          var friendTrans = document.createElement('div');
-          friendTrans.className = 'wa-translation';
-          friendTrans.textContent = friendMeaning;
-          chat.appendChild(friendTrans);
-        }
-
-        // ── Suggested reply bubble (right) ───────────────────────────────────
-        if (p.suggestedReplyEnglish) {
-          var replyBubble = document.createElement('div');
-          replyBubble.className = 'wa-bubble wa-bubble-user';
-          replyBubble.textContent = p.suggestedReplyEnglish;
-          chat.appendChild(replyBubble);
-
-          if (p.suggestedReplySpanish) {
-            var replyTrans = document.createElement('div');
-            replyTrans.className = 'wa-translation wa-translation--right';
-            replyTrans.textContent = p.suggestedReplySpanish;
-            chat.appendChild(replyTrans);
-          }
-
-          // Copy button — closure captures reply text at render time
-          var copyBtn = document.createElement('button');
-          copyBtn.className = 'copy-reply-btn';
-          copyBtn.type = 'button';
-          copyBtn.textContent = 'Copy reply';
-          (function(replyText) {
-            copyBtn.addEventListener('click', function() { copyText(replyText, copyBtn); });
-          }(p.suggestedReplyEnglish));
-          chat.appendChild(copyBtn);
-        }
-
-        // ── Coaching tip ─────────────────────────────────────────────────────
-        var tipText = p.noteSpanish || p.note || '';
-        if (tipText) {
-          var tip = document.createElement('div');
-          tip.className = 'wa-tip';
-          tip.textContent = '\ud83d\udca1 ' + tipText;
-          chat.appendChild(tip);
-        }
-
-        waChatMessages.appendChild(chat);
-        scrollToBottom();
-      }
-
-      // ── Send handler ─────────────────────────────────────────────────────────
-
-      async function sendWaMessage() {
-        var text = waChatTextarea.value.trim();
-        if (!text) return;
-
-        waChatTextarea.value = '';
-        waChatTextarea.style.height = '';
-        waChatSendBtn.disabled = true;
-
-        var thinking = showThinking();
-
-        console.log('Luna Assist request mode: whatsapp detectedType: whatsapp input:', text);
-
-        try {
-          var res = await fetch('http://localhost:3001/api/luna', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ input: text, inputType: 'whatsapp', mode: 'whatsapp', intent: 'whatsapp', context: 'general' })
-          });
-
-          if (thinking && thinking.parentNode) thinking.parentNode.removeChild(thinking);
-
-          if (!res.ok) {
-            var errData = await res.json().catch(function() { return {}; });
-            throw new Error(errData.error || 'Server error ' + res.status);
-          }
-
-          var p = await res.json();
-          console.log('WhatsApp response:', p);
-          if (p.mode === 'whatsapp') {
-            renderWaBlock(text, p);
-          } else {
-            // Unexpected: server didn't return WA mode — show raw
-            renderWaBlock(text, {
-              friendMeaningSpanish:  p.friendMeaningSpanish || p.meaning || '',
-              suggestedReplyEnglish: p.suggestedReplyEnglish || p.english || '',
-              suggestedReplySpanish: p.suggestedReplySpanish || '',
-              noteSpanish:           p.noteSpanish || ''
-            });
-          }
-        } catch (err) {
-          if (thinking && thinking.parentNode) thinking.parentNode.removeChild(thinking);
-          var errBlock = document.createElement('div');
-          errBlock.className = 'wa-bubble wa-bubble--note';
-          var msg = (err && err.message === 'Failed to fetch')
-            ? 'Server offline. Run: node server.js'
-            : 'Error: ' + (err && err.message || 'Something went wrong.');
-          errBlock.textContent = msg;
-          waChatMessages.appendChild(errBlock);
-          scrollToBottom();
-        } finally {
-          waChatSendBtn.disabled = false;
-          waChatTextarea.focus();
-        }
-      }
-
-      // ── Event wiring ─────────────────────────────────────────────────────────
-
-      waChatSendBtn.addEventListener('click', sendWaMessage);
-
-      waChatTextarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendWaMessage(); }
-      });
-
-      waChatTextarea.addEventListener('input', function() {
-        waChatTextarea.style.height = 'auto';
-        waChatTextarea.style.height = waChatTextarea.scrollHeight + 'px';
-      });
-
-      // When pane closes, reset WA mode so reopening starts clean
-      document.getElementById('luna-assist-overlay') && document.getElementById('luna-assist-overlay').addEventListener('click', function() {
-        if (assistPane) assistPane.classList.remove('wa-mode');
-      });
-      document.getElementById('assist-home-btn') && document.getElementById('assist-home-btn').addEventListener('click', function() {
-        if (assistPane) assistPane.classList.remove('wa-mode');
-      });
     })();
   </script>
 </body>
