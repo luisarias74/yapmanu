@@ -4,3 +4,7 @@
 ._*
 Thumbs.db
 .claude/
+.env
+node_modules/
+99_ARCHIVE/env-backups/
+99_ARCHIVE/env-backups/

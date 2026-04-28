@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LaLánguish Repeat v2 Clean</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --bg-top: #081225;
+    --bg-mid: #19173e;
+    --bg-bottom: #081c2f;
+    --cyan: #5de8ff;
+    --cyan-strong: #22d3ee;
+    --lavender: #b7a9ff;
+    --glass: rgba(255, 255, 255, 0.08);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --text-main: #f6f8ff;
+    --text-soft: rgba(236, 240, 255, 0.7);
+    --text-faint: rgba(236, 240, 255, 0.45);
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    --radius-xl: 32px;
+    --radius-lg: 24px;
+    --radius-md: 18px;
+    --radius-pill: 999px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { min-height: 100%; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+    background:
+      radial-gradient(circle at 50% 18%, rgba(93, 232, 255, 0.16), transparent 20%),
+      radial-gradient(circle at 82% 18%, rgba(183, 169, 255, 0.18), transparent 24%),
+      radial-gradient(circle at 18% 88%, rgba(34, 211, 238, 0.14), transparent 24%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 48%, var(--bg-bottom) 100%);
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 50% 22%, rgba(255, 255, 255, 0.08), transparent 22%),
+      radial-gradient(circle at 50% 100%, rgba(93, 232, 255, 0.06), transparent 30%);
+    mix-blend-mode: screen;
+  }
+
+  .schema-star { position: absolute; border-radius: 50%; background: white; pointer-events: none; z-index: 0; }
+  .schema-star.tw { animation: schema-twinkle 3s ease-in-out infinite; }
+  @keyframes schema-twinkle {
+    0%, 100% { opacity: var(--star-op, 0.3); }
+    50% { opacity: calc(var(--star-op, 0.3) * 0.35); }
+  }
+
+  .app-shell {
+    width: min(100%, 520px);
+    min-height: 100dvh;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .app-card {
+    position: relative;
+    width: 100%;
+    min-height: calc(100dvh - 32px);
+    display: grid;
+    grid-template-rows: auto auto auto 1fr auto;
+    gap: 14px;
+    padding: 18px 18px 16px;
+    border-radius: var(--radius-xl);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .app-card::before {
+    content: "";
+    position: absolute;
+    inset: auto -90px -110px auto;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(183, 169, 255, 0.22), transparent 68%);
+    pointer-events: none;
+  }
+
+  .top-bar {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .presence-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-radius: var(--radius-pill);
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .presence-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 16px rgba(93, 232, 255, 0.88);
+  }
+
+  .presence-copy {
+    display: grid;
+    gap: 2px;
+  }
+
+  .presence-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 700;
+  }
+
+  .presence-state {
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .session-context {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 4px;
+    padding: 0 4px;
+  }
+
+  .session-kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    font-weight: 700;
+  }
+
+  .session-title {
+    font-size: 1.18rem;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    color: var(--text-main);
+  }
+
+  .session-subtitle {
+    font-size: 0.84rem;
+    line-height: 1.4;
+    color: var(--text-soft);
+  }
+
+  .luna-stage {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 8px;
+    padding-top: 0;
+  }
+
+  .luna-orb-wrap {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    display: grid;
+    place-items: center;
+  }
+
+  .luna-orb-wrap::before,
+  .luna-orb-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .luna-orb-wrap::before {
+    background: radial-gradient(circle, rgba(93, 232, 255, 0.2), transparent 72%);
+    filter: blur(10px);
+    animation: halo-breathe 4s ease-in-out infinite;
+  }
+
+  .luna-orb-wrap::after {
+    inset: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    opacity: 0.8;
+  }
+
+  .luna-orb {
+    position: relative;
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.98), rgba(201, 239, 255, 0.9) 28%, rgba(105, 144, 255, 0.52) 62%, rgba(19, 27, 77, 0.65) 100%);
+    box-shadow:
+      0 0 0 10px rgba(255, 255, 255, 0.04),
+      0 0 44px rgba(93, 232, 255, 0.34),
+      0 0 84px rgba(183, 169, 255, 0.24);
+    animation: orb-idle 4.8s ease-in-out infinite;
+    overflow: hidden;
+    transition: transform 0.28s ease, box-shadow 0.28s ease;
+  }
+
+  .luna-core {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.98), rgba(255,255,255,0.3) 72%, transparent 100%);
+    filter: blur(1px);
+  }
+
+  .luna-orb.idle { animation: orb-idle 4.8s ease-in-out infinite; }
+
+  .luna-orb.listening {
+    transform: scale(1.08);
+    box-shadow:
+      0 0 0 14px rgba(93, 232, 255, 0.14),
+      0 0 60px rgba(93, 232, 255, 0.62),
+      0 0 110px rgba(93, 232, 255, 0.38);
+    animation: orb-listening 2.4s ease-in-out infinite;
+  }
+
+  .luna-orb.speaking {
+    transform: scale(1.04);
+    box-shadow:
+      0 0 0 16px rgba(183, 169, 255, 0.16),
+      0 0 70px rgba(183, 169, 255, 0.62),
+      0 0 124px rgba(93, 232, 255, 0.34);
+    animation: orb-speaking 1.5s ease-in-out infinite;
+  }
+
+  .luna-copy {
+    text-align: center;
+    max-width: 28ch;
+  }
+
+  .luna-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+
+  .luna-subtitle {
+    margin-top: 2px;
+    font-size: 0.84rem;
+    line-height: 1.45;
+    color: var(--text-soft);
+  }
+
+  .repeat-card {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 12px;
+    padding: 14px;
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+  }
+
+  .repeat-prompt {
+    font-size: 1.12rem;
+    line-height: 1.35;
+    font-weight: 600;
+    color: var(--text-main);
+    letter-spacing: -0.02em;
+    text-align: center;
+  }
+
+  .repeat-cue {
+    padding: 14px;
+    border-radius: var(--radius-md);
+    background: rgba(93, 232, 255, 0.07);
+    border: 1px solid rgba(93, 232, 255, 0.16);
+    color: var(--text-soft);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .repeat-recall-input-wrap {
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    border-radius: var(--radius-pill);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--glass-border);
+  }
+
+  .repeat-recall-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: var(--text-main);
+    font-size: 0.94rem;
+    line-height: 1.4;
+  }
+
+  .repeat-recall-input::placeholder {
+    color: var(--text-faint);
+  }
+
+  .repeat-reset-btn,
+  .repeat-submit-btn,
+  .home-start-btn {
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    color: var(--text-main);
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  .repeat-reset-btn,
+  .repeat-submit-btn {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .home-start-btn {
+    color: #041019;
+    background: linear-gradient(135deg, rgba(34, 211, 238, 0.9), rgba(125, 211, 252, 0.88));
+    box-shadow: 0 18px 40px rgba(34, 211, 238, 0.18), inset 0 1px 0 rgba(255,255,255,0.34);
+  }
+
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  #repeat-next-btn {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .repeat-feedback {
+    min-height: 44px;
+    color: var(--text-soft);
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  .debug {
+    margin-top: auto;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    background: rgba(0,0,0,0.28);
+    border: 1px solid rgba(255,255,255,0.07);
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    font-family: monospace;
+    line-height: 1.6;
+  }
+
+  .hidden { display: none !important; }
+
+  @keyframes orb-idle {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-3px) scale(1.012); }
+  }
+
+  @keyframes orb-listening {
+    0%,100% { transform: scale(1.08); }
+    50% { transform: scale(1.11); }
+  }
+
+  @keyframes orb-speaking {
+    0%,100% { transform: scale(1.04); }
+    50% { transform: scale(1.07); }
+  }
+
+  @keyframes halo-breathe {
+    0%,100% { opacity: 0.8; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+</style>
+</head>
+<body>
+  <div id="schema-stars" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+    <div class="schema-star" style="left:45px;top:28px;width:1.5px;height:1.5px;opacity:.5"></div>
+    <div class="schema-star tw" style="left:312px;top:65px;width:1px;height:1px;opacity:.35;animation-delay:.3s"></div>
+    <div class="schema-star" style="left:78px;top:120px;width:1.2px;height:1.2px;opacity:.4"></div>
+    <div class="schema-star tw" style="left:280px;top:42px;width:.8px;height:.8px;opacity:.3;animation-delay:1.2s"></div>
+    <div class="schema-star" style="left:165px;top:88px;width:1px;height:1px;opacity:.5"></div>
+    <div class="schema-star" style="left:340px;top:155px;width:.8px;height:.8px;opacity:.3"></div>
+    <div class="schema-star tw" style="left:22px;top:210px;width:.8px;height:.8px;opacity:.25;animation-delay:.8s"></div>
+    <div class="schema-star" style="left:195px;top:15px;width:1px;height:1px;opacity:.4"></div>
+    <div class="schema-star" style="left:320px;top:280px;width:1px;height:1px;opacity:.35"></div>
+    <div class="schema-star tw" style="left:370px;top:340px;width:.8px;height:.8px;opacity:.3;animation-delay:.5s"></div>
+    <div class="schema-star" style="left:15px;top:380px;width:1px;height:1px;opacity:.4"></div>
+    <div class="schema-star tw" style="left:85px;top:430px;width:.7px;height:.7px;opacity:.25;animation-delay:1.9s"></div>
+    <div class="schema-star" style="left:350px;top:520px;width:.9px;height:.9px;opacity:.3"></div>
+    <div class="schema-star" style="left:60px;top:650px;width:.7px;height:.7px;opacity:.25"></div>
+    <div class="schema-star tw" style="left:305px;top:680px;width:.8px;height:.8px;opacity:.3;animation-delay:1.4s"></div>
+    <div class="schema-star" style="left:250px;top:130px;width:.6px;height:.6px;opacity:.2"></div>
+    <div class="schema-star" style="left:380px;top:200px;width:.8px;height:.8px;opacity:.3"></div>
+    <div class="schema-star" style="left:110px;top:320px;width:.6px;height:.6px;opacity:.2"></div>
+    <div class="schema-star tw" style="left:230px;top:560px;width:.7px;height:.7px;opacity:.2;animation-delay:2.1s"></div>
+    <div class="schema-star" style="left:50px;top:540px;width:.8px;height:.8px;opacity:.25"></div>
+    <div class="schema-star" style="left:290px;top:420px;width:.6px;height:.6px;opacity:.2"></div>
+    <div class="schema-star tw" style="left:180px;top:720px;width:.7px;height:.7px;opacity:.2;animation-delay:.6s"></div>
+    <div class="schema-star" style="left:360px;top:600px;width:.5px;height:.5px;opacity:.15"></div>
+    <div class="schema-star" style="left:30px;top:760px;width:.6px;height:.6px;opacity:.2"></div>
+    <div class="schema-star tw" style="left:200px;top:350px;width:.5px;height:.5px;opacity:.15;animation-delay:1.7s"></div>
+  </div>
+  <main class="app-shell">
+    <section class="app-card">
+      <header class="top-bar">
+        <div class="presence-chip">
+          <span class="presence-dot"></span>
+          <div class="presence-copy">
+            <span class="presence-label">Luna</span>
+            <span class="presence-state">Repeat Sandbox</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="session-context" aria-label="Repeat context">
+        <div class="session-kicker">Repeat Mode</div>
+        <h2 class="session-title">Build the sentence with Luna</h2>
+        <p class="session-subtitle">One short phrase at a time. Let the pattern settle before you move on.</p>
+      </section>
+
+      <section class="luna-stage" aria-label="Luna presence">
+        <div class="luna-orb-wrap">
+          <div class="luna-orb idle" id="luna-orb">
+            <div class="luna-core"></div>
+          </div>
+        </div>
+        <div class="luna-copy">
+          <h1 class="luna-name">Luna</h1>
+          <p class="luna-subtitle">Ready for the next phrase.</p>
+        </div>
+      </section>
+
+      <section class="repeat-card" aria-label="Repeat challenge">
+        <div class="repeat-prompt" id="prompt">Build this sentence</div>
+        <div class="repeat-cue" id="cue"></div>
+        <div class="repeat-recall-input-wrap">
+          <input class="repeat-recall-input" id="answer-input" type="text" placeholder="Type the English sentence..." autocomplete="off" />
+          <button class="repeat-submit-btn" id="check-btn" type="button">Check</button>
+        </div>
+        <button class="home-start-btn" id="repeat-next-btn" type="button">Next phrase</button>
+        <div class="repeat-feedback" id="feedback"></div>
+        <div class="debug" id="debug"></div>
+      </section>
+    </section>
+  </main>
+<script>
+(function () {
+  const PHRASES = [
+    { en: "I feel good", es: "Me siento bien" },
+    { en: "I am ready", es: "Estoy listo" },
+    { en: "Where is the bathroom?", es: "¿Dónde está el baño?" },
+    { en: "I would like some water", es: "Quisiera un poco de agua" }
+  ];
+
+  let currentPhraseIndex = 0;
+  let confirmationRound = 1;
+  let attempts = 0;
+  let complete = false;
+
+  const promptEl = document.getElementById("prompt");
+  const cueEl = document.getElementById("cue");
+  const inputEl = document.getElementById("answer-input");
+  const checkBtn = document.getElementById("check-btn");
+  const nextBtn = document.getElementById("repeat-next-btn");
+  const feedbackEl = document.getElementById("feedback");
+  const debugEl = document.getElementById("debug");
+
+  function normalize(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[^\w\s]/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+  }
+
+  function currentPhrase() {
+    return PHRASES[currentPhraseIndex];
+  }
+
+  function updateDebug() {
+    debugEl.textContent = "Phrase " + (currentPhraseIndex + 1) + " of " + PHRASES.length +
+      " · Round " + confirmationRound + " · Attempts " + attempts;
+  }
+
+  function loadPhrase(index) {
+    currentPhraseIndex = index;
+    confirmationRound = 1;
+    attempts = 0;
+    complete = false;
+
+    const phrase = currentPhrase();
+    promptEl.textContent = "Build this sentence";
+    cueEl.textContent = "Spanish: " + phrase.es;
+    inputEl.value = "";
+    inputEl.disabled = false;
+    checkBtn.disabled = false;
+    feedbackEl.textContent = "Type the English sentence.";
+    updateDebug();
+    inputEl.focus();
+  }
+
+  function handleCheck() {
+    if (complete) return;
+
+    const phrase = currentPhrase();
+    const answer = normalize(inputEl.value);
+    const target = normalize(phrase.en);
+
+    if (!answer) {
+      feedbackEl.textContent = "Type your answer first.";
+      return;
+    }
+
+    attempts += 1;
+    console.log("[Repeat] check:", { answer, target, attempts, confirmationRound });
+
+    if (answer !== target) {
+      feedbackEl.textContent = attempts >= 3
+        ? "Good practice. You can try again or move to the next phrase."
+        : "Not quite. Try again.";
+      inputEl.value = "";
+      updateDebug();
+      inputEl.focus();
+      return;
+    }
+
+    if (confirmationRound === 1) {
+      confirmationRound = 2;
+      feedbackEl.textContent = "Good. Type it one more time.";
+      promptEl.textContent = "How would you say this?";
+      inputEl.value = "";
+      updateDebug();
+      inputEl.focus();
+      return;
+    }
+
+    complete = true;
+    feedbackEl.textContent = "Perfect. You can move on.";
+    checkBtn.disabled = true;
+    inputEl.disabled = true;
+    updateDebug();
+  }
+
+  function advanceRepeatPhraseOnly() {
+    currentPhraseIndex = (currentPhraseIndex + 1) % PHRASES.length;
+    const phrase = PHRASES[currentPhraseIndex];
+
+    promptEl.textContent = "Build this sentence";
+    cueEl.textContent = "Spanish: " + phrase.es;
+    inputEl.value = "";
+    feedbackEl.textContent = "";
+
+    confirmationRound = 1;
+    attempts = 0;
+    complete = false;
+
+    checkBtn.disabled = false;
+    inputEl.disabled = false;
+
+    console.log("[Repeat Advance Only] index:", currentPhraseIndex);
+    console.log("[Repeat Advance Only] phrase:", phrase.en);
+  }
+
+  checkBtn.addEventListener("click", handleCheck);
+  inputEl.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleCheck();
+    }
+  });
+  nextBtn.addEventListener("click", () => {
+    advanceRepeatPhraseOnly();
+  });
+
+  window.loadRepeatPhrase = loadPhrase;
+
+  loadPhrase(0);
+})();
+</script>
+</body>
+</html>

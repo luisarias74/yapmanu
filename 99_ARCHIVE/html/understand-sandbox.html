@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LaLanguish — Understand</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ── Variables ──────────────────────────────────────────────────────────── */
+:root {
+  --bg-top: #081225;
+  --bg-mid: #19173e;
+  --bg-bottom: #081c2f;
+  --cyan: #5de8ff;
+  --cyan-strong: #22d3ee;
+  --lavender: #b7a9ff;
+  --glass: rgba(255,255,255,0.08);
+  --glass-border: rgba(255,255,255,0.14);
+  --text-main: #f6f8ff;
+  --text-soft: rgba(236,240,255,0.7);
+  --text-faint: rgba(236,240,255,0.45);
+  --shadow: 0 24px 80px rgba(0,0,0,0.38);
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-pill: 999px;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { min-height:100%; }
+
+/* ── Background ─────────────────────────────────────────────────────────── */
+body {
+  min-height: 100dvh;
+  font-family: 'Inter', sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(ellipse 90% 55% at 0% 100%,  rgba(0,210,215,.45) 0%, rgba(0,180,200,.15) 45%, transparent 100%),
+    radial-gradient(ellipse 80% 50% at 5%  85%,  rgba(30,100,210,.38) 0%, transparent 100%),
+    radial-gradient(ellipse 90% 55% at 100% 100%, rgba(180,35,165,.45) 0%, rgba(160,30,150,.15) 45%, transparent 100%),
+    radial-gradient(ellipse 80% 45% at 95%  80%,  rgba(120,28,155,.35) 0%, transparent 100%),
+    radial-gradient(circle   at 50% 22%, rgba(93,232,255,0.1), transparent 28%),
+    radial-gradient(circle   at 82% 14%, rgba(183,169,255,0.12), transparent 22%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 48%, var(--bg-bottom) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-bottom: 100px; /* room for nav */
+}
+
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 22%, rgba(255,255,255,0.07), transparent 22%),
+    radial-gradient(circle at 50% 100%, rgba(93,232,255,0.05), transparent 30%);
+  mix-blend-mode: screen;
+}
+
+/* ── Shell ──────────────────────────────────────────────────────────────── */
+.app-shell {
+  width: min(100%, 520px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Main card ──────────────────────────────────────────────────────────── */
+.app-card {
+  position: relative;
+  width: 100%;
+  min-height: calc(100dvh - 32px);
+  display: grid;
+  grid-template-rows: auto auto auto 1fr auto;
+  gap: 14px;
+  padding: 18px 18px 100px;
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255,255,255,0.09), rgba(255,255,255,0.05));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  overflow: hidden;
+}
+
+.app-card::before {
+  content: "";
+  position: absolute;
+  inset: auto -90px -110px auto;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(183,169,255,0.22), transparent 68%);
+  pointer-events: none;
+}
+
+/* ── Hidden util ────────────────────────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Luna stage ─────────────────────────────────────────────────────────── */
+.luna-stage {
+  position: relative; z-index: 1;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 8px;
+  padding-top: 8px;
+  overflow: visible;
+}
+
+/* Exact GOLDEN Luna sizing and appearance */
+.luna-orb-wrap {
+  position: relative;
+  width: 200px; height: 200px;
+  display: grid; place-items: center;
+}
+
+.luna-orb-wrap::before,
+.luna-orb-wrap::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 50%;
+}
+
+.luna-orb-wrap::before {
+  background: radial-gradient(circle, rgba(93,232,255,0.2), transparent 72%);
+  filter: blur(22px);
+  animation: halo-breathe 4s ease-in-out infinite;
+}
+
+.luna-orb-wrap::after {
+  display: none;
+}
+
+.luna-orb {
+  position: relative;
+  width: 155px; height: 155px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background:
+    radial-gradient(circle at 28% 22%, rgba(255,255,255,.9) 0%, rgba(255,255,255,.3) 30%, transparent 45%),
+    radial-gradient(circle at 72% 25%, rgba(140,100,190,.5) 0%, transparent 55%),
+    radial-gradient(circle at 80% 40%, rgba(130,80,175,.35) 0%, transparent 45%),
+    radial-gradient(circle at 45% 65%, rgba(160,215,235,.45) 0%, transparent 60%),
+    radial-gradient(circle at 50% 80%, rgba(170,210,230,.3) 0%, transparent 45%),
+    radial-gradient(circle at 90% 55%, rgba(120,60,160,.25) 0%, transparent 40%),
+    linear-gradient(155deg, rgba(225,220,240,.75) 0%, rgba(195,210,230,.65) 45%, rgba(180,210,230,.6) 65%, rgba(200,195,225,.7) 100%);
+  box-shadow:
+    inset 0 0 20px 6px rgba(255,255,255,.4),
+    inset 0 0 40px 12px rgba(255,255,255,.18),
+    inset 0 0 55px 18px rgba(200,200,255,.08),
+    0 0 40px 22px rgba(255,255,255,.28),
+    0 0 80px 42px rgba(220,210,255,.16),
+    0 0 140px 65px rgba(200,190,255,.09);
+  animation: schema-breathe 5s ease-in-out infinite;
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.luna-orb.listening {
+  box-shadow:
+    inset 0 0 20px 6px rgba(255,255,255,.4),
+    inset 0 0 40px 12px rgba(255,255,255,.18),
+    0 0 40px 22px rgba(93,232,255,.3),
+    0 0 80px 42px rgba(93,232,255,.15),
+    0 0 140px 65px rgba(93,232,255,.07);
+}
+
+.luna-orb.speaking {
+  box-shadow:
+    inset 0 0 20px 6px rgba(255,255,255,.4),
+    inset 0 0 40px 12px rgba(255,255,255,.18),
+    0 0 40px 22px rgba(183,169,255,.3),
+    0 0 80px 42px rgba(183,169,255,.15),
+    0 0 140px 65px rgba(183,169,255,.07);
+  animation: orb-speaking 1.5s ease-in-out infinite;
+}
+
+.luna-core {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  position: absolute;
+  top: 22%; left: 30%;
+  background: white;
+  box-shadow: 0 0 5px 2px rgba(255,255,255,.7);
+  filter: none;
+}
+
+.luna-copy {
+  text-align: center;
+  max-width: 28ch;
+  position: relative;
+  overflow: visible;
+  padding: 1px 0 14px;
+  margin-top: -6px;
+}
+
+/* Vertical beam down from luna-copy */
+.luna-copy::after {
+  content: '';
+  position: absolute;
+  top: calc(100% - 12px); left: 50%;
+  transform: translateX(-50%);
+  width: 1.5px; height: 200px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.5), rgba(255,255,255,.15) 30%, transparent);
+  z-index: 2; pointer-events: none;
+}
+
+/* Short upward ray from luna-copy */
+.luna-copy::before {
+  content: '';
+  position: absolute;
+  bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 22px;
+  background: linear-gradient(to top, rgba(255,255,255,.9), rgba(255,255,255,.3) 60%, transparent);
+  z-index: 2; pointer-events: none;
+}
+
+.luna-name {
+  font-size: 1.1rem; font-weight: 600;
+  color: rgba(255,255,255,.85);
+  letter-spacing: 0.02em;
+  transform: translateY(-20px);
+  position: relative;
+}
+
+/* Horizontal beam through Luna name */
+.luna-name::before {
+  content: '';
+  position: absolute;
+  top: calc(100% + 14px); left: 50%;
+  transform: translateX(-50%);
+  width: 100vw; height: 1.5px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0) 15%, rgba(255,255,255,.1) 30%, rgba(255,255,255,.35) 42%, rgba(255,255,255,.7) 48%, rgba(255,255,255,.9) 50%, rgba(255,255,255,.7) 52%, rgba(255,255,255,.35) 58%, rgba(255,255,255,.1) 70%, rgba(255,255,255,0) 85%, transparent);
+  z-index: 9; pointer-events: none;
+}
+
+/* Bright dot at beam intersection */
+.luna-name::after {
+  content: '';
+  position: absolute;
+  top: calc(100% + 14px); left: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 6px 3px rgba(255,255,255,1), 0 0 16px 6px rgba(255,255,255,.7), 0 0 30px 10px rgba(255,255,255,.3);
+  z-index: 10; pointer-events: none;
+}
+
+.luna-subtitle {
+  margin-top: 2px;
+  font-size: 0.84rem; line-height: 1.45;
+  color: var(--text-soft);
+}
+
+/* ── Session context ────────────────────────────────────────────────────── */
+.session-context {
+  position: relative; z-index: 1;
+  display: grid; gap: 4px; padding: 0 4px;
+  text-align: center;
+  padding-top: 40px; /* clear beam area */
+}
+
+.session-kicker {
+  font-size: 0.7rem; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(0,210,215,.9);
+  font-weight: 700;
+}
+
+.session-subtitle {
+  font-size: 0.84rem; line-height: 1.4;
+  color: var(--text-faint);
+}
+
+/* ── Understand card ────────────────────────────────────────────────────── */
+.understand-card {
+  position: relative; z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 16px;
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,.18),
+    inset 0 0 12px 3px rgba(255,255,255,.04),
+    0 8px 32px rgba(0,0,0,0.18);
+  align-items: center;
+}
+
+.phrase-text {
+  font-size: 1.25rem; font-weight: 500;
+  text-align: center; line-height: 1.45;
+  color: var(--text-main);
+}
+
+.phrase-text.placeholder {
+  font-size: 1rem; font-weight: 400;
+  color: var(--text-faint);
+  font-style: italic;
+}
+
+.phrase-meaning {
+  font-size: 0.88rem; color: var(--cyan);
+  font-style: italic; text-align: center;
+  margin-top: -4px;
+}
+
+.feedback-line {
+  font-size: 0.82rem; color: var(--text-faint);
+  text-align: center; min-height: 1.1em;
+}
+
+/* ── Practice area ──────────────────────────────────────────────────────── */
+.practice-area {
+  display: flex; flex-direction: column; gap: 10px;
+  width: 100%;
+}
+
+.practice-label {
+  font-size: 0.82rem; color: var(--text-soft);
+  text-align: center;
+}
+
+.practice-row {
+  display: flex; gap: 8px;
+}
+
+.practice-input {
+  flex: 1;
+  padding: 11px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--glass-border);
+  color: var(--text-main);
+  font-size: 0.94rem; font-family: inherit;
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+.practice-input::placeholder { color: var(--text-faint); }
+.practice-input:focus { border-color: rgba(93,232,255,.4); }
+
+/* ── Action rows ────────────────────────────────────────────────────────── */
+.actions {
+  display: flex; gap: 10px;
+  justify-content: center; flex-wrap: wrap;
+  width: 100%;
+}
+
+/* ── Buttons ────────────────────────────────────────────────────────────── */
+button {
+  padding: 11px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  color: var(--text-soft);
+  font-size: 0.88rem; font-weight: 600; font-family: inherit;
+  cursor: pointer;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,.35),
+    inset 0 0 6px 2px rgba(255,255,255,.06),
+    inset 0 0 12px 3px rgba(255,255,255,.03);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover { background: rgba(255,255,255,.11); }
+button:active { transform: scale(0.97); }
+button:disabled { opacity: .4; cursor: default; transform: none; }
+
+button.primary {
+  background: linear-gradient(135deg, rgba(0,220,220,.35), rgba(100,210,230,.25));
+  border-color: rgba(0,210,215,.25);
+  color: var(--cyan);
+}
+button.primary:hover { background: linear-gradient(135deg, rgba(0,220,220,.45), rgba(100,210,230,.35)); }
+
+/* ── Bottom nav ─────────────────────────────────────────────────────────── */
+.schema-nav {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  width: calc(100% - 40px); max-width: 480px; z-index: 999;
+  padding: 12px 16px;
+  display: flex; justify-content: space-around; align-items: center;
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 24px;
+  box-shadow:
+    inset 0 1px 0 0 rgba(255,255,255,.1),
+    inset 0 0 12px 3px rgba(255,255,255,.03);
+}
+
+.schema-nav-btn {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.03);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 0 rgba(255,255,255,.15);
+}
+
+.schema-nav-btn.on {
+  border-color: rgba(0,210,215,.3); background: rgba(0,210,215,.1);
+  box-shadow: inset 0 1px 0 0 rgba(255,255,255,.35), inset 0 0 8px 2px rgba(255,255,255,.08), 0 0 10px rgba(0,210,215,.15);
+}
+
+.schema-nav-btn svg { stroke: rgba(255,255,255,.5); fill: none; }
+.schema-nav-btn.on svg { stroke: rgba(0,210,215,.9); }
+
+/* ── Stars ──────────────────────────────────────────────────────────────── */
+.schema-star {
+  position: absolute; border-radius: 50%;
+  background: white; pointer-events: none; z-index: 0;
+}
+.schema-star.tw { animation: schema-twinkle 3s ease-in-out infinite; }
+
+/* ── Keyframes ──────────────────────────────────────────────────────────── */
+@keyframes schema-breathe { 0%,100%{transform:scale(1)}    50%{transform:scale(1.035)} }
+@keyframes orb-idle       { 0%,100%{transform:scale(1)}    50%{transform:scale(1.04)} }
+@keyframes orb-listening  { 0%,100%{transform:scale(1.08)} 50%{transform:scale(1.12)} }
+@keyframes orb-speaking   { 0%,100%{transform:scale(1.03)} 50%{transform:scale(1.09)} }
+@keyframes orb-thinking   { 0%,100%{transform:scale(1.0);opacity:.82} 50%{transform:scale(1.06);opacity:1} }
+@keyframes halo-breathe   { 0%,100%{transform:scale(.92);opacity:.56} 50%{transform:scale(1.08);opacity:.88} }
+@keyframes schema-twinkle { 0%,100%{opacity:inherit} 50%{opacity:.1} }
+@keyframes fade-in { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+.fade-in { animation: fade-in 0.22s ease forwards; }
+
+::-webkit-scrollbar { display: none; }
+</style>
+</head>
+<body>
+
+<!-- Star field (fixed, behind everything) -->
+<div style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden">
+  <div class="schema-star"    style="left:45px;top:28px;width:1.5px;height:1.5px;opacity:.5"></div>
+  <div class="schema-star tw" style="left:312px;top:65px;width:1px;height:1px;opacity:.35;animation-delay:.3s"></div>
+  <div class="schema-star"    style="left:78px;top:120px;width:1.2px;height:1.2px;opacity:.4"></div>
+  <div class="schema-star tw" style="left:280px;top:42px;width:.8px;height:.8px;opacity:.3;animation-delay:1.2s"></div>
+  <div class="schema-star"    style="left:165px;top:88px;width:1px;height:1px;opacity:.5"></div>
+  <div class="schema-star"    style="left:340px;top:155px;width:.8px;height:.8px;opacity:.3"></div>
+  <div class="schema-star tw" style="left:22px;top:210px;width:.8px;height:.8px;opacity:.25;animation-delay:.8s"></div>
+  <div class="schema-star"    style="left:195px;top:15px;width:1px;height:1px;opacity:.4"></div>
+  <div class="schema-star"    style="left:320px;top:280px;width:1px;height:1px;opacity:.35"></div>
+  <div class="schema-star tw" style="left:370px;top:340px;width:.8px;height:.8px;opacity:.3;animation-delay:.5s"></div>
+  <div class="schema-star"    style="left:15px;top:380px;width:1px;height:1px;opacity:.4"></div>
+  <div class="schema-star tw" style="left:85px;top:430px;width:.7px;height:.7px;opacity:.25;animation-delay:1.9s"></div>
+  <div class="schema-star"    style="left:350px;top:520px;width:.9px;height:.9px;opacity:.3"></div>
+  <div class="schema-star"    style="left:60px;top:650px;width:.7px;height:.7px;opacity:.25"></div>
+  <div class="schema-star tw" style="left:305px;top:680px;width:.8px;height:.8px;opacity:.3;animation-delay:1.4s"></div>
+  <div class="schema-star"    style="left:250px;top:130px;width:.6px;height:.6px;opacity:.2"></div>
+  <div class="schema-star tw" style="left:140px;top:490px;width:.7px;height:.7px;opacity:.25;animation-delay:1.1s"></div>
+  <div class="schema-star"    style="left:380px;top:200px;width:.8px;height:.8px;opacity:.3"></div>
+  <div class="schema-star"    style="left:110px;top:320px;width:.6px;height:.6px;opacity:.2"></div>
+  <div class="schema-star tw" style="left:230px;top:560px;width:.7px;height:.7px;opacity:.2;animation-delay:2.1s"></div>
+</div>
+
+<div class="app-shell">
+  <div class="app-card">
+
+    <!-- Luna -->
+    <div class="luna-stage">
+      <div class="luna-orb-wrap">
+        <div class="luna-orb idle" id="orb">
+          <div class="luna-core"></div>
+        </div>
+      </div>
+      <div class="luna-copy">
+        <div class="luna-name">Luna</div>
+        <div class="luna-subtitle" id="luna-sub">Ready when you are.</div>
+      </div>
+    </div>
+
+    <!-- Mode label -->
+    <div class="session-context">
+      <div class="session-kicker">Understand Mode</div>
+      <div class="session-subtitle">Hear the phrase. Let it settle before you respond.</div>
+    </div>
+
+    <!-- Understand card -->
+    <div class="understand-card">
+
+      <!-- Phrase -->
+      <div class="phrase-text placeholder" id="phrase-text">Listen first</div>
+      <div class="phrase-meaning hidden" id="phrase-meaning"></div>
+
+      <!-- Feedback -->
+      <div class="feedback-line" id="feedback">Tap Listen to hear the phrase.</div>
+
+      <!-- Practice (hidden until Reveal) -->
+      <div class="practice-area hidden" id="practice-area">
+        <div class="practice-label">Now type what you heard.</div>
+        <div class="practice-row">
+          <input class="practice-input" id="practice-input" type="text"
+            placeholder="Type the phrase…" autocomplete="off">
+          <button id="check-btn">Check</button>
+        </div>
+      </div>
+
+      <!-- Listen row: Listen + Reveal (Reveal hidden until after listen) -->
+      <div class="actions" id="listen-actions">
+        <button class="primary" id="listen-btn">🔊 Listen</button>
+        <button class="hidden"  id="reveal-btn">👁 Reveal</button>
+      </div>
+
+      <!-- Reflect: Yes / Not yet (hidden until Next) -->
+      <div class="actions hidden" id="reflect-actions">
+        <button id="yes-btn">Yes, I got it</button>
+        <button id="notyet-btn">Not yet</button>
+      </div>
+
+      <!-- Next (hidden until Check passes) -->
+      <div class="actions hidden" id="next-actions">
+        <button class="primary" id="next-btn">→ Next</button>
+      </div>
+
+    </div><!-- /understand-card -->
+
+    <!-- spacer -->
+    <div></div>
+
+  </div><!-- /app-card -->
+</div><!-- /app-shell -->
+
+<!-- Bottom nav (Understand tab active) -->
+<nav class="schema-nav">
+  <div class="schema-nav-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  </div>
+  <div class="schema-nav-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+      <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+      <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+      <line x1="12" y1="19" x2="12" y2="23"/>
+      <line x1="8"  y1="23" x2="16" y2="23"/>
+    </svg>
+  </div>
+  <div class="schema-nav-btn on">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+      <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z"/>
+      <path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5z"/>
+    </svg>
+  </div>
+  <div class="schema-nav-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round">
+      <polyline points="23 4 23 10 17 10"/>
+      <polyline points="1 20 1 14 7 14"/>
+      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+    </svg>
+  </div>
+  <div class="schema-nav-btn">
+    <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+    </svg>
+  </div>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── Phrases ───────────────────────────────────────────────────────────────
+  const PHRASES = [
+    { en: 'Good day, how are you today?',  es: '¿Buen día, cómo estás hoy?' },
+    { en: 'I need help, please.',           es: 'Necesito ayuda, por favor.' },
+    { en: 'Where is the bathroom?',         es: '¿Dónde está el baño?' },
+    { en: 'I am doing well, thank you.',    es: 'Estoy bien, gracias.' },
+    { en: 'Can you say that again?',        es: '¿Puedes repetir eso?' },
+    { en: 'How much does this cost?',       es: '¿Cuánto cuesta esto?' },
+    { en: 'I would like some water.',       es: 'Quisiera un poco de agua.' },
+  ];
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let currentPhrase = null;
+  let lunaVoice     = null;
+
+  // ── DOM ───────────────────────────────────────────────────────────────────
+  const orb           = document.getElementById('orb');
+  const lunaSub       = document.getElementById('luna-sub');
+  const phraseText    = document.getElementById('phrase-text');
+  const phraseMeaning = document.getElementById('phrase-meaning');
+  const feedbackEl    = document.getElementById('feedback');
+  const practiceArea  = document.getElementById('practice-area');
+  const practiceInput = document.getElementById('practice-input');
+
+  const listenActions  = document.getElementById('listen-actions');
+  const reflectActions = document.getElementById('reflect-actions');
+  const nextActions    = document.getElementById('next-actions');
+
+  const listenBtn = document.getElementById('listen-btn');
+  const revealBtn = document.getElementById('reveal-btn');
+  const checkBtn  = document.getElementById('check-btn');
+  const yesBtn    = document.getElementById('yes-btn');
+  const notyetBtn = document.getElementById('notyet-btn');
+  const nextBtn   = document.getElementById('next-btn');
+
+  // ── Voice ─────────────────────────────────────────────────────────────────
+  function loadVoice() {
+    const v = window.speechSynthesis.getVoices();
+    lunaVoice =
+      v.find(x => x.name.includes('Samantha')) ||
+      v.find(x => x.name.includes('Google US English')) ||
+      v.find(x => x.lang === 'en-US' && x.localService) ||
+      v.find(x => x.lang === 'en-US') ||
+      v[0] || null;
+  }
+  if (window.speechSynthesis) {
+    window.speechSynthesis.onvoiceschanged = loadVoice;
+    loadVoice();
+  }
+
+  // ── TTS ───────────────────────────────────────────────────────────────────
+  function speak(text, rate, onEnd) {
+    if (!window.speechSynthesis || !text) { if (onEnd) onEnd(); return; }
+    window.speechSynthesis.cancel();
+    window.setTimeout(() => {
+      if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+      const u = new SpeechSynthesisUtterance(text);
+      if (lunaVoice) u.voice = lunaVoice;
+      u.rate  = rate || 0.9;
+      u.pitch = 1.02;
+      u.lang  = 'en-US';
+      u.onstart = () => setOrb('speaking');
+      u.onend   = () => { setOrb('idle'); if (onEnd) onEnd(); };
+      u.onerror = () => { setOrb('idle'); if (onEnd) onEnd(); };
+      window.speechSynthesis.speak(u);
+    }, 60);
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function setOrb(state) { orb.className = 'luna-orb ' + state; }
+  function setLuna(txt)  { lunaSub.textContent = txt; }
+  function setFeedback(txt) { feedbackEl.textContent = txt; }
+
+  function show(el) { el.classList.remove('hidden'); }
+  function hide(el) { el.classList.add('hidden'); }
+
+  function normalize(s) {
+    return (s || '').toLowerCase().replace(/[^a-z\s]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isClose(input, target) {
+    const a = normalize(input), b = normalize(target);
+    if (!a) return false;
+    if (a === b || b.includes(a) || a.includes(b)) return true;
+    const setA = new Set(a.split(' ')), wordsB = b.split(' ');
+    return wordsB.filter(w => setA.has(w)).length / wordsB.length >= 0.55;
+  }
+
+  // ── Init (STATE 1) ────────────────────────────────────────────────────────
+  function initLesson() {
+    currentPhrase = PHRASES[Math.floor(Math.random() * PHRASES.length)];
+
+    phraseText.textContent = 'Listen first';
+    phraseText.className = 'phrase-text placeholder';
+    hide(phraseMeaning);
+
+    setFeedback('Tap Listen to hear the phrase.');
+    setLuna('Ready when you are.');
+    setOrb('idle');
+
+    practiceInput.value = '';
+    hide(practiceArea);
+
+    show(listenActions);
+    hide(revealBtn);
+    listenBtn.disabled = false;
+    listenBtn.textContent = '🔊 Listen';
+
+    hide(reflectActions);
+    hide(nextActions);
+  }
+
+  // ── STATE 1 → 2 : Listen ─────────────────────────────────────────────────
+  listenBtn.addEventListener('click', () => {
+    listenBtn.disabled = true;
+    listenBtn.textContent = 'Playing…';
+    setFeedback('Hear it closely.');
+    setLuna('Listen closely.');
+
+    speak(currentPhrase.en, 0.88, () => {
+      phraseText.textContent = currentPhrase.en;
+      phraseText.className = 'phrase-text fade-in';
+      show(revealBtn);
+      listenBtn.textContent = '🔊 Again';
+      listenBtn.disabled = false;
+      setFeedback('Tap Reveal when ready, or listen again.');
+      setLuna('How did that feel?');
+    });
+  });
+
+  // ── STATE 2 → 3 : Reveal ─────────────────────────────────────────────────
+  revealBtn.addEventListener('click', () => {
+    phraseMeaning.textContent = currentPhrase.es;
+    show(phraseMeaning);
+    phraseMeaning.classList.add('fade-in');
+    hide(listenActions);
+    show(practiceArea);
+    practiceInput.focus();
+    setFeedback('Type the phrase back.');
+    setLuna('Now say it.');
+  });
+
+  // ── STATE 3 → 4 : Check ──────────────────────────────────────────────────
+  function runCheck() {
+    const val = practiceInput.value.trim();
+    if (!val) return;
+
+    if (isClose(val, currentPhrase.en)) {
+      setFeedback('Good. You caught it.');
+      setLuna('That phrase is starting to land.');
+      hide(practiceArea);
+      show(nextActions);
+      nextActions.classList.add('fade-in');
+    } else {
+      setFeedback('Not quite — try again, or tap Next to continue.');
+      setLuna('No rush. One more try.');
+      show(nextActions); // let user advance anyway
+    }
+  }
+
+  checkBtn.addEventListener('click', runCheck);
+  practiceInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); runCheck(); }
+  });
+
+  // ── STATE 4 → 5 : Next ───────────────────────────────────────────────────
+  nextBtn.addEventListener('click', () => {
+    hide(nextActions);
+    hide(practiceArea);
+    setFeedback('Did that feel familiar?');
+    setLuna('Take your time.');
+    show(reflectActions);
+    reflectActions.classList.add('fade-in');
+  });
+
+  // ── STATE 5a : Yes ───────────────────────────────────────────────────────
+  yesBtn.addEventListener('click', () => {
+    hide(reflectActions);
+    setFeedback('That phrase is settling in. ✓');
+    setLuna('Good. On to the next one.');
+    setOrb('speaking');
+    setTimeout(() => { setOrb('idle'); initLesson(); }, 1600);
+  });
+
+  // ── STATE 5b : Not yet ───────────────────────────────────────────────────
+  notyetBtn.addEventListener('click', () => {
+    hide(reflectActions);
+    hide(phraseMeaning);
+    practiceInput.value = '';
+    hide(practiceArea);
+    phraseText.textContent = 'Listen first';
+    phraseText.className = 'phrase-text placeholder';
+    show(listenActions);
+    hide(revealBtn);
+    listenBtn.textContent = '🔊 Listen again';
+    listenBtn.disabled = false;
+    setFeedback('No rush. Let\'s try it again.');
+    setLuna('Hear it one more time.');
+  });
+
+  // ── Boot ──────────────────────────────────────────────────────────────────
+  initLesson();
+
+})();
+</script>
+</body>
+</html>
