@@ -2373,7 +2373,7 @@
             <div class="chat-status" id="chat-status">Ready when you are</div>
           </div>
           <div class="messages" id="message-list">
-            <div class="message ai">Hi Luis... ready to practice?</div>
+            <div class="message ai" id="speak-initial-greeting">Hi… ready to practice?</div>
             <div class="message ai">Say: <strong>"I need help."</strong></div>
             <div class="coach-tip"><strong style="color:rgba(0,210,215,.9)">Coach tip:</strong> Short and direct.</div>
           </div>
@@ -4996,6 +4996,17 @@
       }, getTimingProfile('transition', next, stage));
     }
 
+    function getSpeakGreeting() {
+      const name = (localStorage.getItem('lalanguish_user_name') || '').trim();
+      return name ? 'Hi ' + name + '… ready to practice?' : 'Hi… ready to practice?';
+    }
+
+    // Update the static placeholder shown before any session starts
+    (function() {
+      const el = document.getElementById('speak-initial-greeting');
+      if (el) el.textContent = getSpeakGreeting();
+    })();
+
     function startNewSpeakSession(phrase) {
       speakUsedPhrases = [];
       speakAttemptCount = 0;
@@ -5018,12 +5029,12 @@
       setLunaState('idle');
       const stage = getLearnerState() || 'starting';
       const intros = {
-        starting:   'Hi Luis\u2026 ready to practice?',
+        starting:   getSpeakGreeting(),
         building:   'Let\u2019s keep going.',
         settling:   'Ready when you are.',
         ready_more: null
       };
-      const introMsg = intros[stage] !== undefined ? intros[stage] : 'Hi Luis\u2026 ready to practice?';
+      const introMsg = intros[stage] !== undefined ? intros[stage] : getSpeakGreeting();
       const step = speakSequence[0];
       const staged = (step && !step.done) ? buildStageCue(step, stage, first) : null;
 
