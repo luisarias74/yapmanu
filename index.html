@@ -3391,6 +3391,7 @@
         currentAudio.play();
       } catch (err) {
         console.warn('[Luna/EL] FAILED — falling back to browser TTS. Reason:', err.message);
+        console.log('[LaLanguish Mic] Post-mic audio playback failed — falling back to browser TTS');
         elPlaying = false;
         resolve();
         speakWithBrowser(text, browserRate || 0.86);
@@ -4093,7 +4094,15 @@
           if (fallbackTimer) { window.clearTimeout(fallbackTimer); fallbackTimer = null; }
           try { rec.stop(); } catch (e) {}
           textInput.value = transcript;
-          sendUserMessage();
+          console.log('[LaLanguish Mic] Speak recognized successfully:', transcript);
+          // iPhone: AudioSession needs ~300-500ms to hand off from record→playback.
+          // Calling Audio.play() immediately causes a click and audio drop on iOS Safari.
+          flushAudio();
+          console.log('[LaLanguish Mic] Waiting before post-mic audio playback');
+          window.setTimeout(() => {
+            console.log('[LaLanguish Mic] Post-mic audio playback starting');
+            sendUserMessage();
+          }, 400);
         }
       };
 
