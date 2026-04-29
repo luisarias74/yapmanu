@@ -615,28 +615,6 @@
       color: var(--cyan);
     }
 
-    .tap-to-hear-row {
-      display: flex;
-      justify-content: center;
-      padding: 4px 0;
-    }
-
-    .tap-to-hear-btn {
-      padding: 9px 22px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(93, 232, 255, 0.5);
-      background: rgba(93, 232, 255, 0.08);
-      color: var(--cyan);
-      font-size: 0.82rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.18s ease;
-    }
-
-    .tap-to-hear-btn:active {
-      background: rgba(93, 232, 255, 0.2);
-    }
-
     @keyframes mic-ready-pulse {
       0%, 100% { box-shadow: 0 18px 40px rgba(34, 211, 238, 0.32), inset 0 1px 0 rgba(255,255,255,0.34); }
       50%       { box-shadow: 0 18px 40px rgba(34, 211, 238, 0.52), 0 0 0 10px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255,255,255,0.34); }
@@ -2429,9 +2407,6 @@
           <div class="hear-again-row" id="hear-again-row">
             <button class="hear-again-btn" id="hear-again-btn" type="button">🔊 Hear it again</button>
           </div>
-          <div class="tap-to-hear-row" id="tap-to-hear-row" style="display:none;">
-            <button class="tap-to-hear-btn" id="tap-to-hear-btn" type="button">🔊 Tap to hear next</button>
-          </div>
           <div class="session-complete" id="session-complete">Nice progress.</div>
         </section>
       </section>
@@ -2855,8 +2830,6 @@
     const inputHint = document.getElementById('input-hint');
     const yourTurnCue = document.getElementById('your-turn-cue');
     const hearAgainBtn   = document.getElementById('hear-again-btn');
-    const tapToHearRow   = document.getElementById('tap-to-hear-row');
-    const tapToHearBtn   = document.getElementById('tap-to-hear-btn');
     const phraseContext = document.getElementById('phrase-context');
     const phraseEnEl = document.getElementById('phrase-en');
     const phraseEsEl = document.getElementById('phrase-es');
@@ -3454,11 +3427,6 @@
     function speakText(text) {
       if (!text) return;
       lastSpokenPhrase = text;
-      if (postMicMuted) {
-        pendingIphoneSpeakText = text;
-        console.log('[LaLanguish Mic] iPhone: pending speak text =', text);
-        return;
-      }
       if (LUNA_VOICE_PROVIDER === 'elevenlabs') {
         speakWithElevenLabs(text);
       } else {
@@ -3469,7 +3437,6 @@
     // Smooth slow replay — one utterance, slightly reduced rate. Used for corrections.
     function speakSlowPhrase(phrase) {
       if (!phrase) return;
-      if (postMicMuted) return; // iOS: silenced until user tap
       if (LUNA_VOICE_PROVIDER === 'elevenlabs') {
         speakWithElevenLabs(phrase);
       } else {
@@ -4079,11 +4046,8 @@
     let micSessionActive = false;
     let activeSpeakRecognition = null;
     let fallbackTimer = null;
-    // iOS Safari blocks Audio.play() in async callbacks (including onresult).
-    // Only a direct user-tap gesture can unlock audio after mic ends on iOS.
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-    let postMicMuted = false;
-    let pendingIphoneSpeakText = '';
+    let lastMicStopTime = 0;
 
     function resetAudioSession() {
       try {
@@ -4112,6 +4076,7 @@
         console.warn('[Speak Mic] old recognition stop failed:', e.message);
       }
       activeSpeakRecognition = null;
+      lastMicStopTime = Date.now();
       setLunaState('idle');
       try {
         if (navigator.audioSession) {
@@ -4123,34 +4088,19 @@
       console.log('[Speak Mic] reset complete');
     }
 
-    function showTapToHearBtn() {
-      if (!pendingIphoneSpeakText) return;
-      if (tapToHearRow) tapToHearRow.style.display = 'flex';
-    }
-
-    function hideTapToHearBtn() {
-      if (tapToHearRow) tapToHearRow.style.display = 'none';
-      postMicMuted = false;
-      pendingIphoneSpeakText = '';
-    }
-
-    if (tapToHearBtn) {
-      tapToHearBtn.addEventListener('click', () => {
-        console.log('[LaLanguish Mic] iPhone: tap to hear next clicked');
-        const textToPlay = pendingIphoneSpeakText;
-        hideTapToHearBtn();
-        if (textToPlay) {
-          console.log('[LaLanguish Mic] iPhone: playing pending speak text');
-          speakText(textToPlay);
-        }
-      });
-    }
-
     function startMicListening() {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
         addAIMessage("Speech isn\u2019t supported in this browser. Type your answer instead.");
         return;
+      }
+
+      if (isIOS) {
+        const msSinceStop = Date.now() - lastMicStopTime;
+        if (msSinceStop < 300) {
+          window.setTimeout(() => startMicListening(), 300 - msSinceStop + 50);
+          return;
+        }
       }
 
       resetSpeakMicState('before new mic start');
@@ -4195,26 +4145,31 @@
           micSessionActive = false;
           if (fallbackTimer) { window.clearTimeout(fallbackTimer); fallbackTimer = null; }
           try { rec.stop(); } catch (e) {}
+          try {
+            if (navigator.audioSession) {
+              navigator.audioSession.type = 'playback';
+            }
+          } catch (e) {}
           activeSpeakRecognition = null;
+          lastMicStopTime = Date.now();
           setLunaState('idle');
-          if (isIOS) resetAudioSession();
           textInput.value = transcript;
           console.log('[Speak Mic] result received:', transcript);
           flushAudio();
-          if (isIOS) {
-            postMicMuted = true;
-            sendUserMessage();
-            window.setTimeout(() => { showTapToHearBtn(); }, 1100);
-          } else {
-            sendUserMessage();
-          }
+          sendUserMessage();
         }
       };
 
       rec.onend = () => {
         console.log('[Speak Mic] recognition ended');
         activeSpeakRecognition = null;
-        if (isIOS) resetAudioSession();
+        lastMicStopTime = Date.now();
+        try {
+          if (navigator.audioSession) {
+            navigator.audioSession.type = 'playback';
+            console.log('[iOS FIX] Forced playback mode after mic');
+          }
+        } catch (e) {}
         if (gotResult) return;
         const elapsed = Date.now() - startTime;
         const remaining = MIN_LISTEN_MS - elapsed;
@@ -4237,14 +4192,12 @@
       };
 
       try {
-        if (isIOS) {
-          try {
-            if (navigator.audioSession) {
-              navigator.audioSession.type = 'play-and-record';
-              console.log('[LaLanguish Mic] iPhone: setting audioSession play-and-record');
-            }
-          } catch (e) {}
+        if (navigator.audioSession) {
+          navigator.audioSession.type = 'play-and-record';
+          console.log('[iOS FIX] Switching to record mode');
         }
+      } catch (e) {}
+      try {
         rec.start();
       } catch (err) {
         resetSpeakMicState('rec.start() threw');
@@ -5145,7 +5098,6 @@
     })();
 
     function startNewSpeakSession(phrase) {
-      hideTapToHearBtn();
       speakUsedPhrases = [];
       speakAttemptCount = 0;
       speakWeakAttempts = 0;
