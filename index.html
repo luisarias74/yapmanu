@@ -588,33 +588,6 @@
       animation: mic-ready-pulse 1.8s ease-in-out infinite;
     }
 
-    .hear-again-row {
-      display: flex;
-      justify-content: center;
-    }
-
-    .hear-again-btn {
-      padding: 7px 16px;
-      border-radius: var(--radius-pill);
-      border: 1px solid var(--glass-border);
-      background: transparent;
-      color: var(--text-soft);
-      font-size: 0.8rem;
-      font-weight: 600;
-      opacity: 0.55;
-      transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    }
-
-    .hear-again-btn:active {
-      opacity: 0.8;
-    }
-
-    .hear-again-btn.is-suggested {
-      opacity: 1;
-      border-color: rgba(93, 232, 255, 0.4);
-      color: var(--cyan);
-    }
-
     @keyframes mic-ready-pulse {
       0%, 100% { box-shadow: 0 18px 40px rgba(34, 211, 238, 0.32), inset 0 1px 0 rgba(255,255,255,0.34); }
       50%       { box-shadow: 0 18px 40px rgba(34, 211, 238, 0.52), 0 0 0 10px rgba(34, 211, 238, 0.12), inset 0 1px 0 rgba(255,255,255,0.34); }
@@ -1831,7 +1804,7 @@
         inset 0 0 6px 2px rgba(255,255,255,.05) !important;
     }
     .home-start-btn, .assist-entry-btn, .assist-submit-btn,
-    .repeat-reset-btn, .repeat-submit-btn, .hear-again-btn {
+    .repeat-reset-btn, .repeat-submit-btn {
       background: rgba(255,255,255,.06) !important;
       backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important;
       border: 1px solid rgba(255,255,255,.15) !important;
@@ -1925,7 +1898,6 @@
         inset 0 0 15px 4px rgba(255,255,255,.03) !important;
     }
     #speak-screen .text-input-wrap { display: none !important; }
-    #speak-screen .hear-again-row { display: none !important; }
 
     /* ═══ PROGRESS SCREEN ═══ */
     #progress-screen .top-bar { display: none !important; }
@@ -2404,9 +2376,6 @@
               <button class="send-button" id="send-button" type="button" aria-label="Send message">➜</button>
             </div>
           </div>
-          <div class="hear-again-row" id="hear-again-row">
-            <button class="hear-again-btn" id="hear-again-btn" type="button">🔊 Hear it again</button>
-          </div>
           <div class="session-complete" id="session-complete">Nice progress.</div>
         </section>
       </section>
@@ -2829,7 +2798,6 @@
     const inputDock = document.getElementById('input-dock');
     const inputHint = document.getElementById('input-hint');
     const yourTurnCue = document.getElementById('your-turn-cue');
-    const hearAgainBtn   = document.getElementById('hear-again-btn');
     const phraseContext = document.getElementById('phrase-context');
     const phraseEnEl = document.getElementById('phrase-en');
     const phraseEsEl = document.getElementById('phrase-es');
@@ -3548,7 +3516,6 @@
         const currentTurn = activeScenario.turns[scenarioTurnIndex];
         const variants = currentTurn && currentTurn.acceptedVariants;
         if (matchesVariant(input, variants)) {
-          hearAgainBtn.classList.remove('is-suggested');
           hideBeginnerHelp();
           lastScenarioMatchedVariant = getMatchedScenarioVariant(input, currentTurn);
           recordScenarioResponse(currentTurn);
@@ -3564,7 +3531,6 @@
       // Strong match: exact or nearly all words present AND all critical words correct
       if ((input === stepTarget || matchRatio >= 0.75) && criticalOk) {
         speakWeakAttempts = 0;
-        hearAgainBtn.classList.remove('is-suggested');
         hideBeginnerHelp();
 
         // Scenario mode: strong match is enough to continue the conversation
@@ -3692,7 +3658,6 @@
         // Cap: if the learner has been stuck too long, move on gracefully
         if (speakWeakAttempts >= MAX_STRUGGLE_BEFORE_SKIP) {
           hideBeginnerHelp();
-          hearAgainBtn.classList.remove('is-suggested');
           updatePhraseMastery(speakTargetPhrase, 'struggle');
           sessionState.reinforcementMode = 'repeat';
           sessionState.reinforcementPhrase = speakTargetPhrase;
@@ -3724,7 +3689,6 @@
 
         // Full breakdown — only when stage allows and threshold reached
         } else if (speakWeakAttempts >= thresh.breakdown) {
-          hearAgainBtn.classList.add('is-suggested');
           const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           sessionState.reinforcementMode = 'repeat';
           sessionState.reinforcementPhrase = stepTarget;
@@ -3743,7 +3707,6 @@
         // Chunked coaching — when stage allows and chunked threshold reached
         } else if (speakWeakAttempts >= thresh.chunked) {
           hideBeginnerHelp();
-          hearAgainBtn.classList.add('is-suggested');
           const stepTarget = (currentStep && currentStep.target) ? currentStep.target : speakTargetPhrase;
           if (!sessionState.reinforcementMode) {
             updatePhraseMastery(stepTarget, 'struggle');
@@ -4218,9 +4181,6 @@
       startMicListening();
     });
 
-    hearAgainBtn.addEventListener('click', () => {
-      if (lastSpokenPhrase) speakText(lastSpokenPhrase);
-    });
 
     openRepeatButton.addEventListener('click', () => {
       startRepeatChallenge();
@@ -5069,7 +5029,6 @@
       speakSequenceIndex = 0;
       interactionCount = 0;
       sessionComplete.classList.remove('visible');
-      hearAgainBtn.classList.remove('is-suggested');
       speakSequence = speakPracticeSequences[next] || [];
       showPhraseContext(next);
       const firstStep = speakSequence[0] || null;
@@ -5198,7 +5157,6 @@
         speakSessionStruggled = false;
         speakSequenceIndex = 0;
         interactionCount = 0;
-        hearAgainBtn.classList.remove('is-suggested');
         hideBeginnerHelp();
         speakSequence = speakPracticeSequences[phrase] || [];
         showPhraseContext(phrase);
