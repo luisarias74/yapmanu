@@ -1949,6 +1949,15 @@
     #speak-screen .text-input-wrap { display: none !important; }
     #speak-screen .hear-again-row { display: none !important; }
 
+    /* ═══ iOS SPEAK MODE: keyboard/dictation fallback ═══ */
+    body.is-ios #speak-screen .mic-button { display: none !important; }
+    body.is-ios #speak-screen .text-input-wrap { display: flex !important; }
+    body.is-ios #speak-screen .hear-again-row { display: flex !important; }
+    body.is-ios #speak-screen .tap-to-hear-row { display: none !important; }
+    body.is-ios #speak-screen .listening-indicator { display: none !important; }
+    body.is-ios #speak-screen .your-turn-sub { display: none !important; }
+    body.is-ios #speak-screen .input-hint { display: none !important; }
+
     /* ═══ PROGRESS SCREEN ═══ */
     #progress-screen .top-bar { display: none !important; }
     #progress-screen .session-title { display: none !important; }
@@ -3154,8 +3163,8 @@
       yourTurnCue.classList.add('visible');
       inputDock.classList.add('is-your-turn');
       inputHint.style.display = 'none';
-      micButton.classList.add('is-ready');
-      // Hook point: call startMicListening() here to enable auto-listen in the future
+      if (!isIOS) micButton.classList.add('is-ready');
+      if (isIOS && textInput) window.setTimeout(() => textInput.focus(), 150);
     }
 
     const SPEAK_MESSAGE_LIMIT = 8;
@@ -4082,6 +4091,8 @@
     // iOS Safari blocks Audio.play() in async callbacks (including onresult).
     // Only a direct user-tap gesture can unlock audio after mic ends on iOS.
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (isIOS) document.body.classList.add('is-ios');
+    let iosHintShown = false;
     let postMicMuted = false;
     let pendingIphoneSpeakText = '';
 
@@ -4147,6 +4158,7 @@
     }
 
     function startMicListening() {
+      if (isIOS) return; // iOS: mic disabled — user types or uses keyboard dictation
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
         addAIMessage("Speech isn\u2019t supported in this browser. Type your answer instead.");
@@ -5179,6 +5191,10 @@
       window.setTimeout(() => {
         if (introMsg) {
           addAIMessage(introMsg);
+          if (isIOS && !iosHintShown) {
+            iosHintShown = true;
+            window.setTimeout(() => addAIMessage('On iPhone, type your phrase or use the keyboard mic to practice.'), 900);
+          }
           if (staged) window.setTimeout(() => addAIMessage(staged.cue, staged.coach, true, staged.meaning), getTimingProfile('session_start', first, stage));
         } else if (staged) {
           addAIMessage(staged.cue, staged.coach, true, staged.meaning);
