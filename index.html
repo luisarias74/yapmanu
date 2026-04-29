@@ -3075,6 +3075,8 @@
       inputDock.classList.remove('is-your-turn');
       inputHint.style.display = '';
       micButton.classList.remove('is-ready');
+      iosPendingYourTurn = false;
+      if (iosFallbackTimer) { clearTimeout(iosFallbackTimer); iosFallbackTimer = null; }
     }
 
     function setLunaState(state) {
@@ -3348,12 +3350,14 @@
           elPlaying = false;
           resolve();
           playElQueue();
+          onIosAudioFinished();
         };
         currentAudio.onerror = () => {
           currentAudio = null;
           elPlaying = false;
           resolve();
           playElQueue();
+          onIosAudioFinished();
         };
         console.log('[LaLanguish Voice] Speak voice: ElevenLabs (neural) — playing');
         currentAudio.play();
@@ -3364,7 +3368,17 @@
         resolve();
         speakWithBrowser(text, browserRate || 0.86);
         playElQueue();
+        onIosAudioFinished();
       }
+    }
+
+    function onIosAudioFinished() {
+      if (!isIOS || !iosPendingYourTurn) return;
+      if (elPlaying || elQueue.length > 0) return;
+      iosPendingYourTurn = false;
+      if (iosFallbackTimer) { clearTimeout(iosFallbackTimer); iosFallbackTimer = null; }
+      console.log('[iOS Speak] audio ended, enabling mic');
+      setYourTurn();
     }
 
     async function speakWithElevenLabs(text) {
@@ -3461,7 +3475,21 @@
         updateCompletionState();
         window.setTimeout(() => {
           if (awaitInput) {
-            setYourTurn();
+            if (isIOS) {
+              iosPendingYourTurn = true;
+              console.log('[iOS Speak] pending your turn after audio');
+              if (iosFallbackTimer) clearTimeout(iosFallbackTimer);
+              iosFallbackTimer = window.setTimeout(() => {
+                if (iosPendingYourTurn) {
+                  iosPendingYourTurn = false;
+                  iosFallbackTimer = null;
+                  console.log('[iOS Speak] fallback enabling mic');
+                  setYourTurn();
+                }
+              }, 8000);
+            } else {
+              setYourTurn();
+            }
           } else {
             setLunaState('idle');
           }
@@ -4011,6 +4039,8 @@
     let fallbackTimer = null;
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     let lastMicStopTime = 0;
+    let iosPendingYourTurn = false;
+    let iosFallbackTimer = null;
 
     function resetAudioSession() {
       try {
